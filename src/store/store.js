@@ -1,11 +1,11 @@
 import { configureStore  } from '@reduxjs/toolkit';
-import authReducer from '../slices/authSlice.js';
-import cartReducer from '../slices/cartSlice.js';
+import authReducer from './authSlice.js';
+import cartReducer from './cartSlice.js';
 import { combineReducers } from 'redux';
-import wishListSlice from '../slices/wishListSlice.js'  
+import wishListSlice from './wishListSlice.js'  
 import { persistReducer,persistStore } from 'redux-persist'
 import sessionStorage from 'redux-persist/lib/storage/session'
-import orderSlice from '../slices/orderSlice.js';
+import orderSlice from './orderSlice.js';
 
 
 const rootReducer = combineReducers({
@@ -21,10 +21,10 @@ const persistConfig = {
     whitelist: ["cart", "auth", "wishlist"], // State slices to persist
   };
   
-const persistReducer= persistReducer(persistConfig, rootReducer);
+const persistedReducer  = persistReducer(persistConfig, rootReducer);
 
 const store = configureStore({
-    reducer: rootReducer,
+    reducer: persistedReducer,
 });
 export const persistor = persistStore(store);
 export default store;
