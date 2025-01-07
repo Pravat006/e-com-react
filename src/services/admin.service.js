@@ -41,7 +41,7 @@ class AdminService {
     return await Axios.get("/ecommerce/orders/list/admin");
   }
   async updateOrderStatus(orderId) {
-    return await Axios.patch(`/ecommerce/orders/ststus/${orderId}`);
+    return await Axios.patch(`/ecommerce/orders/ststus/${orderId}`, data);
   }
 }
 

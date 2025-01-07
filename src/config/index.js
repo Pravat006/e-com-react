@@ -1,6 +1,6 @@
 const formdataConfig = {
   headers: {
-    "Content-Type": "application/x-www-form-urlencoded",
+    "Content-Type": "multipart/form-data",
 },
 withCredentials: true,
 };
