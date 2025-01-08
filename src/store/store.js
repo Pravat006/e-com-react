@@ -1,11 +1,11 @@
 import { configureStore  } from '@reduxjs/toolkit';
-import authReducer from './authSlice.js';
-import cartReducer from './cartSlice.js';
+import authReducer from '../slices/authSlice';
+import cartReducer from '../slices/cartSlice.js';
 import { combineReducers } from 'redux';
-import wishListSlice from './wishListSlice.js'  
+import wishListSlice from '../slices/wishListSlice.js';  
 import { persistReducer,persistStore } from 'redux-persist'
 import sessionStorage from 'redux-persist/lib/storage/session'
-import orderSlice from './orderSlice.js';
+import orderSlice from '../slices/orderSlice.js';
 
 
 const rootReducer = combineReducers({

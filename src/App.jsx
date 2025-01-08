@@ -1,5 +1,5 @@
 import "./App.css";
-import Header from './components/root/Header'
+
 import Searchbar from "./components/root/Searchbar";
 
 
@@ -10,9 +10,9 @@ function App() {
         {" "}
         hello{" "}
       </div>
-      <Header/>
+      
       <Searchbar />
-
+     
     
       
     </>
