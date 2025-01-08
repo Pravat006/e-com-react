@@ -1,14 +1,14 @@
 import { formdataConfig, jsonConfig, defaultConfig } from "./index";
-import axio from "axios";
+import axios from "axios";
 
-const axio = axio.create({
-  baseURl: process.env.SERVER_BASE_URL,
+const axioInstance = axios.create({
+  baseURL: process.env.SERVER_BASE_URL,
 });
 
 class Axios {
   get = async (url) => {
     try {
-      const response = await axio.get(url, defaultConfig);
+      const response = await axioInstance.get(url, defaultConfig);
       return response?.data;
     } catch (error) {
       error.response?.data;
@@ -17,7 +17,7 @@ class Axios {
   post = async (url, data = {}) => {
     try {
       const config = data instanceof FormData ? formdataConfig : jsonConfig;
-      const response = await axio.post(url, data, config);
+      const response = await axioInstance.post(url, data, config);
       return response?.data;
     } catch (error) {
       error.response?.data;
@@ -26,7 +26,7 @@ class Axios {
   patch = async (url, data) => {
     try {
       const config = data instanceof FormData ? formdataConfig : jsonConfig;
-      const response = await axio.patch(url, data, config);
+      const response = await axioInstance.patch(url, data, config);
       return response?.data;
     } catch {
       error.response?.data;
@@ -34,7 +34,7 @@ class Axios {
   };
   delete = async () => {
     try {
-      const response = await axio.delete(url, defaultConfig);
+      const response = await axioInstance.delete(url, defaultConfig);
       return response?.data;
     } catch {
       error.response?.data;

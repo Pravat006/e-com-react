@@ -1,7 +1,7 @@
 import "./App.css";
-// import Header from './components/root/Header'
+import Header from './components/root/Header'
 import Searchbar from "./components/root/Searchbar";
-import { Button } from "./components/ui/button";
+
 
 function App() {
   return (
@@ -10,8 +10,9 @@ function App() {
         {" "}
         hello{" "}
       </div>
-      {/* <Header/> */}
+      <Header/>
       <Searchbar />
+
     
       
     </>
