@@ -14,6 +14,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import AuthService from "@/services/auth.service.js";
 import { logout } from "@/slices/authSlice";
+import toast from "react-hot-toast";
 
 function Header() {
   const navigate = useNavigate();
@@ -28,11 +29,12 @@ function Header() {
     error.response?.message;
   }
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     try {
-      AuthService.logout().then(() => {
+      await AuthService.logout().then(() => {
         navigate("/");
         dispatch(logout());
+        toast.success("Logged out successfully");
       });
     } catch (error) {
       error.message;
@@ -162,7 +164,7 @@ function Header() {
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <button
-                  onClick={handleLogout}
+                  onClick={handleLogout()}
                   variant="destructive"
                   className="w-full space-x-2 bg-red-700 text-white hover:bg-red-800"
                 >
@@ -180,12 +182,6 @@ function Header() {
         )}
       </div>
     </header>
-
-
-          
-    
-    
-
   );
 }
 export default Header;
