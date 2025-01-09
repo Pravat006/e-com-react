@@ -11,6 +11,9 @@ class ProductService {
     async getProductByCategory(categoryId){
         return await Axios.get(`/ecommerce/products/category/${categoryId}`)
     }
+    async getRandomProducts(){
+        return await Axios.get("/ecommerce/products/randomProducts")
+    }
 
 }
 

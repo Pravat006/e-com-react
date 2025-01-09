@@ -1,19 +1,19 @@
 import Axios from "../config/httpRequests.js";
 
 class AuthService {
-  async register() {
+  async register(data) {
     return await Axios.post("/users/register", data);
   }
-  async login() {
+  async login(data) {
     return await Axios.post("/users/login", data);
   }
   async logout() {
     return await Axios.post("/users/logout");
   }
-  async changePassword() {
+  async changePassword(data) {
     return await Axios.post("/users/change-password", data);
   }
-  async setAvatar() {
+  async setAvatar(data) {
     return await Axios.patch("/users/avatar", data);
   }
   async currentUser(){
