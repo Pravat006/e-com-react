@@ -32,7 +32,7 @@ function Signup() {
             Create an account
           </h3>
         </div>
-        <form onSubmit={() => handleSubmit(onSubmit)} className="space-y-5">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           {/* username input */}
           <Input
             label="Username"

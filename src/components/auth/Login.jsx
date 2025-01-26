@@ -6,34 +6,37 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Input from "../root/Input.jsx";
 import Button from "../root/Button.jsx";
-import logo from "../../assets/file.png";
+import logo from "../../assets/technological-advancement.png";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
+import CustomerService from '../../services/customer.service.js'
+import { addProduct } from "../../slices/cartSlice.js"
 
 function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  
   const [error, setError] = React.useState(null);
-  const { register, handleSubmit } = useForm({
-    defaultValues: {
-      email: "",
-      password: "",
-    },
-  });
-  const onSubmit = async (data) => {
-    try {
+  const { register, handleSubmit } = useForm();
+  const onSubmit =  async (data) => {
+    try { 
       const res = await AuthService.login(data);
-      if (res.success) {
+      // console.log(data)
+      if (res?.data) {
         dispatch(login(res.data));
         toast.success('logged in successful')
-        if (res?.data.role === "ADMIN") {
+        
+        // console.log(data)
+        if (res?.data.user.role === "ADMIN") {
           navigate("/admin/dashboard");
         } else {
           navigate("/");
+          
         }
       }
     } catch (error) {
       setError(error?.message);
+      console.log(error)
       toast.error('Something went wrong !')
     }
   };
@@ -41,21 +44,24 @@ function Login() {
   return (
     <div className="max-w-sm w-full text-gray-600 space-y-5 bg-white mx-auto rounded-md p-4">
       <div className="text-center pb-8 flex">
-        <img src={logo} width={50} height={50} className="mx-auto" />
+        <img src={logo} width={50} height={50} className="mx-auto" 
+              onClick={()=> navigate("/")}
+        />
 
         <h3 className="text-gray-800 text-2xl font-bold sm:text-3xl text- ">
           Log in to your account
         </h3>
       </div>
       <form
-        onSubmit={() => handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(onSubmit)}
         className="space-y-5"
       >
         {/* email input */}
         <Input
           label="Email"
           placeholder="Enter your email id"
-          {...register("email", {
+          // autoComplete="off"
+          {...register('email', {
             required: true,
             validate: {
               matchPattern: (value) =>
@@ -68,25 +74,26 @@ function Login() {
         {/* PASSWORD input */}
         <Input
           label="Password"
+          // autoComplete="off"
           placeholder="Enter your password"
-          {...register("password", {
+          {...register('password', {
             required: true,
             
           })}
         />
         <div className="flex items-center justify-between text-sm">
-          <a
-            href="javascript:void(0)"
+          <Link
+            to={"/user/forgot-password"}
             className="text-center text-indigo-600 hover:text-indigo-500"
           >
             Forgot password?
-          </a>
+          </Link>
         </div>
         {/* BUTTON */}
         <Button
           type="submit"
           label="Log in"
-          text="sign in"
+          text="log in"
           className="text-xl"
         />
       </form>

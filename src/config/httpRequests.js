@@ -36,7 +36,7 @@ class Axios {
     try {
       const response = await axioInstance.delete(url, defaultConfig);
       return response?.data;
-    } catch {
+    } catch(error){
       error.response?.data;
     }
   };

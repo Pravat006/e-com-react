@@ -1,28 +1,36 @@
 import "./App.css";
-
-import Searchbar from "./components/root/Searchbar";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import AuthLayout from "./components/layout/AuthLayout";
+import Login from "./components/auth/Login";
+import Signup from "./components/auth/Signup";
+import WorkingonIt from "./components/root/WorkingonIt";
+import UserLayout from "./components/layout/UserLayout";
+import Home from "./pages/Home";
+import Cart from "./components/products/Cart";
+import ProductDetails from "./components/products/ProductDetails";
 
 function App() {
   return (
-   <div className="h-screen"
-   
-   >
+    <BrowserRouter>
+      <Routes>
+        
 
-      <div className="text-center bg-blue-900 text-white p-4 text-4xl"
-      
-      >
-        hello
-       <div>
+        <Route element={<AuthLayout/>} >
+          <Route path="/login" element={<Login/>} />
+          <Route path="/sign-up" element={<Signup/>} />
+          <Route path="/user/forgot-password" element={<WorkingonIt/>} />     
+        </Route>
+        <Route element={<UserLayout/>} >            
+          <Route path="/" element={<Home/>} />
+          <Route path='/product/id/:productId' element={<ProductDetails/>} />
+          <Route path="/admin/dashboard" element={<WorkingonIt/>} />
+          <Route path="/user/cart" element={<Cart/>} />
+        </Route>
+         
        
-       </div>
-      </div>
-    
-      <Searchbar />
 
-     
-    
-        </div>
- 
+      </Routes>
+    </BrowserRouter>
   );
 }
 

@@ -1,6 +1,6 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import { Toaster } from "react-hot-toast";
+// import { Toaster } from "react-hot-toast";
 
 function AuthLayout() {
   return (
@@ -11,7 +11,7 @@ function AuthLayout() {
           "linear-gradient(143deg, rgba(80,116,145,1) 0%, rgba(10,33,64,1) 63%)",
       }}
     >
-      <Toaster position="top-right" reverseOrder={false} />
+     
 
       <Outlet />
     </div>
