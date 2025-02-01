@@ -14,6 +14,7 @@ function AdminLayout() {
           <div className="flex h-full">
             <SideBar /> 
             <div className="flex-1">
+              
             <Outlet />
             </div>
           </div>

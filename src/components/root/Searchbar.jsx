@@ -8,7 +8,7 @@ function Searchbar() {
 
   const handleSearch = () => {
     if (searchedText.trim()) {
-      navigate(`/search?q=${searchedText}`);
+      navigate(`/products/c/?search=${encodeURIComponent(searchedText)}`);
     }
   };
 

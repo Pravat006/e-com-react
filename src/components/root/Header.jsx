@@ -23,7 +23,7 @@ function Header() {
   const authData = useSelector((state) => state.auth.userData);
   // const [state, setState] = useState(false);
   // console.log("auth status : ", authStatus);
-  console.log("auth data : ", authData);
+  // console.log("auth data : ", authData);
 
   
 

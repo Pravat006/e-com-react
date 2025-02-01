@@ -4,6 +4,7 @@ import Allproducts from './Allproducts'
 // import { RandomProduct } from '@/components/carousel/RandomProduct'
 import Banner from '@/components/root/Banner'
 
+
 function Home() {
     // const navigate= useNavigate()
   return (

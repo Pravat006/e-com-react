@@ -11,8 +11,10 @@ import ProductDetails from "./components/products/ProductDetails";
 import Profile from "./components/root/Profile";
 import PrivateLayout from "./components/layout/PrivateLayout";
 import AdminLayout from "./components/layout/AdminLayout";
-import AdminDash from "./components/admin/AdminDash";
-import ProductTable from "./components/admin/ProductTable";
+// import AdminDash from "./components/admin/AdminDash";
+import ProductTable from "./components/admin/product/ProductTable";
+import AdminProfile from "./components/admin/AdminProfile";
+import SearchedProduct from "./components/products/SearchedProduct";
 
 function App() {
   return (
@@ -26,17 +28,17 @@ function App() {
         <Route element={<UserLayout/>} >            
           <Route path="/" element={<Home/>} />
           <Route path='/product/id/:productId' element={<ProductDetails/>} />
+          <Route path='/products/c' element={<SearchedProduct/>} />
           <Route>
             <Route element={<PrivateLayout/>}>
               <Route path="/user/cart" element={<Cart/>} />
               <Route path="/user/profile" element={<Profile/>} />
             </Route>
           </Route>
-
-         
-            
+           
         </Route>
           <Route  path="/admin/dashboard" element={<AdminLayout/>} >
+            <Route path="/admin/dashboard/" element={<AdminProfile/>} />
             <Route path="/admin/dashboard/all-product" element={<ProductTable/>} />
           </Route>
          

@@ -17,6 +17,9 @@ class ProductService {
     async getCategoryById(categoryId){
         return await Axios.get(`/ecommerce/categories/${categoryId}`)
     }
+    async getSearchedProducts(searchText){
+        return await Axios.get(`/ecommerce/products/s/search?search=${searchText}`)
+    }
 
 }
 

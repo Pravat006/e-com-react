@@ -75,7 +75,7 @@ function Cart() {
   }
   return (
     <section>
-      <div className="mx-auto max-w-screen-xl px-2 py-8 sm:px-6 sm:py-12 lg:px-8">
+      <div className="mx-auto max-w-screen-xl  py-8 sm:px-6 sm:py-12 lg:px-8">
         <div className="mx-auto max-w-3xl">
           <div className="text-center">
             <h1 className="text-xl font-bold text-gray-900 sm:text-3xl">
@@ -161,24 +161,24 @@ function Cart() {
               )}
             </ul>
 
-            <div className="mt-8 flex justify-end border-t border-gray-100 pt-8">
+            <div className="mt-8 flex justify-end border-t border-gray-100 pt-8 ">
               <div className="w-screen max-w-lg space-y-4">
                 <dl className="space-y-0.5 text-sm text-gray-700">
-                  <div className="flex justify-between">
+                  <div className="flex justify-between px-1">
                     <dt>Subtotal</dt>
                     <dd className="text-yellow-700 font-bold">${cartTotal}</dd>
                   </div>
 
-                  <div className="flex justify-between">
+                  <div className="flex justify-between px-1">
                     <dt>Total items</dt>
                     <dd>{items.length}</dd>
                   </div>
-                  <div className="flex justify-between">
+                  <div className="flex justify-between px-1">
                     <dt>Total product quantity</dt>
                     <dd>{totalQuantity}</dd>
                   </div>
 
-                  <div className="flex justify-between">
+                  <div className="flex justify-between px-1">
                     <dt>Applied coupon</dt>
                     <dd className="inline-flex items-center justify-center rounded-full bg-indigo-100 px-2.5 pl-2 pr-0 text-indigo-700">
                     <svg
@@ -201,14 +201,14 @@ function Cart() {
                     </p>
                     </dd>
                   </div>
-                  <div className="flex justify-between">
+                  <div className="flex justify-between px-1">
                     <dt>Discount</dt>
                     <dd className="text-red-800 font-bold">
                       -${coupon?.discountValue || 0}
                     </dd>
                   </div>
 
-                  <div className="flex justify-between !text-base font-medium">
+                  <div className="flex justify-between !text-base font-medium px-1">
                     <dt>Total</dt>
                     <dd className="text-green-700 font-bold">
                       ${discountedTotal}
@@ -216,7 +216,7 @@ function Cart() {
                   </div>
                 </dl>
 
-                <div className="flex justify-end">
+                <div className="flex justify-end pr-1">
                   
                   <Dialog>
                     <DialogTrigger>
@@ -237,12 +237,12 @@ function Cart() {
                                   <div className="flex justify-between items-center gap-2 border-black border-2 my-1">
 
 
-                                  <p>{item?.couponCode}</p>
+                                  <p className="text-bold text-orange-700 pl-2">{item?.couponCode}</p>
                                   {
                                     coupon?.couponCode=== item?.couponCode ? (
-                                      <button onClick={()=> handleRemoveCoupon(item?.couponCode)} className="px-2  bg-red-300 font-bold  my-1 mr-1 rounded-3xl flex justify-center items-center" > remove</button>
+                                      <button onClick={()=> handleRemoveCoupon(item?.couponCode)} className="px-2  bg-red-300 font-bold  my-1 mr-1 rounded-3xl flex justify-center items-center" >remove</button>
                                     ) : (
-                                      <button onClick={()=> handleApplyCoupon(item?.couponCode)} className="px-2  bg-green-300 font-bold  my-1 mr-1 rounded-3xl flex justify-center items-center" > apply</button>
+                                      <button onClick={()=> handleApplyCoupon(item?.couponCode)} className="px-3  bg-green-300 font-bold  my-1 mr-1 rounded-3xl flex justify-center items-center" >apply</button>
                                     )
                                   }
                                   </div>
@@ -255,7 +255,7 @@ function Cart() {
                   </Dialog>
                 </div>
 
-                <div className="flex justify-end gap-1">
+                <div className="flex sm:justify-end gap-1 justify-center ">
                   <a
                     href="#"
                     className="block rounded bg-gray-700 px-5 py-3 text-sm text-gray-100 transition hover:bg-gray-600"

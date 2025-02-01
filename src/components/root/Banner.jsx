@@ -3,7 +3,7 @@ import React from "react";
 function Banner() {
   return (
     <div
-      className="relative  bg-center h-[50vh] md:h-[70vh] flex items-center justify-center text-center bg-cover"
+      className="relative  bg-center h-[50vh] md:h-[70vh] flex items-center justify-center text-center bg-cover bg-muted"
       style={
             {
 
