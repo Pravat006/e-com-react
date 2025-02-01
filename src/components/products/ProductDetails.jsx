@@ -6,7 +6,7 @@ import { FaArrowRightLong } from "react-icons/fa6";
 function ProductDetails() {
   const { productId } = useParams();
   const [productdata, setProductData] = useState();
-  const [category, setCategory] = useState();
+ 
   const [mainImage, setMainImage] = useState('');
 
   React.useEffect(() => {
@@ -15,11 +15,8 @@ function ProductDetails() {
         const response = await ProductService.getProductById(productId);
         setProductData(response?.data);
         console.log("product data: ", response?.data);
-        console.log(" category id: ", response?.data?.category);
-        const cat = await ProductService.getProductByCategory(
-          response?.data?.category
-        );
-        setCategory(cat?.data.name);
+        console.log(" category id: ", response?.data?.category.name);
+        
         const subImages = Array.isArray(response?.data?.subImages) ? response.data.subImages : [];
         const imageLinks = [response?.data?.mainImage?.url, ...subImages.map(subImage => subImage.url)];
         setMainImage(imageLinks[0]);
@@ -44,7 +41,7 @@ function ProductDetails() {
             className="h-full w-full object-cover"
           />
         </div>
-        <div className="h-[20%] flex overflow-hidden gap-2">
+        <div className="h-[20%] flex overflow-hidden gap-1">
           {imageLinks.slice(1,5).map((image, index) => (
             <img  
             key={index}
@@ -63,7 +60,7 @@ function ProductDetails() {
         <p className="text-lg font-semibold ">
           Price: <span className="text-green-600">{productdata?.price}$</span>
         </p>
-        <p className="text-lg font-semibold">Category: {category}</p>
+        <p className="text-lg font-semibold">Category: {productdata?.category.name} </p>
         <p className="text-lg font-semibold ">
           Available Stock:{" "}
           <span className="text-purple-600">{productdata?.stock}</span>
@@ -74,7 +71,6 @@ function ProductDetails() {
         <div className="flex gap-1 p-2">
         <AddtocartBtn 
         productId={productdata?._id}
-    
         />
           <button className="px-6 py-1  bg-[#e7cb2b] duration-150 hover:shadow-2xl  rounded-3xl w-full mx-auto flex justify-center items-center">
             <span className="pb-1">Buy now</span>

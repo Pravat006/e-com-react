@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Searchbar from "./Searchbar";
 import { IoIosCart } from "react-icons/io";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import {  useSelector } from "react-redux";
 import logo from "../../assets/technological-advancement.png";
 import {
   DropdownMenu,
@@ -20,10 +20,10 @@ function Header() {
   // const [userData, setUserData] = React.useState();
   // const dispatch = useDispatch();
   const authStatus = useSelector((state) => state.auth.status);
-  // const authData = useSelector((state) => state.auth.userData);
+  const authData = useSelector((state) => state.auth.userData);
   // const [state, setState] = useState(false);
   // console.log("auth status : ", authStatus);
-  // console.log("auth data : ", authData);
+  console.log("auth data : ", authData);
 
   
 
@@ -67,15 +67,15 @@ function Header() {
               <DropdownMenu>
                 <DropdownMenuTrigger>
                   <Avatar>
-                    <AvatarImage src="https://static.vecteezy.com/system/resources/previews/005/544/718/large_2x/profile-icon-design-free-vector.jpg" />
-                    <AvatarFallback src="abcd" />
+                    <AvatarImage src={ authData?.user.avatar.url || "https://static.vecteezy.com/system/resources/previews/005/544/718/large_2x/profile-icon-design-free-vector.jpg"} />
+                    <AvatarFallback src={authData?.user.name} />
                   </Avatar>
                 </DropdownMenuTrigger>
-             
+
                 <DropdownMenuContent>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem>
-                    <Link to="/update-profile">Update Profile</Link>
+                    <Link to="/user/profile">Your Profile</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
                     <Link to="/user/orders">Your Orders</Link>
@@ -96,6 +96,7 @@ function Header() {
        
           </div>
             )}
+            
       </div>
     </header>
   );

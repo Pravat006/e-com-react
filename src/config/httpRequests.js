@@ -6,39 +6,40 @@ const axioInstance = axios.create({
 });
 
 class Axios {
-  get = async (url) => {
+  async get(url) {
     try {
       const response = await axioInstance.get(url, defaultConfig);
       return response?.data;
     } catch (error) {
-      error.response?.data;
+      return error.response?.data;
     }
-  };
-  post = async (url, data = {}) => {
+  }
+  async post(url, data = {}) {
     try {
       const config = data instanceof FormData ? formdataConfig : jsonConfig;
       const response = await axioInstance.post(url, data, config);
       return response?.data;
     } catch (error) {
-      error.response?.data;
+      return error.response?.data;
     }
-  };
-  patch = async (url, data) => {
+  }
+  async patch(url, data) {
     try {
       const config = data instanceof FormData ? formdataConfig : jsonConfig;
       const response = await axioInstance.patch(url, data, config);
       return response?.data;
-    } catch {
-      error.response?.data;
+    } catch(error) {
+      return error.response?.data;
     }
-  };
-  delete = async () => {
+  }
+  async delete(url) {
     try {
       const response = await axioInstance.delete(url, defaultConfig);
+
       return response?.data;
-    } catch(error){
-      error.response?.data;
+    } catch (error) {
+      return error.response?.data;
     }
-  };
+  }
 }
 export default new Axios();

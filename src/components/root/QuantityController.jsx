@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const Test = () => {
+const QuantityController = ({quantity, onIncrease, onDecrease, onQuantityChange}) => {
   const [isAdding, setIsAdding] = useState(false); // Tracks if the user clicked "Add to Cart"
   const [quantity, setQuantity] = useState(1); // Quantity state
 
@@ -27,14 +27,7 @@ const Test = () => {
 
   return (
     <div className="flex items-center gap-4 p-4 bg-white border border-gray-300 rounded-lg shadow-md">
-      {!isAdding ? (
-        <button
-          onClick={handleAddToCartClick}
-          className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded shadow"
-        >
-          Add to Cart
-        </button>
-      ) : (
+      
         <div className="flex items-center gap-0 bg-yellow-500">
           <button
             onClick={decreaseQuantity}
@@ -43,10 +36,11 @@ const Test = () => {
             -
           </button>
           <input
+           className="h-8 w-12 rounded border-gray-200 bg-gray-50 p-0 text-center text-xs text-gray-600 [-moz-appearance:_textfield] focus:outline-none [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
             type="number"
             value={quantity}
             onChange={handleQuantityChange}
-            className="w-12 text-center  border-gray-300 rounded h-8 bg-yellow-500 text-white font-semibold"
+            
           />
           <button
             onClick={increaseQuantity}
@@ -55,8 +49,8 @@ const Test = () => {
             +
           </button>
         </div>
-      )}
+      
     </div>
   );
 };
-export default Test;
+export default QuantityController;

@@ -9,8 +9,6 @@ import Button from "../root/Button.jsx";
 import logo from "../../assets/technological-advancement.png";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
-import CustomerService from '../../services/customer.service.js'
-import { addProduct } from "../../slices/cartSlice.js"
 
 function Login() {
   const dispatch = useDispatch();

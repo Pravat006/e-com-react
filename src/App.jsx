@@ -8,13 +8,16 @@ import UserLayout from "./components/layout/UserLayout";
 import Home from "./pages/Home";
 import Cart from "./components/products/Cart";
 import ProductDetails from "./components/products/ProductDetails";
+import Profile from "./components/root/Profile";
+import PrivateLayout from "./components/layout/PrivateLayout";
+import AdminLayout from "./components/layout/AdminLayout";
+import AdminDash from "./components/admin/AdminDash";
+import ProductTable from "./components/admin/ProductTable";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        
-
         <Route element={<AuthLayout/>} >
           <Route path="/login" element={<Login/>} />
           <Route path="/sign-up" element={<Signup/>} />
@@ -23,9 +26,19 @@ function App() {
         <Route element={<UserLayout/>} >            
           <Route path="/" element={<Home/>} />
           <Route path='/product/id/:productId' element={<ProductDetails/>} />
-          <Route path="/admin/dashboard" element={<WorkingonIt/>} />
-          <Route path="/user/cart" element={<Cart/>} />
+          <Route>
+            <Route element={<PrivateLayout/>}>
+              <Route path="/user/cart" element={<Cart/>} />
+              <Route path="/user/profile" element={<Profile/>} />
+            </Route>
+          </Route>
+
+         
+            
         </Route>
+          <Route  path="/admin/dashboard" element={<AdminLayout/>} >
+            <Route path="/admin/dashboard/all-product" element={<ProductTable/>} />
+          </Route>
          
        
 

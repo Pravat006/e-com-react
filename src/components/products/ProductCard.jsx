@@ -20,9 +20,6 @@ function ProductCard({ imageLink, name, description, price, id }) {
           <LearnMoreBtn productId={id} />
           <AddtocartBtn
             productId={id}
-            name={name}
-            image={imageLink}
-            price={price}
           />
         </div>
       </div>

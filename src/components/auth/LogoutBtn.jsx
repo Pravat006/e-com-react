@@ -22,10 +22,6 @@ function LogoutBtn() {
             error.message;
           }
         }
- 
-      
-
-   
 
   return (
     <button 

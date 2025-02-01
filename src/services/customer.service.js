@@ -19,27 +19,13 @@ class CustomerService {
   async addToCart(productId,data) {
     return await Axios.post(`/ecommerce/cart/item/${productId}`, data);
   }
-  async removeFromCart(productId) {
+  async removeItem(productId) {
     return await Axios.delete(`/ecommerce/cart/item/${productId}`);
   }
   async clearCart() {
     return await Axios.delete("/ecommerce/cart/clear");
   }
-  async availableCoupons() {
-    return await Axios.get("/ecommerce/coupons/customer/available");
-  }
-  async allCoupons() {
-    return await Axios.get("/ecommerce/coupns");
-  }
-  async getCouponbyId(couponId) {
-    return await Axios.get(`/ecommerce/coupons/${couponId}`);
-  }
-  async applyCoupon(data) {
-    return await Axios.post("/ecommerce/coupons/c/apply", data);
-  }
-  async removeCoupon(data) {
-    return await Axios.post("/ecommerce/coupons/c/remove", data);
-  }
+  
 }
 
 export default new CustomerService();
