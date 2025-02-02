@@ -40,13 +40,13 @@ function Login() {
   };
 
   return (
-    <div className="max-w-sm w-full text-gray-600 space-y-5 bg-white mx-auto rounded-md p-4">
-      <div className="text-center pb-8 flex">
-        <img src={logo} width={50} height={50} className="mx-auto" 
+    <div className="max-w-sm w-full text-gray-600 space-y-5 bg-white sm:mx-auto mx-3 rounded-[20px] p-4">
+      <div className="text-center pb-8 flex " >
+        <img src={logo} width={50} height={50} className="mx-auto mr-0 " 
               onClick={()=> navigate("/")}
         />
 
-        <h3 className="text-gray-800 text-2xl font-bold sm:text-3xl text- ">
+        <h3 className="text-gray-800 text-2xl font-bold ml-0  mx-auto flex items-center justify-center">
           Log in to your account
         </h3>
       </div>

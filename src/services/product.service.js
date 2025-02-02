@@ -2,8 +2,8 @@ import Axios from "../config/httpRequests.js";
 
 class ProductService {
 
-    async getAllProducts(){
-        return await Axios.get("/ecommerce/products")
+    async getAllProducts(pageNumber){
+        return await Axios.get(`/ecommerce/products/?page=${pageNumber}&limit=12`)
     }
     async getProductById(productId){
         return await Axios.get(`/ecommerce/products/${productId}`)

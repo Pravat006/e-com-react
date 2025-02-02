@@ -16,8 +16,14 @@ import ProductTable from "./components/admin/product/ProductTable";
 import AdminProfile from "./components/admin/AdminProfile";
 import SearchedProduct from "./components/products/SearchedProduct";
 
+
 function App() {
+
+ 
+
   return (
+  
+
     <BrowserRouter>
       <Routes>
         <Route element={<AuthLayout/>} >
@@ -46,6 +52,7 @@ function App() {
 
       </Routes>
     </BrowserRouter>
+    
   );
 }
 

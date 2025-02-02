@@ -9,7 +9,7 @@ function Home() {
     // const navigate= useNavigate()
   return (
 
-    <div className='text-center'>
+    <div className='text-center max-w-[1440px]'>
         <Banner/>
         {/* <RandomProduct/> */}
         <Allproducts/>

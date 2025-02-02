@@ -8,20 +8,28 @@ import AuthService from "../../services/auth.service.js"
 
 function Signup() {
   const { register, handleSubmit } = useForm({
-    defaultValues:{
-        username:"",
-        email:"",
-        password:"",
+    defaultValues:{       
         role:"USER"
     }
   });
   const navigate = useNavigate()
   const onSubmit = async (data)=>{
-        const res= await AuthService.register(data)
-        if(res.success){
-            toast.success("account create successful")
-            navigate("/")
-        }
+    try {
+      console.log(data)
+          const res= await AuthService.register(data)
+          console.log(res)
+          if(res?.success){
+              toast.success("account create successful")
+              navigate("/")
+          }else{
+              toast.error(res?.message)
+          }
+      
+    } catch (error) {
+      console.log(error)
+      toast.error("something went wrong")
+      
+    }
   }
 
   return (
@@ -59,7 +67,7 @@ function Signup() {
           <Input
             label="Password"
             placeholder="Enter your password"
-            {...register("password  ", {
+            {...register("password", {
               required: true,
               minLength: 8,
               maxLength: 20,

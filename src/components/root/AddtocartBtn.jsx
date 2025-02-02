@@ -19,10 +19,7 @@ const AddtocartBtn = (productId) => {
       dispatch(addItemToCart(productId));
     }
   };
-  // useEffect(()=>{
-  //   handleSubmit()
-  // },[dispatch])
-
+  
 
   return (
     <button
