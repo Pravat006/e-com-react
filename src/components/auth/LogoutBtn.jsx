@@ -5,7 +5,10 @@ import { useDispatch } from 'react-redux'
 import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 
-function LogoutBtn() {
+function LogoutBtn({
+  className="",
+  text="Logout"
+}) {
 
     const dispatch= useDispatch()
     const navigate= useNavigate()
@@ -24,10 +27,10 @@ function LogoutBtn() {
         }
 
   return (
-    <button 
+    <button className={`${className}`}
         onClick={()=>handleLogout()}
     >
-        Logout
+        {text}
     </button>
   )
 }

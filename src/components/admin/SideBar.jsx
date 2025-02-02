@@ -11,6 +11,17 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useNavigate } from "react-router-dom";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { Button } from "../ui/button";
 
 function SideBar() {
   const navigate = useNavigate();
@@ -128,31 +139,35 @@ function SideBar() {
             ))
           }
         
-          {/* <NavLink to="/admin/dashboard/all-product" className="p-4 ">
-            All products
-          </NavLink>
-          <NavLink to="/admin/dashboard/product" className="p-4">
-            Product
-          </NavLink>
-          <NavLink to="/admin/dashboard/all-coupon" className="p-4 ">
-            All coupon
-          </NavLink>
-          <NavLink to="/admin/dashboard/coupon" className="p-4 ">
-            Coupon
-          </NavLink>
-          <NavLink to="/admin/dashboard/all-category" className="p-4 ">
-            All category
-          </NavLink>
-          <NavLink to="/admin/dashboard/category" className="p-4 ">
-            Category
-          </NavLink>
-          <NavLink to="/admin/dashboard/order-list" className="p-4 ">
-            Order list
-          </NavLink> */}
+          
         </div>
       </div>
-      <div className="h-1/5 bg-gray-200">
-        <LogoutBtn />
+      <div className="h-1/5 bg-gray-200 flex items-center justify-center">
+      <Dialog>
+      <DialogTrigger asChild>
+        <Button variant="outline">Log out</Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle>Log out</DialogTitle>
+         
+        </DialogHeader>
+        <div className="flex justify-between">
+          <h1>Are you sure you want to log out ?  </h1>
+          <div className="flex justify-evenly gap-1">
+            <LogoutBtn text="Yes" className="px-3 bg-green-800 text-white font-bold"/>
+          <DialogClose asChild>
+            <button className="px-3 bg-red-800 text-white font-bold">No</button>
+          </DialogClose>
+          </div>
+        </div>
+       
+        <DialogFooter className="sm:justify-start">
+          
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+        
       </div>
     </div>
   );

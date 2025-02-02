@@ -2,32 +2,33 @@ import React, { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
-  // TableCaption,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
 import productService from "@/services/product.service";
+import { Copy } from "lucide-react";
 
 function ProductTable() {
   const [data, setData] = useState([]);
- 
+
   useEffect(() => {
     const fetchData = async () => {
-      const res = await productService.getAllProducts();
-      
+      const res = await productService.productTable();
       if (res) {
         setData(res?.data.products);
       }
     };
     fetchData();
   }, []);
-  console.log(data);
+
+  const copyToClipboard = (id) => {
+    window.navigator.clipboard.writeText(id);
+  };
 
   return (
     <Table>
-      {/* <TableCaption>A list of your recent invoices.</TableCaption> */}
       <TableHeader>
         <TableRow>
           <TableHead className="w-[100px]">PRODUCT ID</TableHead>
@@ -38,13 +39,22 @@ function ProductTable() {
         </TableRow>
       </TableHeader>
       <TableBody>
-        { data.map((product) => (
+        {data.map((product) => (
           <TableRow key={product?._id}>
-            <TableCell className="font-medium">{product?._id}</TableCell>
+            <TableCell className="font-medium flex gap-1 px-1">
+              {product?._id}
+              <button onClick={() => copyToClipboard(product?._id)}>
+                <Copy />{" "}
+              </button>{" "}
+            </TableCell>
             <TableCell className="font-bold">{product?.name}</TableCell>
             <TableCell>{product?.category?.name}</TableCell>
-            <TableCell className="text-purple-800 text-[1rem]">{product?.stock}</TableCell>
-            <TableCell className="text-right text-green-700 text-[1rem] ">${product?.price}  </TableCell>
+            <TableCell className="text-purple-800 text-[1rem]">
+              {product?.stock}
+            </TableCell>
+            <TableCell className="text-right text-green-700 text-[1rem] ">
+              ${product?.price}{" "}
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>

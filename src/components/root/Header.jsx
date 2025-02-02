@@ -16,7 +16,6 @@ import { RxAvatar } from "react-icons/rx";
 import LogoutBtn from "../auth/LogoutBtn";
 
 function Header() {
-  
   const authStatus = useSelector((state) => state.auth.status);
   const authData = useSelector((state) => state.auth.userData);
   return (

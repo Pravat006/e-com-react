@@ -5,6 +5,9 @@ class ProductService {
     async getAllProducts(pageNumber){
         return await Axios.get(`/ecommerce/products/?page=${pageNumber}&limit=12`)
     }
+    async productTable(){
+        return await Axios.get("/ecommerce/products")
+    }
     async getProductById(productId){
         return await Axios.get(`/ecommerce/products/${productId}`)
     }
