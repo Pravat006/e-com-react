@@ -15,6 +15,7 @@ import AdminLayout from "./components/layout/AdminLayout";
 import ProductTable from "./components/admin/product/ProductTable";
 import AdminProfile from "./components/admin/AdminProfile";
 import SearchedProduct from "./components/products/SearchedProduct";
+import CreateProduct from "./components/admin/product/CreateProduct";
 
 
 function App() {
@@ -46,6 +47,7 @@ function App() {
           <Route  path="/admin/dashboard" element={<AdminLayout/>} >
             <Route path="/admin/dashboard/" element={<AdminProfile/>} />
             <Route path="/admin/dashboard/all-product" element={<ProductTable/>} />
+            <Route path="/admin/dashboard/create-product" element={<CreateProduct/>} />
           </Route>
          
        

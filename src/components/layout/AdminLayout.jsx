@@ -13,7 +13,7 @@ function AdminLayout() {
           </div>
           <div className="flex h-full">
             <SideBar /> 
-            <div className="flex-1">
+            <div className="flex-1  text-center   ">
               
             <Outlet />
             </div>

@@ -7,7 +7,7 @@ import {
   updateCartItemQuantity,
   emptyCart,
   applyCoupon,
-  removeCoupon
+  removeCoupon,
 } from "../../slices/cartSlice.js";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -24,9 +24,9 @@ function Cart() {
   const dispatch = useDispatch();
   const { items, cartTotal, discountedTotal, status, error, coupon } =
     useSelector((state) => state.cart);
-  
 
-  const [availableCoupons, setAvailableCoupons]= useState([])
+  const [availableCoupons, setAvailableCoupons] = useState([]);
+  const [quantity , setQuantity]= useState(1);
 
   const handleRemove = (id) => {
     dispatch(removeItemFromCart(id));
@@ -37,18 +37,14 @@ function Cart() {
   };
 
   const handleApplyCoupon = (couponName) => {
-      dispatch(applyCoupon(couponName))
-      setIsApplied(true);
-     
-      
-    }
+    dispatch(applyCoupon(couponName));
+    setIsApplied(true);
+  };
 
-
-  const handleRemoveCoupon =  (couponName) => {
-   dispatch(removeCoupon(couponName))
-      setIsApplied(false);
-    }
-  
+  const handleRemoveCoupon = (couponName) => {
+    dispatch(removeCoupon(couponName));
+    setIsApplied(false);
+  };
 
   const handleClearCart = () => {
     dispatch(emptyCart());
@@ -58,14 +54,13 @@ function Cart() {
     const fetchAllCoupons = async () => {
       const res = await couponService.availableCoupons();
       if (res) {
-        setAvailableCoupons(res?.data.coupons)
+        setAvailableCoupons(res?.data.coupons);
         // console.log("available coupons: ", res?.data.coupons);
       }
     };
     dispatch(fetchCart());
     fetchAllCoupons();
-  }, [dispatch
-  ]);
+  }, [dispatch]);
 
   const totalQuantity = items.reduce((acc, item) => acc + item.quantity, 0);
 
@@ -181,24 +176,21 @@ function Cart() {
                   <div className="flex justify-between px-1">
                     <dt>Applied coupon</dt>
                     <dd className="inline-flex items-center justify-center rounded-full bg-indigo-100 px-2.5 pl-2 pr-0 text-indigo-700">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      stroke="currentColor"
-                      className="-ms-1 me-1.5 size-4"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 010 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 010-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375z"
-                      />
-                    </svg>
-                    <p>
-                      {coupon?.couponCode}
-
-                    </p>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="currentColor"
+                        className="-ms-1 me-1.5 size-4"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 010 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 010-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375z"
+                        />
+                      </svg>
+                      <p>{coupon?.couponCode}</p>
                     </dd>
                   </div>
                   <div className="flex justify-between px-1">
@@ -217,7 +209,6 @@ function Cart() {
                 </dl>
 
                 <div className="flex justify-end pr-1">
-                  
                   <Dialog>
                     <DialogTrigger>
                       <p className="whitespace-nowrap text-xs text-orange-600 font-bold bg-blue-50 px-1 py-1 ">
@@ -231,25 +222,34 @@ function Cart() {
                         </DialogTitle>
                       </DialogHeader>
                       <ul className="w-full">
-                        {
-                          availableCoupons.map((item)=>(
-                                <li key={item?._id} >
-                                  <div className="flex justify-between items-center gap-2 border-black border-2 my-1">
-
-
-                                  <p className="text-bold text-orange-700 pl-2">{item?.couponCode}</p>
-                                  {
-                                    coupon?.couponCode=== item?.couponCode ? (
-                                      <button onClick={()=> handleRemoveCoupon(item?.couponCode)} className="px-2  bg-red-300 font-bold  my-1 mr-1 rounded-3xl flex justify-center items-center" >remove</button>
-                                    ) : (
-                                      <button onClick={()=> handleApplyCoupon(item?.couponCode)} className="px-3  bg-green-300 font-bold  my-1 mr-1 rounded-3xl flex justify-center items-center" >apply</button>
-                                    )
+                        {availableCoupons.map((item) => (
+                          <li key={item?._id}>
+                            <div className="flex justify-between items-center gap-2 border-black border-2 my-1">
+                              <p className="text-bold text-orange-700 pl-2">
+                                {item?.couponCode}
+                              </p>
+                              {coupon?.couponCode === item?.couponCode ? (
+                                <button
+                                  onClick={() =>
+                                    handleRemoveCoupon(item?.couponCode)
                                   }
-                                  </div>
-                                  
-                                </li>
-                          ))
-                        }
+                                  className="px-2  bg-red-300 font-bold  my-1 mr-1 rounded-3xl flex justify-center items-center"
+                                >
+                                  remove
+                                </button>
+                              ) : (
+                                <button
+                                  onClick={() =>
+                                    handleApplyCoupon(item?.couponCode)
+                                  }
+                                  className="px-3  bg-green-300 font-bold  my-1 mr-1 rounded-3xl flex justify-center items-center"
+                                >
+                                  apply
+                                </button>
+                              )}
+                            </div>
+                          </li>
+                        ))}
                       </ul>
                     </DialogContent>
                   </Dialog>
