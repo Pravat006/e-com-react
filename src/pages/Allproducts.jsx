@@ -22,7 +22,7 @@ function Allproducts() {
 
   const { data, error, isLoading, isError } = useQuery({
     queryKey: ["products", pageNumber],
-    queryFn: () => fetchProducts(parseInt(pageNumber)),
+    queryFn: () => fetchProducts(),
   });
 
   if (isLoading)

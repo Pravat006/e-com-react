@@ -1,33 +1,30 @@
 import React from "react";
+import pc from "../../assets/pngwing.com.png"
 
 function Banner() {
-  return (
-    <div
-      className="relative  bg-center h-[50vh] md:h-[70vh] flex items-center justify-center text-center bg-cover bg-muted"
-      style={
-            {
 
-                "background-image": "url('https://images.unsplash.com/photo-1487215078519-e21cc028cb29?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')" 
-            }
-        }
-    >
-      <div className="absolute inset-0 bg-black bg-opacity-50"></div>
-      <div className="relative z-10 text-white px-4 max-w-2xl">
-        <h1 className="text-3xl md:text-5xl font-bold mb-4">
-          Discover the Beauty of Science
-        </h1>
-        <p className="text-lg md:text-xl mb-6">
-          Explore the future of science and Gadgets
-        </p>
-        <a
-          href="#explore"
-          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition duration-300"
-        >
-          Explore Now
-        </a>
+ 
+
+  return (
+      <div className="bg-gray-900">
+          
+          <section className="mt-0 my-4 mx-auto max-w-screen-xl pb-12 px-4 items-center lg:flex md:px-8">
+              <div className="space-y-4 flex-1 sm:text-center lg:text-left">
+                  <h1 className="text-white font-bold text-4xl xl:text-5xl">
+                      Checkout our computer accessories for your 
+                       <span className="text-indigo-400"> Beast</span>
+                  </h1>
+                  <p className="text-gray-300 max-w-xl leading-relaxed sm:mx-auto lg:ml-0">
+                      It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum
+                  </p>
+                  
+              </div>
+              <div className="flex-1 text-center mt-7 lg:mt-0 lg:ml-3 py-4">
+                  <img src={pc} className="w-full mx-auto sm:w-10/12  lg:w-full bg-blend-multiply" />
+              </div>
+          </section>
       </div>
-    </div>
-  );
+  )
 }
 
 export default Banner;

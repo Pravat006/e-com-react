@@ -19,6 +19,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import couponService from "@/services/coupon.service.js";
+import { Link } from "react-router-dom";
 
 function Cart() {
   const dispatch = useDispatch();
@@ -26,14 +27,22 @@ function Cart() {
     useSelector((state) => state.cart);
 
   const [availableCoupons, setAvailableCoupons] = useState([]);
-  const [quantity , setQuantity]= useState(1);
+  console.log("coupons: ", availableCoupons);
 
   const handleRemove = (id) => {
     dispatch(removeItemFromCart(id));
   };
-  const handleQuantityChange = (productId, qnt) => {
-    dispatch(updateQuantity({ productId, qnt }));
-    dispatch(updateCartItemQuantity({ productId, qnt }));
+  const handleQuantityChange = (productId, operation) => {
+    
+    const item = items.find((item) => item.product._id === productId);
+    if (item) {
+      const newQuantity = operation === "increment" ? item.quantity + 1 : item.quantity - 1;
+      if (newQuantity > 0) {
+        dispatch(updateCartItemQuantity({ productId, quantity: newQuantity }));
+        dispatch(updateQuantity({ productId, quantity: newQuantity }));
+      }
+    }
+    
   };
 
   const handleApplyCoupon = (couponName) => {
@@ -80,11 +89,11 @@ function Cart() {
 
           <div className="mt-8">
             <ul className="space-y-4 px-4">
-              {items.length >= 0 &&
-                items.map((item) => (
+              {items?.length >= 0 &&
+                items?.map((item) => (
                   <li
                     className="flex items-center gap-4"
-                    key={item.product?._id}
+                    key={item?.product?._id}
                   >
                     <img
                       src={item?.product.mainImage.url}
@@ -114,13 +123,17 @@ function Cart() {
 
                     <div className="flex flex-1 items-center justify-end gap-2">
                       <div className="flex items-center gap-0 bg-gray-50">
-                        <button className="w-8 h-8 flex justify-center items-center  hover:bg-gray-800 hover:text-white text-gray-800 font-bold rounded ">
+                        <button className="w-8 h-8 flex justify-center items-center  hover:bg-gray-800 hover:text-white text-gray-800 font-bold rounded "
+                          onClick={() => handleQuantityChange(item?.product._id, "decrement")}
+                        >
                           -
                         </button>
                         <h2 className="h-8 w-12 rounded border-gray-200 bg-gray-50 p-0  flex justify-center items-center  text-xs text-gray-600 :m-0 ">
                           {item.quantity}
                         </h2>
-                        <button className="w-8 h-8 flex justify-center items-center  hover:bg-gray-800 hover:text-white text-gray-800 font-semibold rounded">
+                        <button className="w-8 h-8 flex justify-center items-center  hover:bg-gray-800 hover:text-white text-gray-800 font-semibold rounded"
+                          onClick={() => handleQuantityChange(item?.product._id, "increment")}
+                        >
                           +
                         </button>
                       </div>
@@ -256,12 +269,12 @@ function Cart() {
                 </div>
 
                 <div className="flex sm:justify-end gap-1 justify-center ">
-                  <a
-                    href="#"
+                  <Link
+                    to={"/products/checkout"}
                     className="block rounded bg-gray-700 px-5 py-3 text-sm text-gray-100 transition hover:bg-gray-600"
                   >
                     Checkout
-                  </a>
+                  </Link>
                   <button
                     onClick={handleClearCart}
                     className="block rounded bg-red-700 px-5 py-3 text-sm text-gray-100 transition hover:bg-red-600"

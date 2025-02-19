@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import ProductService from "../../services/product.service.js";
 import AddtocartBtn from "../root/AddtocartBtn.jsx";
 import { FaArrowRightLong } from "react-icons/fa6";
@@ -68,14 +68,16 @@ function ProductDetails() {
         <p className="text-lg font-semibold text-gray-500">
           {productdata?.description}
         </p>
-        <div className="flex gap-1 p-2">
+        <div className="p-2">
         <AddtocartBtn 
         productId={productdata?._id}
         />
-          <button className="px-6 py-1  bg-[#e7cb2b] duration-150 hover:shadow-2xl  rounded-3xl w-full mx-auto flex justify-center items-center">
+          {/* <Link className="px-6 py-1  bg-[#e7cb2b] duration-150 hover:shadow-2xl  rounded-3xl w-full mx-auto flex justify-center items-center"
+            to={"  "}
+          > 
             <span className="pb-1">Buy now</span>
             <FaArrowRightLong />
-          </button>
+          </Link> */}
         </div>
       </div>
       </div>

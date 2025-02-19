@@ -17,13 +17,14 @@ function Signup() {
     try {
       console.log(data)
           const res= await AuthService.register(data)
-          console.log(res)
-          if(res?.success){
-              toast.success("account create successful")
-              navigate("/")
-          }else{
-              toast.error(res?.message)
-          }
+          console.log("user register : ", res?.data.user.isEmailVerified)
+          // if(res?.success){
+              
+          //     toast.success("account create successful")
+          //     navigate("/")
+          // }else{
+          //     toast.error(res?.message)
+          // }
       
     } catch (error) {
       console.log(error)

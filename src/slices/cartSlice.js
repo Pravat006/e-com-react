@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import CustomerService from "../services/customer.service.js";
 import couponService from "@/services/coupon.service.js";
+import toast from "react-hot-toast";
 
 // asyncthunk to fetch cart data from the Api
 export const fetchCart = createAsyncThunk(
@@ -8,7 +9,10 @@ export const fetchCart = createAsyncThunk(
   async function (_, { rejectWithValue }) {
     try {
       const response = await CustomerService.myCart();
-      console.log("cart response : ", response);
+      if (response) {
+        console.log("cart response : ", response);
+      }
+      
       return response?.data;
     } catch (error) {
       console.log("failed to fetch the cart from server");
@@ -20,13 +24,12 @@ export const fetchCart = createAsyncThunk(
 // asyncthunk to add item to the cart
 export const addItemToCart = createAsyncThunk(
   "cart/addItemToCart",
-  async ({ productId, quantity }, { rejectWithValue }) => {
+  async ({ productId }, { rejectWithValue }) => {
     try {
-      const response = await CustomerService.addToCart(productId, {
-        quantity: parseInt(quantity) || 1,
-      });
+      const response = await CustomerService.addToCart(productId, { "quantity": 1 });
       if (response) {
         console.log("new product added to cart");
+        toast.success("Product added to cart")
       }
       return response?.data;
     } catch (error) {
@@ -64,8 +67,9 @@ export const updateCartItemQuantity = createAsyncThunk(
   async ({ productId, quantity }, { rejectWithValue }) => {
     try {
       const response = await CustomerService.addToCart(productId, {
-        quantity: parseInt(quantity) || 1,
+        "quantity": quantity
       });
+      
       return response?.data;
     } catch (error) {
       return rejectWithValue(

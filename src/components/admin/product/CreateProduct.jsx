@@ -8,6 +8,7 @@ import categoryService from "@/services/category.service";
 import Input from "../../root/Input";
 // import productService from "@/services/product.service";
 import adminService from "@/services/admin.service";
+import toast from "react-hot-toast";
 
 
 
@@ -15,12 +16,9 @@ function CreateProduct() {
 
   const { register, handleSubmit, watch, reset } = useForm();
   
-  const [preview, setPreview] = useState("");
-  const [subImgs, setSubImgs] = useState([]);
+
   const [product, setProduct]= useState(null)
   const [mainImage, setMainImage] = useState(null);
-  const [subImages, setSubImages] = useState([]);
-
 
   const fetchCategories = async () => {
     try {
@@ -67,6 +65,7 @@ function CreateProduct() {
       const res = await adminService.createProduct(data);
       if (res?.success) {
         setProduct(res?.data);
+        toast.success("Product created successfully");  
         console.log("Product created successfully:", res?.data);
         reset(); // Reset the form after successful submission
       } else {
@@ -89,7 +88,7 @@ function CreateProduct() {
     // console.log("sub images", subImages)
   };
 
-  const mainImageFile = watch("mainImage");
+  // const mainImageFile = watch("mainImage");
  
   const handleImageChange = (event) => {
     if(!event) return;
@@ -108,16 +107,16 @@ function CreateProduct() {
     <div className="flex h-full w-full">
      
       <div className=" h-full w-full flex-col flex">
-        <div className="h-1/5  flex justify-center items-center">
-          <h1 className="font-bold text-2xl"> Create Product</h1>
-        </div>
+       
+          <h1 className="font-bold text-2xl p-6"> Create Product</h1>
+       
 
         <div className="  flex  w-full h-full">
           
           <div className="form  w-full h-full box-border flex justify-center items-center">
             <form
               onSubmit={handleSubmit(onSubmit)}
-              className=" h-[95%]  w-3/6 px-3 flex flex-col gap-4 shadow-2xl"
+              className=" h-auto  w-3/6 px-3 flex flex-col gap-4 shadow-2xl p-4"
             >
               <div className="  w-full  items-center gap-1.5">
                 <Label htmlFor="name">Name: </Label>

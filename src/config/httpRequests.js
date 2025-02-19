@@ -11,6 +11,7 @@ class Axios {
       const response = await axioInstance.get(url, defaultConfig);
       return response?.data;
     } catch (error) {
+      console.log("error",error)
       return error.response?.data;
     }
   }

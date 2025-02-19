@@ -11,11 +11,15 @@ import ProductDetails from "./components/products/ProductDetails";
 import Profile from "./components/root/Profile";
 import PrivateLayout from "./components/layout/PrivateLayout";
 import AdminLayout from "./components/layout/AdminLayout";
-// import AdminDash from "./components/admin/AdminDash";
 import ProductTable from "./components/admin/product/ProductTable";
 import AdminProfile from "./components/admin/AdminProfile";
 import SearchedProduct from "./components/products/SearchedProduct";
 import CreateProduct from "./components/admin/product/CreateProduct";
+import CategoryTable from "./components/admin/category/CategoryTable";
+import CreateCategory from "./components/admin/category/CreateCategory";
+import Checkout from "./components/Checkout/Checkout";
+import YourOrder from "./components/customer/YourOrder";
+
 
 
 function App() {
@@ -40,6 +44,8 @@ function App() {
             <Route element={<PrivateLayout/>}>
               <Route path="/user/cart" element={<Cart/>} />
               <Route path="/user/profile" element={<Profile/>} />
+              <Route path="/products/checkout" element={<Checkout/>} />
+              <Route path="/user/orders" element={<YourOrder/>} />
             </Route>
           </Route>
            
@@ -48,10 +54,14 @@ function App() {
             <Route path="/admin/dashboard/" element={<AdminProfile/>} />
             <Route path="/admin/dashboard/all-product" element={<ProductTable/>} />
             <Route path="/admin/dashboard/create-product" element={<CreateProduct/>} />
+           
+            <Route path="/admin/dashboard/all-category" element={<CategoryTable/>} />
+            <Route path="/admin/dashboard/create-category" element={<CreateCategory/>} />
+            
+           
           </Route>
          
        
-
       </Routes>
     </BrowserRouter>
     

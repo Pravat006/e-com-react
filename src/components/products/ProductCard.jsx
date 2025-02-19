@@ -13,7 +13,7 @@ function ProductCard({ imageLink, name, description, price, id }) {
         <p className="text-sm text-gray-600 my-auto">{description}</p>
 
         <p className="text-lg font-semibold  my-auto">
-          Price :<span className="text-green-600">{price}</span>
+          Price :<span className="text-green-600">${price}</span>
         </p>
 
         <div className="my-auto flex flex-col gap-1">

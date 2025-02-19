@@ -15,7 +15,7 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
-  DialogDescription,
+
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -38,10 +38,7 @@ function SideBar() {
           value: "/admin/dashboard/create-product",
           label: "Create product",
         },
-        {
-          value: "/admin/dashboard/delete-product",
-          label: "Delete product",
-        },
+        
         {
           value: "/admin/dashboard/update-product",
           label: "Update product",
