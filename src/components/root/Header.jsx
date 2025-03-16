@@ -14,14 +14,19 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { RxAvatar } from "react-icons/rx";
 import LogoutBtn from "../auth/LogoutBtn";
+import ThemeButton from "./ThemeButton";
 
 function Header() {
   const authStatus = useSelector((state) => state.auth.status);
   const authData = useSelector((state) => state.auth.userData);
   return (
-    <header className="text-base lg:text-sm bg-gray-50 shadow-md">
+    <header className="text-base lg:text-sm shadow-md backdrop-blur-md  sticky top-0 z-50 bg-transparent"
+    // style={{
+    //   backgroundColor: "var(--card-bg)",
+    // }}
+    >
       {/* ************************************************************** */}
-      <div className=" items-center  px-4 max-w-screen-xl mx-auto flex lg:px-8 static justify-between p-4 py-3">
+      <div className=" items-center  px-4 max-w-screen-xl mx-auto flex lg:px-8  justify-between p-4 py-3 ">
         <div className="flex justify-center items-center">
           <img src={logo} width={50} height={50} alt="tech-cart" />
           <span className="sm:text-2xl  font-serif sm:font-bold hidden sm:block">
@@ -32,61 +37,65 @@ function Header() {
         <div className="search-bar">
           <Searchbar />
         </div>
-        <div className="flex items-center space-x-4 ">
-          {!authStatus && (
-            <Link
-              to="/login"
-              className="  text-gray-900  bg-gray-400 flex items-center justify-center px-3 py-2 text-xl  rounded-[50px]  "
-            >
-              <RxAvatar />
-            </Link>
+
+        <div  className="flex items-center space-x-4 justify-between">
+          <ThemeButton />
+          <div className="flex items-center space-x-4 ">
+            {!authStatus && (
+              <Link
+                to="/login"
+                className="  text-gray-900  bg-gray-400 flex items-center justify-center px-3 py-2 text-xl  rounded-[50px]  "
+              >
+                <RxAvatar />
+              </Link>
+            )}
+          </div>
+
+          {authStatus && (
+            <div className="cartLogo-and-profile flex justify-between items-center mr-4 ">
+              <div className="items-center space-x-4 hidden sm:flex px-5">
+                <Link to="/user/cart">
+                  <IoIosCart className="text-4xl   text-[var(--text-bg)] " />
+                </Link>
+              </div>
+              <div>
+                <DropdownMenu>
+                  <DropdownMenuTrigger>
+                    <Avatar>
+                      <AvatarImage
+                        src={
+                          authData?.user.avatar.url ||
+                          "https://static.vecteezy.com/system/resources/previews/005/544/718/large_2x/profile-icon-design-free-vector.jpg"
+                        }
+                      />
+
+                      <AvatarFallback src={authData?.user.name} />
+                    </Avatar>
+                  </DropdownMenuTrigger>
+
+                  <DropdownMenuContent>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem>
+                      <Link to="/user/profile">Your Profile</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Link to="/user/orders">Your Orders</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Link to="/user/cart">Your Cart</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Link to="/user/wishlists">Wishlists</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <LogoutBtn />
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            </div>
           )}
         </div>
-
-        {authStatus && (
-          <div className="cartLogo-and-profile flex justify-between items-center mr-4 ">
-            <div className="items-center space-x-4 hidden sm:flex px-5">
-              <Link to="/user/cart">
-                <IoIosCart className="text-4xl   text-gray-800 hover:text-gray-900" />
-              </Link>
-            </div>
-            <div>
-              <DropdownMenu>
-                <DropdownMenuTrigger>
-                  <Avatar>
-                    <AvatarImage
-                      src={
-                        authData?.user.avatar.url ||
-                        "https://static.vecteezy.com/system/resources/previews/005/544/718/large_2x/profile-icon-design-free-vector.jpg"
-                      }
-                    />
-
-                    <AvatarFallback src={authData?.user.name} />
-                  </Avatar>
-                </DropdownMenuTrigger>
-
-                <DropdownMenuContent>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem>
-                    <Link to="/user/profile">Your Profile</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Link to="/user/orders">Your Orders</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Link to="/user/cart">Your Cart</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Link to="/user/wishlists">Wishlists</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <LogoutBtn />
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          </div>
-        )}
       </div>
     </header>
   );

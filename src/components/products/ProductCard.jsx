@@ -1,29 +1,46 @@
+// import React from "react";
+// import AddtocartBtn from "../root/AddtocartBtn";
+// import LearnMoreBtn from "../root/LearnMoreBtn";
 import React from "react";
-import AddtocartBtn from "../root/AddtocartBtn";
+import { BackgroundGradient } from "../ui/background-gradient";
+import { useNavigate } from "react-router-dom";
 import LearnMoreBtn from "../root/LearnMoreBtn";
+// import { IconAppWindow } from "@tabler/icons-react";
 
 function ProductCard({ imageLink, name, description, price, id }) {
+
+  
   return (
-    <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 ">
-      <img src={imageLink} alt={name} className="w-full h-48 object-cover" />
+    
+    <div className="h-full max-w-sm  backdrop-blur-lg">
+  {/* <BackgroundGradient className="rounded-[22px] max-w-sm p-4 sm:p-8 bg-white dark:bg-zinc-900 h-full flex flex-col"> */}
+    
+    {/* Image */}
+    <img 
+      src={imageLink} 
+      alt={name} 
+      width="400" 
+      className="object-cover h-52 w-full rounded-lg"
+    />
 
-      <div className="px-4 py-2">
-        <h2 className="text-lg font-bold text-gray-800">{name}</h2>
-
-        <p className="text-sm text-gray-600 my-auto">{description}</p>
-
-        <p className="text-lg font-semibold  my-auto">
-          Price :<span className="text-green-600">${price}</span>
+    {/* Text Content */}
+    <div className="flex-grow flex flex-col justify-between">
+      <div>
+        <p className="text-base text-start sm:text-xl text-black mt-4 mb-2 dark:text-neutral-200 min-h-[48px] flex items-center">
+          {name}
         </p>
-
-        <div className="my-auto flex flex-col gap-1">
-          <LearnMoreBtn productId={id} />
-          <AddtocartBtn
-            productId={id}
-          />
-        </div>
+        <p className="text-sm text-neutral-600 dark:text-neutral-400 h-[40px] overflow-hidden text-start ">
+          {description}
+        </p>
       </div>
+
+      {/* Button at Bottom */}
+      <LearnMoreBtn price={price} productId={id} />
     </div>
+
+  {/* </BackgroundGradient> */}
+</div>
+
   );
 }
 

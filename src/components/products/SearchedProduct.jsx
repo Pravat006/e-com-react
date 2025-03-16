@@ -10,6 +10,8 @@ function SearchedProduct() {
 
   const searchQuery = searchParam.get("search");
 
+  console.log(searchQuery);
+
   useEffect(() => {
     const fetchData = async () => {
      try {

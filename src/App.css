@@ -1,4 +1,8 @@
-#root {
-  background-color: #e0e5e9;
- 
+ #root {
+  margin: 0;
+  padding: 0;
+max-width: 100%;
+  height: 100%;
+  font-family:   monospace;
+
 }

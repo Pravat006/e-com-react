@@ -19,6 +19,10 @@ import CategoryTable from "./components/admin/category/CategoryTable";
 import CreateCategory from "./components/admin/category/CreateCategory";
 import Checkout from "./components/Checkout/Checkout";
 import YourOrder from "./components/customer/YourOrder";
+import Allproducts from "./pages/Allproducts";
+import ShopByFetaturedCategory from "./components/products/ShopByFetaturedCategory";
+import Wishlists from "./components/products/Wishlists";
+
 
 
 
@@ -28,7 +32,8 @@ function App() {
 
   return (
   
-
+   
+     
     <BrowserRouter>
       <Routes>
         <Route element={<AuthLayout/>} >
@@ -40,12 +45,15 @@ function App() {
           <Route path="/" element={<Home/>} />
           <Route path='/product/id/:productId' element={<ProductDetails/>} />
           <Route path='/products/c' element={<SearchedProduct/>} />
+          <Route path='/products/c' element={<ShopByFetaturedCategory/>} />
+          <Route path="/all-products" element={<Allproducts/>} />
           <Route>
             <Route element={<PrivateLayout/>}>
               <Route path="/user/cart" element={<Cart/>} />
               <Route path="/user/profile" element={<Profile/>} />
               <Route path="/products/checkout" element={<Checkout/>} />
               <Route path="/user/orders" element={<YourOrder/>} />
+              <Route path="/user/wishlists" element={<Wishlists/>} />
             </Route>
           </Route>
            
@@ -65,6 +73,7 @@ function App() {
       </Routes>
     </BrowserRouter>
     
+
   );
 }
 

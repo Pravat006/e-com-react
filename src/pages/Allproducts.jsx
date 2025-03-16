@@ -27,7 +27,7 @@ function Allproducts() {
 
   if (isLoading)
     return (
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5 p-4">
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 p-12">
         {Array.from({ length: 12 }).map((_, index) => (
           <div key={index} className="flex flex-col space-y-3 h-[372px] w-[267px] transition-shadow duration-300">
             <Skeleton className="h-48  w-full rounded-xl" />
@@ -46,7 +46,7 @@ function Allproducts() {
 
   return (
     <div className="flex flex-col items-center justify-center w-full">
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5 p-4">
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 p-4 lg:p-12">
         {data?.map((product) => (
           <ProductCard
             data={product}

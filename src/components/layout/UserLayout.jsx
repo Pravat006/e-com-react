@@ -3,7 +3,6 @@ import {  Outlet,  } from 'react-router-dom'
 import Header from '../root/Header'
 import Footer from '../root/Footer'
 import { useState } from 'react'
-import Loading from '../loader/Loading'
 
 function UserLayout() {
 
@@ -19,14 +18,22 @@ function UserLayout() {
     return (
       
 
+     
+          
+      <div className='min-h-screen flex flex-col rounded-md'
+      style={{
+        backgroundColor: "var(--card-bg)",
+      }}
+      > 
 
-      <div className='min-h-screen flex flex-col bg-white rounded-md'>
       <Header />
-      <div className='flex-grow text-center flex justify-center items-center '>
+      
+      <div className='flex-grow text-center flex justify-center items-center w-full '>
         <Outlet />
       </div>
       <Footer />
     </div>
+     
      
     )
   

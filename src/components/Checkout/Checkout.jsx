@@ -31,8 +31,9 @@ const Checkout = () => {
 
   const customerDetails =  useSelector((state) => state.auth.userData);
   const discountedTotal= useSelector((state) => state.cart.discountedTotal);
-  
-
+  const { items, cartTotal } =
+     useSelector((state) => state.cart);
+ 
   // Load Razorpay Script
   const loadRazorpayScript = () => {
     return new Promise((resolve) => {
@@ -177,6 +178,7 @@ const Checkout = () => {
   const handleDeliverHere = (id) => {
     setAddressId(id);
     setCurrentPage(2);
+    isAddressSelected(true);
   };
 
   console.log("checkout address : ", addressId);
@@ -187,7 +189,7 @@ const Checkout = () => {
       {currentPage === 1 && (
         <div className="w-full">
           <h2 className="text-lg font-semibold mb-4">
-            Choose your delivery address
+              Shipping information  
           </h2>
           {isAddressesLoading ? (
             <h1>Loading...</h1>
@@ -211,17 +213,28 @@ const Checkout = () => {
                     <div className="flex items-center justify-center gap-2 ">
                       <button
                         onClick={() => handleDelete(address._id)}
-                        className="bg-red-100
-                      text-red-800 px-3 py-1 rounded-md"
+                        className="
+                      text-red-800 text-xl bg-red-100 rounded-sm px-[2px] py-[1px]"
+                      //   className="bg-red-100
+                      // text-red-800 px-3 py-1 rounded-md"
                       >
                         <MdDeleteForever />
                       </button>
 
                       <button
-                        className="bg-gray-200 px-3 py-1 text-gray-800  rounded-md"
+                        // className="bg-gray-200 px-3 py-1 text-gray-800  rounded-md"
+                        className="text-xl"
                         onClick={() => handleDeliverHere(address._id)}
                       >
-                        <FaArrowAltCircleRight />
+                        {
+                          addressId === address._id ? (
+                            "✅"
+                          )  : (
+                          "➡️"
+                          )
+
+                        }
+                        {/* <FaArrowAltCircleRight /> */}
                       </button>
                     </div>
                   </div>
@@ -303,6 +316,36 @@ const Checkout = () => {
       {/* Page 2 */}
       {currentPage === 2 && (
         <div>
+            <h2 className="text-lg font-semibold mb-4">Order Summery</h2>
+            <div className="flex justify-center items-center gap-4 flex-col">
+              <div className="products">
+                <h3 className="text-lg font-semibold">Products</h3>
+                <div className="product-details">
+                  <div className="flex justify-between">
+                    <p>Product 1</p>
+                    <p>₹ 500</p>
+                  </div>
+                  <div className="flex justify-between">
+                    <p>Product 2</p>
+                    <p> 500</p>
+                  </div>
+                  <div className="flex justify-between">
+                    <p>Product 3</p>
+                    <p>₹ 500</p>
+                  </div>
+                </div>
+
+              </div>
+              <div
+                  className="amount-details"
+              ></div>
+            </div>
+        </div>
+      )}
+
+      {/* Page 3 */}
+      {currentPage === 3 && (
+        <div>
           <h2 className="text-lg font-semibold mb-4">
             Pay now
           </h2>
@@ -311,13 +354,7 @@ const Checkout = () => {
               {loading ? "Processing..." : "Pay ₹" + discountedTotal}
             </button>
           </div>
-        </div>
-      )}
-
-      {/* Page 3 */}
-      {currentPage === 3 && (
-        <div>
-          <h2 className="text-lg font-semibold mb-4">Order Summery</h2>
+        
           {/* info about product and  */}
         </div>
       )}

@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import ProductService from "../../services/product.service.js";
 import AddtocartBtn from "../root/AddtocartBtn.jsx";
 import { FaArrowRightLong } from "react-icons/fa6";
+import ToggleWishlist from "../root/ToggleWishlist.jsx";
 function ProductDetails() {
   const { productId } = useParams();
   const [productdata, setProductData] = useState();
@@ -32,9 +33,14 @@ function ProductDetails() {
   
   
   return (
-    <div className="sm:w-[80%] w-full  h-[90vh] mx-2 sm:mx-auto mb-10 mt-3 bg-white rounded-md shadow-md box-border flex lg:flex-row flex-col p-4 gap-2">
+    <div className="sm:w-[80%] w-full  h-[90vh] mx-2 sm:mx-auto mb-10 mt-3  rounded-md shadow-md box-border flex lg:flex-row flex-col p-4 gap-2"
+    style={{
+      backgroundColor: "var(--comp-bg)",
+    }}
+    >
       <div className="lg:w-3/5 lg:h-full  flex flex-col gap-2 sm:w-full h-[50%]">
         <div className="h-[80%] ">
+       
           <img
             src={mainImage}
             alt="image"
@@ -42,6 +48,7 @@ function ProductDetails() {
           />
         </div>
         <div className="h-[20%] flex overflow-hidden gap-1">
+           
           {imageLinks.slice(1,5).map((image, index) => (
             <img  
             key={index}
@@ -68,16 +75,13 @@ function ProductDetails() {
         <p className="text-lg font-semibold text-gray-500">
           {productdata?.description}
         </p>
-        <div className="p-2">
+        <div className="p-2 gap-2 flex flex-col">
         <AddtocartBtn 
         productId={productdata?._id}
         />
-          {/* <Link className="px-6 py-1  bg-[#e7cb2b] duration-150 hover:shadow-2xl  rounded-3xl w-full mx-auto flex justify-center items-center"
-            to={"  "}
-          > 
-            <span className="pb-1">Buy now</span>
-            <FaArrowRightLong />
-          </Link> */}
+            <ToggleWishlist
+              itemId={productId}
+            />
         </div>
       </div>
       </div>

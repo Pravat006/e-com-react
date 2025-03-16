@@ -29,7 +29,11 @@ function Footer (){
   ]
 
   return (
-      <footer className="text-gray-500 bg-white px-4 py-5 max-w-screen-xl mx-auto md:px-8 mt-auto">
+      <footer className="text-gray-500  px-4 py-5    mt-auto w-full mx-auto"
+      style={{
+        backgroundColor: "var(--footer-bg)",
+      }}
+      >
           <div className="max-w-lg sm:mx-auto sm:text-center">
              <h3>Tech-Cart Commercial</h3>
               <p className="leading-relaxed mt-2 text-[15px]">
@@ -51,6 +55,7 @@ function Footer (){
               <div className="mt-4 sm:mt-0">
                   &copy; 2025 Tect-Cart ltd. All rights reserved.
               </div>
+              <p className="font-bold text-sm">developed by <a className="text-blue-800" href="http://github.com/Pravat006">@PravatOO6</a></p>
              
           </div>
           <style jsx>{`

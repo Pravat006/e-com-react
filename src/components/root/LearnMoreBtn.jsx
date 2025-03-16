@@ -1,14 +1,17 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-function LearnMoreBtn({ productId }) {
+function LearnMoreBtn({ productId , price}) {
   return (
 
       <Link
-        className="bg-[#9D9DA1]  px-6 py-1 text-white  duration-150 hover:shadow-2xl  rounded-3xl w-full "
+       className="rounded-full pl-4 pr-1 py-1 text-white flex items-center space-x-1 bg-black mt-4 text-xs font-bold dark:bg-zinc-800"
         to={`/product/id/${productId}`}
       >
-        Learn more
+        <span>learn more</span>
+        <span className="bg-zinc-700 rounded-full text-[0.6rem] px-2 py-0 text-white">
+            ${price}
+          </span>
       </Link>
  
   );

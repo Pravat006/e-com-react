@@ -1,30 +1,59 @@
-import React from "react";
-import pc from "../../assets/pngwing.com.png"
 
-function Banner() {
+import { CardBody, CardContainer, CardItem } from "../ui/3d-card";
+import image from "../../assets/pngwing.com.png";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
+ 
 
+
+export default function Banner() {
  
 
   return (
-      <div className="bg-gray-900">
-          
-          <section className="mt-0 my-4 mx-auto max-w-screen-xl pb-12 px-4 items-center lg:flex md:px-8">
-              <div className="space-y-4 flex-1 sm:text-center lg:text-left">
-                  <h1 className="text-white font-bold text-4xl xl:text-5xl">
-                      Checkout our computer accessories for your 
-                       <span className="text-indigo-400"> Beast</span>
-                  </h1>
-                  <p className="text-gray-300 max-w-xl leading-relaxed sm:mx-auto lg:ml-0">
-                      It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum
-                  </p>
-                  
-              </div>
-              <div className="flex-1 text-center mt-7 lg:mt-0 lg:ml-3 py-4">
-                  <img src={pc} className="w-full mx-auto sm:w-10/12  lg:w-full bg-blend-multiply" />
-              </div>
-          </section>
-      </div>
-  )
-}
+    <div className="relative w-full h-full bg-gradient-to-r from-gray-900 to-blue-900 flex items-center justify-center flex-col sm:flex-row rounded-3xl ">
+      <div className="max-w-5xl px-6 text-white text-center md:text-left py-5">
+        <h1 className="text-4xl md:text-5xl font-bold">
+          Next-Gen Tech <br />
+          <span className="text-blue-300">For Your Digital Life</span>
+        </h1>
+        <p className="mt-4 text-lg text-gray-300">
+          Discover premium electronic gadgets and computer accessories that enhance your digital experience.
+        </p>
+        <div className="mt-6 flex flex-col md:flex-row gap-4 justify-center md:justify-start">
+         
+          <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+        <Link to={"/all-products"} className="px-6 py-3 bg-white text-blue-700 rounded-full font-semibold shadow-lg hover:bg-gray-200 transition">
+            Shop Now →
+          </Link>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>Browse all products</p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
 
-export default Banner;
+          <button className="px-6 py-3 border-2 border-white text-white rounded-full font-semibold hover:bg-white hover:text-blue-700 transition">
+            View Deals
+          </button>
+        </div>
+      </div>
+
+          <CardContainer className="inter-var">
+        <CardBody>
+            <img src={image} 
+            
+            className=" w-full object-cover rounded-xl "
+            />
+        </CardBody>
+     </CardContainer>
+    </div>
+  );
+}

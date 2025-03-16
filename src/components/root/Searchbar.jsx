@@ -20,7 +20,10 @@ function Searchbar() {
           value={searchedText}
           onChange={(e) => setSearchedText(e.target.value)}
           placeholder="Search for an item "
-          className="w-full h-10  pr-10 text-sm bg-[#D9D9D9] placeholder-[#000000] border rounded-l-[50px] focus:outline-none px-10 boreder-none "
+          className="w-full h-10  pr-10 text-sm   rounded-l-[50px]  px-10 boreder-none outline-none focus:outline-none focus:ring-2 focus:ring-gray-500 bg-transparent"
+          style={{
+            backgroundColor: "var(--searchBar-bg)",
+          }}
           onKeyDown={(e) => e.key === "Enter" && handleSearch()}
         />
         {searchedText && (
@@ -33,11 +36,13 @@ function Searchbar() {
       </div>
       <button
         onClick={handleSearch}
-        className="h-10 w-10 bg-[#D9D9D9] text-[#000000] flex justify-center items-center rounded-r-[50px] "
+        className="h-10 w-10 bg-[var(--searchBar-bg)]  flex justify-center items-center rounded-r-[50px] "
         // if the input is empty the disable the button
         disabled={!searchedText.trim()}
       >
-      <FiSearch size={20} />
+      <FiSearch size={20} 
+      
+      />
       </button>
     </div>
   );

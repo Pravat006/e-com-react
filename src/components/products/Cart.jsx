@@ -79,10 +79,10 @@ function Cart() {
   }
   return (
     <section>
-      <div className="mx-auto max-w-screen-xl  py-8 sm:px-6 sm:py-12 lg:px-8">
+      <div className="mx-auto max-w-screen-xl  py-8 sm:px-6 sm:py-12 lg:px-8 bg-[var(--section-bg)] rounded-2xl my-4">
         <div className="mx-auto max-w-3xl">
           <div className="text-center">
-            <h1 className="text-xl font-bold text-gray-900 sm:text-3xl">
+            <h1 className="text-xl font-bold  sm:text-3xl">
               Your Cart
             </h1>
           </div>
@@ -102,15 +102,15 @@ function Cart() {
                     />
 
                     <div>
-                      <h3 className="text-sm text-gray-900">
+                      <h3 className="text-sm ">
                         {item?.product.name}
                       </h3>
 
-                      <dl className="mt-0.5 space-y-px text-[10px] text-gray-600">
-                        <div>
-                          <dt className="inline">Price:</dt>
-                          <dd className="inlinebg-green-600">
-                            {item?.product.price}
+                      <dl className="mt-0.5 space-y-px text-[10px] ">
+                        <div className="flex">
+                          <dt className="inline">Price: </dt>
+                          <dd className="inline text-green-600">
+                           ₹{item?.product.price} 
                           </dd>
                         </div>
 
@@ -171,10 +171,10 @@ function Cart() {
 
             <div className="mt-8 flex justify-end border-t border-gray-100 pt-8 ">
               <div className="w-screen max-w-lg space-y-4">
-                <dl className="space-y-0.5 text-sm text-gray-700">
+                <dl className="space-y-0.5 text-sm ">
                   <div className="flex justify-between px-1">
                     <dt>Subtotal</dt>
-                    <dd className="text-yellow-700 font-bold">${cartTotal}</dd>
+                    <dd className="text-yellow-700 font-bold">₹{cartTotal}</dd>
                   </div>
 
                   <div className="flex justify-between px-1">
@@ -209,14 +209,14 @@ function Cart() {
                   <div className="flex justify-between px-1">
                     <dt>Discount</dt>
                     <dd className="text-red-800 font-bold">
-                      -${coupon?.discountValue || 0}
+                      -₹{coupon?.discountValue || 0}
                     </dd>
                   </div>
 
                   <div className="flex justify-between !text-base font-medium px-1">
                     <dt>Total</dt>
                     <dd className="text-green-700 font-bold">
-                      ${discountedTotal}
+                    ₹{discountedTotal}
                     </dd>
                   </div>
                 </dl>
