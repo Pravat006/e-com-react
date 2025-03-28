@@ -6,7 +6,7 @@ const Input = ({ className = "", type = "text", label, ...props }, ref) => {
   return (
     <div>
       {label && (
-        <label className="inline-block mb-1 pl-1 font-medium" htmlFor={id}>
+        <label className="inline-block  pl-1 font-medium" htmlFor={id}>
           {label}
         </label>
       )}

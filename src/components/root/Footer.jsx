@@ -55,7 +55,7 @@ function Footer (){
               <div className="mt-4 sm:mt-0">
                   &copy; 2025 Tect-Cart ltd. All rights reserved.
               </div>
-              <p className="font-bold text-sm">developed by <a className="text-blue-800" href="http://github.com/Pravat006">@PravatOO6</a></p>
+              <p className="font-bold text-sm">developed by <a className="text-blue-800" href="http://github.com/Pravat006" target="_blank"   >@PravatOO6</a></p>
              
           </div>
           <style jsx>{`

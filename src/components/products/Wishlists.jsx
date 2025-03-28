@@ -1,6 +1,7 @@
 import { fetchWistlists, removeFromWishlists } from "@/slices/wishListSlice.js";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 function Wishlists() {
   const dispatch = useDispatch();
@@ -13,7 +14,7 @@ const handleRemove = (ProductId)=>{
     dispatch(removeFromWishlists(ProductId))
 }
 
-console.log("wishlists ",   wishlists)
+
 
 
   return (
@@ -31,11 +32,14 @@ console.log("wishlists ",   wishlists)
             {wishlists?.length >= 0 &&
               wishlists?.map((item) => (
                 <li
-                  className="flex items-center gap-4"
+                 
                   key={item?._id}
                 >
+                <Link to={`/product/id/${item?.product._id}`}
+                   className="flex items-center gap-4"
+                >
                <img
-                      src={item?.product.mainImage.url}
+                      src={item?.product?.mainImage.url}
                       alt=""
                       className="size-16 rounded object-cover"
                     />
@@ -64,7 +68,7 @@ console.log("wishlists ",   wishlists)
                    
 
                     <button
-                      className="text-gray-600 transition hover:text-red-600"
+                      className="text-gray-600 transition hover:text-red-600 ml-16"
                       onClick={() => handleRemove(item?.product._id)}
                     >
                       <svg
@@ -83,6 +87,7 @@ console.log("wishlists ",   wishlists)
                       </svg>
                     </button>
                   </div>
+                  </Link>
                 </li>
               ))}
             {wishlists.length === 0 && (

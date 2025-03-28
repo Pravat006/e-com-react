@@ -39,7 +39,20 @@ function Header() {
         </div>
 
         <div  className="flex items-center space-x-4 justify-between">
-          <ThemeButton />
+          {
+            authStatus && (
+              <ThemeButton className="hidden sm:flex" />
+            )
+
+          }
+          {
+            ! authStatus && (
+              <ThemeButton  />
+            )
+
+          }
+
+          {/* <ThemeButton /> */}
           <div className="flex items-center space-x-4 ">
             {!authStatus && (
               <Link
@@ -75,19 +88,25 @@ function Header() {
 
                   <DropdownMenuContent>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem>
+                    <DropdownMenuItem className="flex items-center justify-center">
                       <Link to="/user/profile">Your Profile</Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem>
+                    <DropdownMenuItem className="flex items-center justify-center">
                       <Link to="/user/orders">Your Orders</Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem>
+                    <DropdownMenuItem className="flex items-center justify-center">
                       <Link to="/user/cart">Your Cart</Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem>
+                    <DropdownMenuItem className="flex items-center justify-center">
                       <Link to="/user/wishlists">Wishlists</Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem>
+                    <DropdownMenuItem className="sm:hidden flex items-center justify-center p-0">
+                      
+                      <ThemeButton   className="h-full w-full"/>
+
+                   
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="flex items-center justify-center">
                       <LogoutBtn />
                     </DropdownMenuItem>
                   </DropdownMenuContent>
