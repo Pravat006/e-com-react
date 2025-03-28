@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import ProductService from "../../services/product.service.js";
 import AddtocartBtn from "../root/AddtocartBtn.jsx";
-import { FaArrowRightLong } from "react-icons/fa6";
+
 import ToggleWishlist from "../root/ToggleWishlist.jsx";
 function ProductDetails() {
   const { productId } = useParams();
@@ -15,9 +15,7 @@ function ProductDetails() {
       try {
         const response = await ProductService.getProductById(productId);
         setProductData(response?.data);
-        console.log("product data: ", response?.data);
-        console.log(" category id: ", response?.data?.category.name);
-        
+     
         const subImages = Array.isArray(response?.data?.subImages) ? response.data.subImages : [];
         const imageLinks = [response?.data?.mainImage?.url, ...subImages.map(subImage => subImage.url)];
         setMainImage(imageLinks[0]);

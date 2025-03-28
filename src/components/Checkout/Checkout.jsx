@@ -8,27 +8,27 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus} from "lucide-react";
 import Input from "../root/Input";
-import { FaArrowAltCircleRight } from "react-icons/fa";
+
 import { useForm } from "react-hook-form";
 import { MdDeleteForever } from "react-icons/md";
-import StyledUnput from "../styledComponent/StyledUnput";
+
 import orderService from "@/services/order.service";
 import { useSelector } from "react-redux";
 
 const Checkout = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [addressId, setAddressId] = useState(null);
+  const [addressId, setAddressId] = useState([]);
   const [isAddressSelected, setIsAddressSelected] = useState(false);
   const [loading, setLoading] = useState(false);
- 
+  
   const { register, handleSubmit } = useForm({
     defaultValues: {
       country: "India",
     },
   });
-
+  
   const customerDetails =  useSelector((state) => state.auth.userData);
   const discountedTotal= useSelector((state) => state.cart.discountedTotal);
   const { items, cartTotal } =
@@ -76,16 +76,16 @@ const Checkout = () => {
         order_id: razorPayOrder.data.id, // Razorpay Order ID
 
         handler: async (response) => {
-          console.log("Payment Success Response:", response);
+          
 
           // Send payment response to backend for verification
           const verifyRes = await orderService.verifyPayment({
             response
           });
           if(verifyRes){
-            console.log("Payment verified:", verifyRes);
+            // console.log("Payment verified:", verifyRes);
           }
-         
+          
         },
         prefill: {
           
@@ -128,6 +128,8 @@ const Checkout = () => {
       }
     },
   });
+ 
+  // console.log(addresses[0])
 
   const createAddress = async (data) => {
     try {
@@ -176,12 +178,11 @@ const Checkout = () => {
   };
 
   const handleDeliverHere = (id) => {
+    // setCurrentPage(2);
     setAddressId(id);
-    setCurrentPage(2);
-    isAddressSelected(true);
+    setIsAddressSelected(true);
   };
-
-  console.log("checkout address : ", addressId);
+console.log(addressId)
 
   return (
     <div className="w-screen sm:w-[80%] lg:w-[70%] p-4 border rounded shadow-lg h-[70vh] my-7  flex flex-col justify-between">
@@ -221,8 +222,8 @@ const Checkout = () => {
                         <MdDeleteForever />
                       </button>
 
-                      <button
-                        // className="bg-gray-200 px-3 py-1 text-gray-800  rounded-md"
+                      {/* <button
+                       
                         className="text-xl"
                         onClick={() => handleDeliverHere(address._id)}
                       >
@@ -234,8 +235,13 @@ const Checkout = () => {
                           )
 
                         }
-                        {/* <FaArrowAltCircleRight /> */}
-                      </button>
+                       
+                      </button> */}
+                       <input
+            type="checkbox"
+            checked={addressId === address._id}
+            onChange={() => handleDeliverHere(address._id)}
+          />
                     </div>
                   </div>
                 ))}
@@ -315,32 +321,26 @@ const Checkout = () => {
 
       {/* Page 2 */}
       {currentPage === 2 && (
-        <div>
-            <h2 className="text-lg font-semibold mb-4">Order Summery</h2>
-            <div className="flex justify-center items-center gap-4 flex-col">
-              <div className="products">
-                <h3 className="text-lg font-semibold">Products</h3>
-                <div className="product-details">
-                  <div className="flex justify-between">
-                    <p>Product 1</p>
-                    <p>₹ 500</p>
-                  </div>
-                  <div className="flex justify-between">
-                    <p>Product 2</p>
-                    <p> 500</p>
-                  </div>
-                  <div className="flex justify-between">
-                    <p>Product 3</p>
-                    <p>₹ 500</p>
-                  </div>
-                </div>
-
-              </div>
-              <div
-                  className="amount-details"
-              ></div>
-            </div>
+        <div className="bg-[var(--section-bg)] p-4 mt-6 rounded-lg shadow-inner">
+        <h3 className="text-lg font-semibold">Order Summary</h3>
+        <div className="flex justify-between text-sm mt-2">
+          <span>Subtotal (3 items)</span>
+          <span>$279.97</span>
         </div>
+        <div className="flex justify-between text-sm mt-2">
+          <span>Shipping</span>
+          <span className="text-green-600">Free</span>
+        </div>
+        <div className="flex justify-between text-sm mt-2">
+          <span>Tax</span>
+          <span>$28.00</span>
+        </div>
+        <div className="border-t mt-3 pt-3 flex justify-between font-semibold">
+          <span>Total</span>
+          <span>$307.97</span>
+        </div>
+        <button className="mt-4 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">Place Order</button>
+      </div>
       )}
 
       {/* Page 3 */}
