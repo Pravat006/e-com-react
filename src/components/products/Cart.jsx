@@ -33,16 +33,15 @@ function Cart() {
     dispatch(removeItemFromCart(id));
   };
   const handleQuantityChange = (productId, operation) => {
-    
     const item = items.find((item) => item.product._id === productId);
     if (item) {
-      const newQuantity = operation === "increment" ? item.quantity + 1 : item.quantity - 1;
+      const newQuantity =
+        operation === "increment" ? item.quantity + 1 : item.quantity - 1;
       if (newQuantity > 0) {
         dispatch(updateCartItemQuantity({ productId, quantity: newQuantity }));
         dispatch(updateQuantity({ productId, quantity: newQuantity }));
       }
     }
-    
   };
 
   const handleApplyCoupon = (couponName) => {
@@ -82,9 +81,7 @@ function Cart() {
       <div className="mx-auto max-w-screen-xl  py-8 sm:px-6 sm:py-12 lg:px-8 bg-[var(--section-bg)] rounded-2xl my-4">
         <div className="mx-auto max-w-3xl">
           <div className="text-center">
-            <h1 className="text-xl font-bold  sm:text-3xl">
-              Your Cart
-            </h1>
+            <h1 className="text-xl font-bold  sm:text-3xl">Your Cart</h1>
           </div>
 
           <div className="mt-8">
@@ -96,21 +93,19 @@ function Cart() {
                     key={item?.product?._id}
                   >
                     <img
-                      src={item?.product.mainImage.url}
+                      src={item?.product.mainImage?.url}
                       alt=""
                       className="size-16 rounded object-cover"
                     />
 
                     <div>
-                      <h3 className="text-sm ">
-                        {item?.product.name}
-                      </h3>
+                      <h3 className="text-sm ">{item?.product.name}</h3>
 
                       <dl className="mt-0.5 space-y-px text-[10px] ">
                         <div className="flex">
                           <dt className="inline">Price: </dt>
                           <dd className="inline text-green-600">
-                           ₹{item?.product.price} 
+                            ₹{item?.product.price}
                           </dd>
                         </div>
 
@@ -123,16 +118,22 @@ function Cart() {
 
                     <div className="flex flex-1 items-center justify-end gap-2">
                       <div className="flex items-center gap-0 bg-gray-50">
-                        <button className="w-8 h-8 flex justify-center items-center  hover:bg-gray-800 hover:text-white text-gray-800 font-bold rounded "
-                          onClick={() => handleQuantityChange(item?.product._id, "decrement")}
+                        <button
+                          className="w-8 h-8 flex justify-center items-center  hover:bg-gray-800 hover:text-white text-gray-800 font-bold rounded "
+                          onClick={() =>
+                            handleQuantityChange(item?.product._id, "decrement")
+                          }
                         >
                           -
                         </button>
                         <h2 className="h-8 w-12 rounded border-gray-200 bg-gray-50 p-0  flex justify-center items-center  text-xs text-gray-600 :m-0 ">
                           {item.quantity}
                         </h2>
-                        <button className="w-8 h-8 flex justify-center items-center  hover:bg-gray-800 hover:text-white text-gray-800 font-semibold rounded"
-                          onClick={() => handleQuantityChange(item?.product._id, "increment")}
+                        <button
+                          className="w-8 h-8 flex justify-center items-center  hover:bg-gray-800 hover:text-white text-gray-800 font-semibold rounded"
+                          onClick={() =>
+                            handleQuantityChange(item?.product._id, "increment")
+                          }
                         >
                           +
                         </button>
@@ -216,7 +217,7 @@ function Cart() {
                   <div className="flex justify-between !text-base font-medium px-1">
                     <dt>Total</dt>
                     <dd className="text-green-700 font-bold">
-                    ₹{discountedTotal}
+                      ₹{discountedTotal}
                     </dd>
                   </div>
                 </dl>

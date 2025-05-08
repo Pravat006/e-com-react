@@ -23,57 +23,53 @@ import Allproducts from "./pages/Allproducts";
 import ShopByFetaturedCategory from "./components/products/ShopByFetaturedCategory";
 import Wishlists from "./components/products/Wishlists";
 
-
-
-
 function App() {
-
- 
-
   return (
-  
-   
-     
     <BrowserRouter>
       <Routes>
-        <Route element={<AuthLayout/>} >
-          <Route path="/login" element={<Login/>} />
-          <Route path="/sign-up" element={<Signup/>} />
-          <Route path="/user/forgot-password" element={<WorkingonIt/>} />     
+        <Route element={<AuthLayout />}>
+          <Route path="/login" element={<Login />} />
+          <Route path="/sign-up" element={<Signup />} />
+          <Route path="/user/forgot-password" element={<WorkingonIt />} />
         </Route>
-        <Route element={<UserLayout/>} >            
-          <Route path="/" element={<Home/>} />
-          <Route path='/product/id/:productId' element={<ProductDetails/>} />
-          <Route path='/products/c' element={<SearchedProduct/>} />
-          <Route path='/products/c' element={<ShopByFetaturedCategory/>} />
-          <Route path="/all-products" element={<Allproducts/>} />
+        <Route element={<UserLayout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/product/id/:productId" element={<ProductDetails />} />
+          <Route path="/products/c" element={<SearchedProduct />} />
+          <Route path="/products/c" element={<ShopByFetaturedCategory />} />
+          <Route path="/all-products" element={<Allproducts />} />
           <Route>
-            <Route element={<PrivateLayout/>}>
-              <Route path="/user/cart" element={<Cart/>} />
-              <Route path="/user/profile" element={<Profile/>} />
-              <Route path="/products/checkout" element={<Checkout/>} />
-              <Route path="/user/orders" element={<YourOrder/>} />
-              <Route path="/user/wishlists" element={<Wishlists/>} />
+            <Route element={<PrivateLayout />}>
+              <Route path="/user/cart" element={<Cart />} />
+              <Route path="/user/profile" element={<Profile />} />
+              <Route path="/products/checkout" element={<Checkout />} />
+              <Route path="/user/orders" element={<YourOrder />} />
+              <Route path="/user/wishlists" element={<Wishlists />} />
             </Route>
           </Route>
-           
         </Route>
-          <Route  path="/admin/dashboard" element={<AdminLayout/>} >
-            <Route path="/admin/dashboard/" element={<AdminProfile/>} />
-            <Route path="/admin/dashboard/all-product" element={<ProductTable/>} />
-            <Route path="/admin/dashboard/create-product" element={<CreateProduct/>} />
-           
-            <Route path="/admin/dashboard/all-category" element={<CategoryTable/>} />
-            <Route path="/admin/dashboard/create-category" element={<CreateCategory/>} />
-            
-           
-          </Route>
-         
-       
+        <Route path="/admin/dashboard" element={<AdminLayout />}>
+          <Route path="/admin/dashboard/" element={<AdminProfile />} />
+          <Route
+            path="/admin/dashboard/all-product"
+            element={<ProductTable />}
+          />
+          <Route
+            path="/admin/dashboard/create-product"
+            element={<CreateProduct />}
+          />
+
+          <Route
+            path="/admin/dashboard/all-category"
+            element={<CategoryTable />}
+          />
+          <Route
+            path="/admin/dashboard/create-category"
+            element={<CreateCategory />}
+          />
+        </Route>
       </Routes>
     </BrowserRouter>
-    
-
   );
 }
 
