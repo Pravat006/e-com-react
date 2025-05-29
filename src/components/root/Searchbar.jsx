@@ -13,17 +13,17 @@ function Searchbar() {
   };
 
   return (
-    <div className="w-[60vw]  mx-auto flex justify-center items-center md:w-[50vw] lg:w-[40vw]">
+    <div className="w-[60vw]  mx-auto flex justify-center items-center md:w-[50vw] lg:w-[40vw] ">
       <div className="flex-1 relative">
         <input
           type="text"
           value={searchedText}
           onChange={(e) => setSearchedText(e.target.value)}
           placeholder="Search for an item "
-          className="w-full h-10  pr-10 text-sm   rounded-l-[50px]  px-10 boreder-none outline-none focus:outline-none focus:ring-2 focus:ring-gray-500 bg-transparent"
-          style={{
-            backgroundColor: "var(--searchBar-bg)",
-          }}
+          className="w-full h-10  pr-10 text-sm   rounded-l-[50px]  px-10 boreder-none outline-none focus:outline-none focus:ring-2 focus:ring-gray-500 bg-white bg-opacity-5 backdrop-blur"
+          // style={{
+          //   backgroundColor: "var(--searchBar-bg)",
+          // }}
           onKeyDown={(e) => e.key === "Enter" && handleSearch()}
         />
         {searchedText && (
@@ -36,7 +36,7 @@ function Searchbar() {
       </div>
       <button
         onClick={handleSearch}
-        className="h-10 w-10 bg-[var(--searchBar-bg)]  flex justify-center items-center rounded-r-[50px] "
+        className="h-10 w-10 bg-white bg-opacity-5 backdrop-blur  flex justify-center items-center rounded-r-[50px] "
         // if the input is empty the disable the button
         disabled={!searchedText.trim()}
       >

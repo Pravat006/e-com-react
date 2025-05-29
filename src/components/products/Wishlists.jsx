@@ -16,7 +16,7 @@ function Wishlists() {
 
   return (
     <section>
-      <div className="mx-auto max-w-screen-xl  py-8 sm:px-6 sm:py-12 lg:px-8 bg-[var(--section-bg)] rounded-2xl my-4">
+      <div className="mx-auto max-w-screen-xl  py-8 sm:px-6 sm:py-12 lg:px-8 bg-white bg-opacity-5 backdrop-blur rounded-2xl my-4">
         <div className="mx-auto max-w-3xl">
           <div className="text-center">
             <h1 className="text-xl font-bold  sm:text-3xl">Your wishlists</h1>

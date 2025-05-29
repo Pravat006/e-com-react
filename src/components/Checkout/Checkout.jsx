@@ -8,7 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Plus} from "lucide-react";
+import { Plus } from "lucide-react";
 import Input from "../root/Input";
 
 import { useForm } from "react-hook-form";
@@ -16,24 +16,25 @@ import { MdDeleteForever } from "react-icons/md";
 
 import orderService from "@/services/order.service";
 import { useSelector } from "react-redux";
+import OrderSummary from "./OrderSummery";
+import PriceDetails from "./PriceDetails";
 
 const Checkout = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [addressId, setAddressId] = useState([]);
   const [isAddressSelected, setIsAddressSelected] = useState(false);
   const [loading, setLoading] = useState(false);
-  
+
   const { register, handleSubmit } = useForm({
     defaultValues: {
       country: "India",
     },
   });
-  
-  const customerDetails =  useSelector((state) => state.auth.userData);
-  const discountedTotal= useSelector((state) => state.cart.discountedTotal);
-  const { items, cartTotal } =
-     useSelector((state) => state.cart);
- 
+
+  const customerDetails = useSelector((state) => state.auth.userData);
+  const discountedTotal = useSelector((state) => state.cart.discountedTotal);
+  const { items, cartTotal } = useSelector((state) => state.cart);
+
   // Load Razorpay Script
   const loadRazorpayScript = () => {
     return new Promise((resolve) => {
@@ -44,8 +45,6 @@ const Checkout = () => {
       document.body.appendChild(script);
     });
   };
-
-  
 
   // Handle Payment
   const handlePayment = async () => {
@@ -76,21 +75,16 @@ const Checkout = () => {
         order_id: razorPayOrder.data.id, // Razorpay Order ID
 
         handler: async (response) => {
-          
-
           // Send payment response to backend for verification
           const verifyRes = await orderService.verifyPayment({
-            response
+            response,
           });
-          if(verifyRes){
+          if (verifyRes) {
             // console.log("Payment verified:", verifyRes);
           }
-          
         },
         prefill: {
-          
           email: customerDetails.user.email,
-          
         },
 
         theme: {
@@ -128,7 +122,7 @@ const Checkout = () => {
       }
     },
   });
- 
+
   // console.log(addresses[0])
 
   const createAddress = async (data) => {
@@ -182,16 +176,14 @@ const Checkout = () => {
     setAddressId(id);
     setIsAddressSelected(true);
   };
-console.log(addressId)
+  console.log(addressId);
 
   return (
     <div className="w-screen sm:w-[80%] lg:w-[70%] p-4 border rounded shadow-lg h-[70vh] my-7  flex flex-col justify-between">
       {/* Page 1 */}
       {currentPage === 1 && (
         <div className="w-full">
-          <h2 className="text-lg font-semibold mb-4">
-              Shipping information  
-          </h2>
+          <h2 className="text-lg font-semibold mb-4">Shipping information</h2>
           {isAddressesLoading ? (
             <h1>Loading...</h1>
           ) : (
@@ -237,11 +229,11 @@ console.log(addressId)
                         }
                        
                       </button> */}
-                       <input
-            type="checkbox"
-            checked={addressId === address._id}
-            onChange={() => handleDeliverHere(address._id)}
-          />
+                      <input
+                        type="checkbox"
+                        checked={addressId === address._id}
+                        onChange={() => handleDeliverHere(address._id)}
+                      />
                     </div>
                   </div>
                 ))}
@@ -255,7 +247,7 @@ console.log(addressId)
                   <DialogContent>
                     <DialogHeader>
                       <DialogTitle>Create new address</DialogTitle>
-                      {/* form handling the address creation */}
+                      {/* forLinkm handling the address creation */}
                       <form
                         action=""
                         className="py-4 flex flex-col"
@@ -321,40 +313,28 @@ console.log(addressId)
 
       {/* Page 2 */}
       {currentPage === 2 && (
-        <div className="bg-[var(--section-bg)] p-4 mt-6 rounded-lg shadow-inner">
-        <h3 className="text-lg font-semibold">Order Summary</h3>
-        <div className="flex justify-between text-sm mt-2">
-          <span>Subtotal (3 items)</span>
-          <span>$279.97</span>
+        <div className="w-full h-screen flex gap-3 overflow-y-auto scrollbar-hide items-center justify-center ">
+          <OrderSummary />
         </div>
-        <div className="flex justify-between text-sm mt-2">
-          <span>Shipping</span>
-          <span className="text-green-600">Free</span>
-        </div>
-        <div className="flex justify-between text-sm mt-2">
-          <span>Tax</span>
-          <span>$28.00</span>
-        </div>
-        <div className="border-t mt-3 pt-3 flex justify-between font-semibold">
-          <span>Total</span>
-          <span>$307.97</span>
-        </div>
-        <button className="mt-4 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">Place Order</button>
-      </div>
+
+
+
       )}
 
       {/* Page 3 */}
       {currentPage === 3 && (
         <div>
-          <h2 className="text-lg font-semibold mb-4">
-            Pay now
-          </h2>
+          <h2 className="text-lg font-semibold mb-4">Pay now</h2>
           <div>
-            <button onClick={handlePayment} disabled={loading} className="bg-blue-500 text-white px-4 py-2 rounded">
+            <button
+              onClick={handlePayment}
+              disabled={loading}
+              className="bg-blue-500 text-white px-4 py-2 rounded"
+            >
               {loading ? "Processing..." : "Pay ₹" + discountedTotal}
             </button>
           </div>
-        
+
           {/* info about product and  */}
         </div>
       )}
@@ -365,9 +345,8 @@ console.log(addressId)
           type="button"
           onClick={goToPreviousPage}
           disabled={currentPage === 1}
-          className={`px-4 py-2 rounded ${
-            currentPage === 1 ? "bg-gray-300" : "bg-blue-500 text-white"
-          }`}
+          className={`px-4 py-2 rounded ${currentPage === 1 ? "bg-gray-300" : "bg-blue-500 text-white"
+            }`}
         >
           Previous
         </button>

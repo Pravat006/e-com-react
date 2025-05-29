@@ -75,9 +75,18 @@ theme: {
         lightBg: "#f8f9fa", // Light mode background
         darkBg: "#121212",  // Dark mode background
         lightText: "#333",  // Light mode text
-        darkText: "#ffffff" // Dark mode text
+        darkText: "#ffffff", // Dark mode text
+         'brand-beige': '#F4F1EA',
+        'brand-orange-primary': '#FF4500',
+        'brand-orange-accent': '#FF6B00',
+        'brand-dark': '#1C1C1C',
       },
+      fontFamily: {
+        'sans': ['Segoe UI', 'Tahoma', 'Geneva', 'Verdana', 'sans-serif'], // Example custom font stack
+      }
     },
   },
   plugins: [require("tailwindcss-animate")],
+  plugins: [require('tailwind-scrollbar-hide')],
+
 }

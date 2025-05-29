@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+  import React, { useEffect, useState } from "react";
 
 import {
   removeItemFromCart,
@@ -78,13 +78,13 @@ function Cart() {
   }
   return (
     <section>
-      <div className="mx-auto max-w-screen-xl  py-8 sm:px-6 sm:py-12 lg:px-8 bg-[var(--section-bg)] rounded-2xl my-4">
+      <div className="mx-auto  max-w-screen-xl  py-8  sm:px-6 sm:py-12 lg:px-8 backdrop-blur-md rounded-2xl my-4">
         <div className="mx-auto max-w-3xl">
           <div className="text-center">
             <h1 className="text-xl font-bold  sm:text-3xl">Your Cart</h1>
           </div>
 
-          <div className="mt-8">
+          <div className="mt-8 ">
             <ul className="space-y-4 px-4">
               {items?.length >= 0 &&
                 items?.map((item) => (
@@ -170,24 +170,24 @@ function Cart() {
               )}
             </ul>
 
-            <div className="mt-8 flex justify-end border-t border-gray-100 pt-8 ">
+            <div className="mt-8 flex justify-end border-t border-gray-100 pt-8  ">
               <div className="w-screen max-w-lg space-y-4">
                 <dl className="space-y-0.5 text-sm ">
-                  <div className="flex justify-between px-1">
+                  <div className="flex justify-between px-3">
                     <dt>Subtotal</dt>
                     <dd className="text-yellow-700 font-bold">₹{cartTotal}</dd>
                   </div>
 
-                  <div className="flex justify-between px-1">
+                  <div className="flex justify-between px-3">
                     <dt>Total items</dt>
                     <dd>{items.length}</dd>
                   </div>
-                  <div className="flex justify-between px-1">
+                  <div className="flex justify-between px-3">
                     <dt>Total product quantity</dt>
                     <dd>{totalQuantity}</dd>
                   </div>
 
-                  <div className="flex justify-between px-1">
+                  <div className="flex justify-between px-3">
                     <dt>Applied coupon</dt>
                     <dd className="inline-flex items-center justify-center rounded-full bg-indigo-100 px-2.5 pl-2 pr-0 text-indigo-700">
                       <svg
@@ -207,14 +207,14 @@ function Cart() {
                       <p>{coupon?.couponCode}</p>
                     </dd>
                   </div>
-                  <div className="flex justify-between px-1">
+                  <div className="flex justify-between px-3">
                     <dt>Discount</dt>
                     <dd className="text-red-800 font-bold">
                       -₹{coupon?.discountValue || 0}
                     </dd>
                   </div>
 
-                  <div className="flex justify-between !text-base font-medium px-1">
+                  <div className="flex justify-between !text-base font-medium px-3">
                     <dt>Total</dt>
                     <dd className="text-green-700 font-bold">
                       ₹{discountedTotal}
@@ -222,14 +222,14 @@ function Cart() {
                   </div>
                 </dl>
 
-                <div className="flex justify-end pr-1">
-                  <Dialog>
+                <div className="flex justify-end pr-3">
+                  <Dialog className="w-full max-w-md bg-transparent">
                     <DialogTrigger>
-                      <p className="whitespace-nowrap text-xs text-orange-600 font-bold bg-blue-50 px-1 py-1 ">
+                      <p className="whitespace-nowrap text-xs text-orange-600 font-bold bg-blue-50 px-3 py-1 ">
                         Apply Coupon
                       </p>
                     </DialogTrigger>
-                    <DialogContent>
+                    <DialogContent className="bg-none">
                       <DialogHeader>
                         <DialogTitle>
                           Select the best offer available
@@ -238,7 +238,7 @@ function Cart() {
                       <ul className="w-full">
                         {availableCoupons.map((item) => (
                           <li key={item?._id}>
-                            <div className="flex justify-between items-center gap-2 border-black border-2 my-1">
+                            <div className="flex justify-between items-center gap-2 my-1">
                               <p className="text-bold text-orange-700 pl-2">
                                 {item?.couponCode}
                               </p>
@@ -269,7 +269,7 @@ function Cart() {
                   </Dialog>
                 </div>
 
-                <div className="flex sm:justify-end gap-1 justify-center ">
+                <div className="flex sm:justify-end gap-1 justify-center sm:pr-3">
                   <Link
                     to={"/products/checkout"}
                     className="block rounded bg-gray-700 px-5 py-3 text-sm text-gray-100 transition hover:bg-gray-600"
