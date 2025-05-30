@@ -1,15 +1,32 @@
-import React, { useEffect, useState } from 'react'
+// ...existing code...
+import React, { useEffect, useState } from 'react';
 import AddressInput from './AddressInput';
 import OrderSummeryCard from './OrderSummeryCard';
 import { useForm } from 'react-hook-form';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux'; // Added useDispatch
 import addressService from '@/services/address.service';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import orderService from '@/services/order.service';
+// import { useRouter } from 'next/router'; // Uncomment if using Next.js for navigation
+// import { clearCart } from '@/store/cartSlice'; // Example: if you have a clearCart action
 
+// Helper function to load a script (can be moved to a utility file)
+const loadScript = (src) => {
+    return new Promise((resolve) => {
+        const script = document.createElement('script');
+        script.src = src;
+        script.onload = () => {
+            resolve(true);
+        };
+        script.onerror = () => {
+            resolve(false);
+        };
+        document.body.appendChild(script);
+    });
+};
 
 
 function CheckouT() {
-
     const { register, handleSubmit, setValue, watch, reset, formState: { errors } } = useForm({
         defaultValues: {
             addressLine1: '',
@@ -23,10 +40,12 @@ function CheckouT() {
         }
     });
     const userDetails = useSelector((state) => state.auth.userData);
-    const { items, cartTotal, status, error: cartError, coupon } = useSelector((state) => state.cart); // Renamed error to cartError
+    const { items, cartTotal, status, error: cartError, coupon } = useSelector((state) => state.cart);
+    const dispatch = useDispatch(); // For potential actions like clearCart
+    // const router = useRouter(); // Uncomment if using Next.js
 
-    const [selectedAddress, setSelectedAddress] = useState(null); // 1. Define selectedAddress state
-    const [isAddingNewAddress, setIsAddingNewAddress] = useState(false); // 2. Initialize, will be updated by useEffect
+    const [selectedAddress, setSelectedAddress] = useState(null);
+    const [isAddingNewAddress, setIsAddingNewAddress] = useState(false);
     const [showAddressModal, setShowAddressModal] = useState(false);
     const [manualAddress, setManualAddress] = useState({
         addressLine1: '',
@@ -38,11 +57,29 @@ function CheckouT() {
         addressType: 'home',
         country: 'India',
     });
-    // For future update functionality
-    // const [isUpdatingAddress, setIsUpdatingAddress] = useState(false);
-    // const [editingAddressId, setEditingAddressId] = useState(null);
 
     const pincodeValue = watch("pincode");
+
+    // --- Razorpay State ---
+    const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+    const [paymentError, setPaymentError] = useState('');
+    const [paymentSuccess, setPaymentSuccess] = useState('');
+    // --- End Razorpay State ---
+
+    useEffect(() => {
+        // Load Razorpay checkout script when component mounts
+        loadScript('https://checkout.razorpay.com/v1/checkout.js').then(loaded => {
+            if (!loaded) {
+                setPaymentError("Failed to load Razorpay SDK. Please refresh and try again.");
+            }
+        });
+        // Cleanup function to remove script if component unmounts, though generally not strictly necessary for Razorpay's script
+        // return () => {
+        //     const script = document.querySelector('script[src="https://checkout.razorpay.com/v1/checkout.js"]');
+        //     if (script) document.body.removeChild(script);
+        // };
+    }, []);
+
 
     useEffect(() => {
         const fetchAddressDetails = async () => {
@@ -53,8 +90,6 @@ function CheckouT() {
                         console.warn(`API request failed for pincode ${pincodeValue} with status ${response.status}`);
                         setValue("city", "", { shouldDirty: true });
                         setValue("state", "", { shouldDirty: true });
-                        // Optionally reset country or leave as is
-                        // setValue("country", "India", { shouldDirty: true }); 
                         return;
                     }
                     const data = await response.json();
@@ -68,8 +103,6 @@ function CheckouT() {
                         console.warn("Pincode not found or API error:", data[0]?.Message);
                         setValue("city", "", { shouldValidate: true, shouldDirty: true });
                         setValue("state", "", { shouldValidate: true, shouldDirty: true });
-                        // Optionally reset country or leave as is
-                        // setValue("country", "India", { shouldValidate: true, shouldDirty: true });
                     }
                 } catch (error) {
                     console.error("Error fetching pincode details:", error);
@@ -77,60 +110,53 @@ function CheckouT() {
                     setValue("state", "", { shouldDirty: true });
                 }
             } else if (pincodeValue && pincodeValue.length > 0 && pincodeValue.length < 6) {
-                // Clear auto-filled fields if pincode is partially typed and then corrected
                 const currentCity = watch("city");
-                if (currentCity) { // Only clear if fields were likely auto-filled
+                if (currentCity) {
                     setValue("city", "", { shouldDirty: true });
                     setValue("state", "", { shouldDirty: true });
-                    // setValue("country", "India", { shouldDirty: true }); // Reset country to default
                 }
-           }
+            }
         };
 
         fetchAddressDetails();
     }, [pincodeValue, setValue, watch]);
 
-    const { data: addresses, isLoading: isAddresssLoading, error: addressesError } = useQuery({ // Renamed idAddressError
+    const { data: addresses, isLoading: isAddresssLoading, error: addressesError } = useQuery({
         queryKey: ["addresses"],
         queryFn: async () => {
             try {
                 const res = await addressService.getAllAddress();
-                return res?.success ? res?.data?.addresses : []; // 10. Ensure array or empty array
+                return res?.success ? res?.data?.addresses : [];
             } catch (error) {
                 console.error("Error fetching addresses:", error);
-                throw error; // 10. Let React Query handle the error object
+                throw error;
             }
         }
     });
 
-    // 3. useEffect for Initial Address Selection
     useEffect(() => {
-        if (isAddresssLoading) return; // Wait for loading to finish
+        if (isAddresssLoading) return;
 
-        if (addresses && !selectedAddress && !isAddingNewAddress /* && !isUpdatingAddress */) {
+        if (addresses && !selectedAddress && !isAddingNewAddress) {
             if (Array.isArray(addresses) && addresses.length > 0) {
                 const defaultAddress = addresses.find(addr => addr.isDefault);
-                setSelectedAddress(defaultAddress || addresses[0]); // Select default or first
+                setSelectedAddress(defaultAddress || addresses[0]);
                 setIsAddingNewAddress(false);
             } else if (Array.isArray(addresses) && addresses.length === 0) {
-                // No addresses fetched, show the form to add one
                 setIsAddingNewAddress(true);
             }
         }
-    }, [addresses, selectedAddress, isAddingNewAddress, isAddresssLoading /*, isUpdatingAddress */]);
+    }, [addresses, selectedAddress, isAddingNewAddress, isAddresssLoading]);
 
-    console.log("addresses :  ", addresses);
-    console.log("selectedAddress :  ", selectedAddress);
-
+    const queryClient = useQueryClient();
 
     const createAddress = async (data) => {
         try {
             const res = await addressService.createAddress(data);
-            // Assuming API returns the created address object in res.data or res.data.address
             return res?.success ? (res.data?.address || res.data) : null;
         } catch (error) {
             console.log("failed to create address ");
-            throw error; // Propagate error for mutation's onError
+            throw error;
         }
     }
 
@@ -140,38 +166,38 @@ function CheckouT() {
             return res?.success ? res?.data : null;
         } catch (error) {
             console.log("failed to delete address");
-            throw error; // Propagate error
+            throw error;
         }
     };
 
-    const queryClient = useQueryClient();
-
     const createAddressMutaton = useMutation({
         mutationFn: createAddress,
-        onSuccess: (newlyCreatedAddress) => { // 8. Refine onSuccess
+        onSuccess: (newlyCreatedAddress) => {
             queryClient.invalidateQueries("addresses");
-            setManualAddress({ // Reset form
+            reset({ // Reset RHF form
                 addressLine1: '', addressLine2: '', city: '', state: '',
                 pincode: '', phoneNumber: '', addressType: 'home', country: 'India',
             });
-            setIsAddingNewAddress(false); // Hide form
+            setManualAddress({ // Reset local manualAddress state as well
+                addressLine1: '', addressLine2: '', city: '', state: '',
+                pincode: '', phoneNumber: '', addressType: 'home', country: 'India',
+            });
+            setIsAddingNewAddress(false);
             if (newlyCreatedAddress) {
-                setSelectedAddress(newlyCreatedAddress); // Select the newly created address
+                setSelectedAddress(newlyCreatedAddress);
             }
         },
         onError: (error) => {
             console.error("Error creating address:", error.message);
-            // Handle user-facing error (e.g., toast)
         }
     });
 
     const deleteAddressMutation = useMutation({
         mutationFn: deleteAddress,
-        onSuccess: (data, addressId) => { // 8. Refine onSuccess (addressId is the variable passed to mutate)
+        onSuccess: (data, addressId) => {
             queryClient.invalidateQueries("addresses");
             if (selectedAddress && (selectedAddress._id === addressId || selectedAddress.id === addressId)) {
-                setSelectedAddress(null); // Clear selection if deleted
-                // Optionally, select another address or set isAddingNewAddress(true)
+                setSelectedAddress(null);
             }
         },
         onError: (error) => {
@@ -183,7 +209,7 @@ function CheckouT() {
         try {
             const res = await addressService.setDefaultAddress(addressid);
             if (res?.success) {
-                queryClient.invalidateQueries("addresses"); // Refetch to update default status
+                queryClient.invalidateQueries("addresses");
             }
             return res;
         } catch (error) {
@@ -191,50 +217,174 @@ function CheckouT() {
         }
     };
 
-    const handlePayment = () => { // 9. Correct handlePayment
-        const finalAddress = isAddingNewAddress /*|| isUpdatingAddress*/ ? manualAddress : selectedAddress;
-        if (!finalAddress || !finalAddress.addressLine1 || !finalAddress.city || !finalAddress.pincode || !finalAddress.phoneNumber) {
-            alert('Please select or enter a valid shipping address including Address Line 1, City, Pincode, and Phone Number.');
+    // --- MODIFIED HANDLE PAYMENT FUNCTION ---
+    const handlePayment = async () => {
+        // Ensure a saved address is selected and has an ID
+        if (!selectedAddress || !selectedAddress._id) {
+            alert('Please select a saved shipping address to proceed with payment. If you are adding a new address, please save it first and then select it.');
             return;
         }
-        console.log('Processing payment for:', cartTotal.toFixed(2)); // Use cartTotal
-        console.log('Shipping to:', finalAddress);
-        alert(`Payment of $${cartTotal.toFixed(2)} processed successfully! Shipping to ${finalAddress.addressLine1}, ${finalAddress.city}.`);
-    };
 
-    // 4. Update handleSelectAddress
+        // Use selectedAddress for payment details
+        const addressForPayment = selectedAddress;
+
+        // Optional: A further check to ensure the selected address is complete, 
+        // though your backend might handle this if it fetches the address by ID.
+        if (!addressForPayment.addressLine1 || !addressForPayment.city || !addressForPayment.pincode || !addressForPayment.phoneNumber) {
+            alert('The selected shipping address appears to be incomplete. Please ensure all details are present.');
+            return;
+        }
+
+        if (cartTotal <= 0) {
+            alert('Your cart is empty or total is zero. Cannot proceed to payment.');
+            return;
+        }
+
+        setIsProcessingPayment(true);
+        setPaymentError('');
+        setPaymentSuccess('');
+
+        try {
+            // 1. Create Razorpay Order by calling your backend
+            const orderData = await orderService.generateOrder({
+                addressId: addressForPayment._id
+            })
+            // Expected orderData: { id (Razorpay Order ID), amount, currency, keyId (Your Razorpay Key ID) }
+            // 2. Configure Razorpay Options
+            const options = {
+                key: process.env.REACT_APP_RAZORPAY_KEY_ID,
+                amount: orderData?.data?.amount,
+                currency: orderData?.data?.currency,
+                name: "Tech cart",
+                description: `Payment for Order ${orderData?.data?.id}`, // Ensure orderData.data.id is the Razorpay order_id
+                order_id: orderData?.data?.id, // This should be the Razorpay order_id from your backend
+                handler: async function (razorpayHandlerResponse) { // Renamed 'response' for clarity
+                    setIsProcessingPayment(true);
+                    setPaymentSuccess('Payment received. Verifying...');
+                    try {
+                        // 3. Verify Payment with your backend
+                        console.log("Verifying payment with Razorpay response:", razorpayHandlerResponse);
+
+                        // orderService.verifyPayment now directly returns the parsed JSON object
+                        const backendVerificationResult = await orderService.verifyPayment(
+                            razorpayHandlerResponse
+                        );
+
+                        console.log("Backend verification result (direct from service):", backendVerificationResult);
+
+                        // Now check the 'success' field from your backend's response structure
+                        if (backendVerificationResult && backendVerificationResult.success === true) {
+                            setPaymentSuccess(`Payment Successful! Payment ID: ${razorpayHandlerResponse.razorpay_payment_id}. Order ID: ${razorpayHandlerResponse.razorpay_order_id}`);
+                            // dispatch(clearCart()); // Example: Uncomment and ensure clearCart is imported and works
+                            console.log("Payment Verified Successfully. Order Data:", backendVerificationResult.data);
+                            alert("Payment Successful! Your order has been placed.");
+                            // router.push(`/order-confirmation?orderId=${razorpayHandlerResponse.razorpay_order_id}&paymentId=${razorpayHandlerResponse.razorpay_payment_id}`) // Example navigation
+                        } else {
+                            // Use the message from your backend's response, or a default
+                            let errorMessage = "Payment verification failed. Please contact support.";
+                            if (backendVerificationResult && backendVerificationResult.message) {
+                                errorMessage = backendVerificationResult.message;
+                                if (backendVerificationResult.errors && backendVerificationResult.errors.length > 0) {
+                                    // Optionally append specific error details
+                                    const specificErrors = backendVerificationResult.errors.map(e => e.msg || JSON.stringify(e)).join(', ');
+                                    errorMessage += ` Details: ${specificErrors}`;
+                                }
+                            }
+                            setPaymentError(errorMessage);
+                            console.error("Payment verification failed:", backendVerificationResult);
+                        }
+                    } catch (error) { // This catches errors if orderService.verifyPayment itself throws an error (e.g. network issue before backend responds)
+                        console.error("Payment verification error (catch block):", error);
+                        let detailedErrorMessage = error.message || "An unexpected error occurred during payment verification.";
+                        // If the error object has more details (e.g. from an Axios error)
+                        if (error.response && error.response.data && error.response.data.message) {
+                            detailedErrorMessage = error.response.data.message;
+                        } else if (error.data && error.data.message) { // Some error wrappers might put data here
+                            detailedErrorMessage = error.data.message;
+                        }
+                        setPaymentError(`Verification Error: ${detailedErrorMessage}. Please contact support with your Payment ID: ${razorpayHandlerResponse.razorpay_payment_id}`);
+                    } finally {
+                        setIsProcessingPayment(false);
+                    }
+                },
+
+                prefill: { // Prefill for Razorpay modal can still use full details for better UX
+                    name: userDetails?.user?.username || userDetails?.username || 'Guest User',
+                    email: userDetails?.email,
+                    contact: addressForPayment?.phoneNumber || userDetails?.phoneNumber,
+                },
+                notes: { // These notes are for Razorpay's dashboard, can still contain address summary
+                    address: `${addressForPayment.addressLine1}, ${addressForPayment.city} - ${addressForPayment.pincode}`,
+                    customer_id: userDetails?._id || userDetails?.id || 'guest_user',
+                },
+                theme: {
+                    color: "#3B82F6"
+                },
+                modal: {
+                    ondismiss: function () {
+                        if (!paymentSuccess && !isProcessingPayment) {
+                            setPaymentError("Payment modal closed by user.");
+                        }
+                        setIsProcessingPayment(false);
+                    }
+                }
+            };
+
+            // 3. Open Razorpay Checkout
+            if (window.Razorpay) {
+                const rzp = new window.Razorpay(options);
+                rzp.on('payment.failed', function (response) {
+                    console.error("Razorpay payment.failed event:", response.error);
+                    setPaymentError(`Payment Failed: ${response.error.description} (Code: ${response.error.code}). ${response.error.metadata?.order_id ? `Order ID: ${response.error.metadata.order_id}` : ''}`);
+                    setIsProcessingPayment(false);
+                });
+                rzp.open();
+            } else {
+                setPaymentError("Razorpay SDK could not be loaded. Please check your internet connection or refresh the page.");
+                setIsProcessingPayment(false);
+            }
+
+        } catch (error) {
+            console.error("Error during payment initiation:", error);
+            setPaymentError(`Error: ${error.message}`);
+            setIsProcessingPayment(false);
+        }
+    };
+    // --- END MODIFIED HANDLE PAYMENT FUNCTION ---
+
     const handleSelectAddress = (address) => {
         setSelectedAddress(address);
         setIsAddingNewAddress(false);
-        // setIsUpdatingAddress(false); // If update functionality is added
         setShowAddressModal(false);
     };
 
-    const handleManualAddressChange = (e) => {
+    const handleManualAddressChange = (e) => { // This might be redundant if RHF is fully used for form inputs
         const { name, value } = e.target;
         setManualAddress(prev => ({ ...prev, [name]: value }));
-        // If this function is still used for RHF fields, ensure RHF is also updated:
-        // setValue(name, value, { shouldValidate: true, shouldDirty: true });
+        setValue(name, value, { shouldValidate: true, shouldDirty: true });
     };
 
-    // 5. Update toggleAddNewAddress
     const toggleAddNewAddress = () => {
         setIsAddingNewAddress(true);
         setSelectedAddress(null);
-        // setIsUpdatingAddress(false); // If update functionality is added
         const defaultFormValues = {
             addressLine1: '', addressLine2: '', city: '', state: '',
             pincode: '', phoneNumber: '', addressType: 'home', country: 'India',
         };
-        reset(defaultFormValues); // Reset RHF form
-        setManualAddress(prev => ({ ...prev, ...defaultFormValues, addressType: 'home' })); // Sync addressType in local state
+        reset(defaultFormValues);
+        setManualAddress(prev => ({ ...prev, ...defaultFormValues, addressType: 'home' }));
     };
 
-    // 7. Implement handleCreateAddress
-    const handleCreateAddress = (data) => { // RHF passes validated form data here
-        // RHF handles validation based on register options.
+    const handleCreateAddress = (data) => {
         console.log("Submitting address data:", data);
-        createAddressMutaton.mutate(data); // Use data from RHF
+        createAddressMutaton.mutate(data);
+    };
+
+    // Helper to determine button text and disabled state
+    const getPaymentButtonText = () => {
+        if (isProcessingPayment) return "Processing Payment...";
+        if (paymentSuccess && !isProcessingPayment) return "Payment Successful!";
+        return `Pay ₹${cartTotal.toFixed(2)}`;
     };
 
     return (
@@ -273,7 +423,7 @@ function CheckouT() {
                                 </div>
                             ) : (
                                 <form className="space-y-4"
-                                    onSubmit={handleSubmit(handleCreateAddress)} 
+                                    onSubmit={handleSubmit(handleCreateAddress)}
                                 >
                                     <AddressInput
                                         label="Address Line 1"
@@ -281,14 +431,13 @@ function CheckouT() {
                                         {...register("addressLine1", {
                                             required: "Address Line 1 is required",
                                         })}
-                                        // Removed onChange={handleManualAddressChange} assuming RHF controls this
                                     />
                                     <div>
                                         <AddressInput
                                             label="Address Line 2"
-                                            name="addressLine2" // name prop is good for RHF
+                                            name="addressLine2"
                                             placeholder="New lane central, D-203"
-                                            {...register("addressLine2")} // Simplified, add validation if needed
+                                            {...register("addressLine2")}
                                         />
                                     </div>
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -334,10 +483,9 @@ function CheckouT() {
                                             <AddressInput
                                                 label="Country"
                                                 placeholder="e.g. India"
-                                                {...register("country", { // Control with RHF
+                                                {...register("country", {
                                                     required: "Country is required",
                                                 })}
-                                                // Removed value and onChange previously tied to manualAddress
                                             />
                                         </div>
                                     </div>
@@ -347,13 +495,13 @@ function CheckouT() {
                                             name="phoneNumber"
                                             placeholder="e.g. +917847875599"
                                             {
-                                                ...register("phoneNumber", {
-                                                    required: "Phone Number is required",
-                                                    pattern: {
-                                                        value: /^\+?[1-9]\d{1,14}$/,
-                                                        message: "Invalid phone number format",
-                                                    },
-                                                })
+                                            ...register("phoneNumber", {
+                                                required: "Phone Number is required",
+                                                pattern: {
+                                                    value: /^\+?[1-9]\d{1,14}$/,
+                                                    message: "Invalid phone number format",
+                                                },
+                                            })
                                             }
                                         />
                                     </div>
@@ -366,10 +514,10 @@ function CheckouT() {
                                                     type="button"
                                                     onClick={() => {
                                                         setManualAddress(prev => ({ ...prev, addressType: type }));
-                                                        setValue("addressType", type, { shouldDirty: true }); // Update RHF as well
+                                                        setValue("addressType", type, { shouldDirty: true });
                                                     }}
                                                     className={`px-4 py-2 border rounded-md text-sm font-medium transition-colors duration-150 ease-in-out
-                                                        ${manualAddress.addressType === type // Visual state can still use manualAddress
+                                                        ${watch("addressType") === type
                                                             ? 'bg-blue-600 border-blue-600 text-white ring-2 ring-blue-400 ring-offset-1 ring-offset-transparent'
                                                             : 'bg-transparent border-gray-600 text-gray-300 hover:bg-gray-700 hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500'
                                                         }`}
@@ -378,18 +526,14 @@ function CheckouT() {
                                                 </button>
                                             ))}
                                             <button
-                                                type="button"
-                                                onClick={handleCreateAddress} // Use the new handler
+                                                type="submit" // Changed to submit to trigger RHF handleSubmit
                                                 disabled={createAddressMutaton.isLoading}
                                                 className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md text-sm font-medium transition-colors disabled:opacity-50"
                                             >
-                                                {createAddressMutaton.isLoading ? 'Creating...' : 'Create '}
+                                                {createAddressMutaton.isLoading ? 'Saving...' : 'Save Address'}
                                             </button>
                                         </div>
                                     </div>
-
-                                    {/* Removed mock savedUserAddresses.length check, rely on fetched addresses */}
-                                    {/* Button to choose from saved addresses, shown if form is active but there are addresses */}
                                     {isAddingNewAddress && addresses && addresses.length > 0 && (
                                         <button
                                             type="button"
@@ -402,7 +546,6 @@ function CheckouT() {
                                 </form>
                             )}
                         </div>
-                        {/* Order Summary Section (Items + Subtotal) */}
                         <div className="bg-white bg-opacity-10 backdrop-blur-lg rounded-lg shadow-sm p-4 sm:p-6 lg:p-8">
                             <h2 className="text-lg sm:text-xl font-medium text-gray-200 mb-4 sm:mb-6">
                                 Order Summary
@@ -420,6 +563,7 @@ function CheckouT() {
                                         : (
                                             items.map(item => (
                                                 <OrderSummeryCard
+                                                    key={item?.product._id} // Added key
                                                     name={item?.product.name}
                                                     id={item?.product._id}
                                                     image={item?.product.mainImage.url}
@@ -433,14 +577,13 @@ function CheckouT() {
                             <div className="border-t border-gray-200 pt-4">
                                 <div className="flex justify-between text-sm sm:text-base font-medium">
                                     <span className="text-gray-200">Subtotal</span>
-                                    <span className="text-gray-200">${cartTotal}</span>
+                                    <span className="text-gray-200">₹{cartTotal.toFixed(2)}</span>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    {/* Right Column: Price Details (Shipping, Tax, Total) & Payment Button */}
                     <div className="lg:col-span-2 mt-6 lg:mt-0">
-                        <div className="lg:sticky lg:top-8"> {/* Sticky container for the right column content */}
+                        <div className="lg:sticky lg:top-8">
                             <div className="bg-white bg-opacity-10 backdrop-blur-lg rounded-lg shadow-sm p-4 sm:p-6 lg:p-8">
                                 <h2 className="text-lg sm:text-xl font-medium text-gray-200 mb-4 sm:mb-6">
                                     Price Details
@@ -448,24 +591,31 @@ function CheckouT() {
                                 <div className="space-y-2 sm:space-y-3 mb-6">
                                     <div className="flex justify-between text-sm sm:text-base">
                                         <span className="text-gray-300">Shipping</span>
-                                        <span className="text-gray-200">$0</span>
+                                        <span className="text-gray-200">₹0.00</span>
                                     </div>
                                     <div className="flex justify-between text-sm sm:text-base">
                                         <span className="text-gray-300">Tax</span>
-                                        <span className="text-gray-200">$0</span>
+                                        <span className="text-gray-200">₹0.00</span>
                                     </div>
                                     <div className="flex justify-between text-base sm:text-lg font-semibold border-t border-gray-200 pt-3 mt-3">
                                         <span className="text-gray-300">Total</span>
-                                        <span className="text-gray-200">${cartTotal}</span>
+                                        <span className="text-gray-200">₹{cartTotal.toFixed(2)}</span>
                                     </div>
                                 </div>
 
-                                {/* Payment Button */}
+                                {/* {paymentError && (
+                                    <p className="text-red-400 text-sm mb-3 p-2 bg-red-900 bg-opacity-30 rounded">{paymentError}</p>
+                                )}
+                                {paymentSuccess && !isProcessingPayment && (
+                                    <p className="text-green-400 text-sm mb-3 p-2 bg-green-900 bg-opacity-30 rounded">{paymentSuccess}</p>
+                                )} */}
+
                                 <button
                                     onClick={handlePayment}
-                                    className="w-full bg-blue-600 text-white py-3 sm:py-4 px-6 rounded-md font-semibold text-sm sm:text-base hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200 shadow-md hover:shadow-lg"
+                                    disabled={isProcessingPayment || cartTotal <= 0 || (!!paymentSuccess && !isProcessingPayment)}
+                                    className="w-full bg-blue-600 text-white py-3 sm:py-4 px-6 rounded-md font-semibold text-sm sm:text-base hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
-                                    Pay ${cartTotal}
+                                    {getPaymentButtonText()}
                                 </button>
                             </div>
                         </div>
@@ -473,7 +623,6 @@ function CheckouT() {
                 </div>
             </div>
 
-            {/* Address Modal */}
             {showAddressModal && (
                 <div className="fixed inset-0 bg-black bg-opacity-75 overflow-y-auto h-full w-full z-50 flex items-center justify-center p-4">
                     <div className="bg-white bg-opacity-5 backdrop-blur-xl p-5 sm:p-8 rounded-lg shadow-xl w-full max-w-md">
@@ -490,12 +639,11 @@ function CheckouT() {
                                 <div
                                     key={address._id || address.id}
                                     className={`p-4 border rounded-md bg-white bg-opacity-10 cursor-pointer
-                                        ${selectedAddress?._id === (address._id || address.id) // Consistent ID check
+                                        ${selectedAddress?._id === (address._id || address.id)
                                             ? 'border-blue-500 ring-2 ring-blue-500'
-                                            : 'border-gray-600 hover:border-gray-400'}`} // Adjusted inactive border
-                                    onClick={() => handleSelectAddress(address)} // Make whole div clickable
+                                            : 'border-gray-600 hover:border-gray-400'}`}
+                                    onClick={() => handleSelectAddress(address)}
                                 >
-                                    {/* Removed nested div with onClick, parent div handles it */}
                                     <p className="font-medium text-gray-100">{address?.addressLine1}</p>
                                     {address?.addressLine2 && <p className="text-sm text-gray-200">{address.addressLine2}</p>}
                                     <p className="text-sm text-gray-200">{`${address?.city}, ${address?.state} - ${address?.pincode}`}</p>
@@ -508,7 +656,7 @@ function CheckouT() {
                                         {!address.isDefault && (
                                             <button
                                                 onClick={(e) => {
-                                                    e.stopPropagation(); // Prevent selecting address
+                                                    e.stopPropagation();
                                                     setAddressdefault(address._id || address.id);
                                                 }}
                                                 className="text-xs text-blue-400 hover:text-blue-300 font-medium"
@@ -516,12 +664,16 @@ function CheckouT() {
                                                 Set as Default
                                             </button>
                                         )}
-                                        <div className="flex space-x-2"> {/* Wrapper for Update/Delete */}
+                                        <div className="flex space-x-2 ml-auto"> {/* Ensure Update/Delete are to the right */}
                                             <button
                                                 onClick={(e) => {
                                                     e.stopPropagation();
-                                                    // handleStartUpdate(address); // Placeholder for update
                                                     console.log("Update address:", address._id || address.id);
+                                                    // Placeholder for update logic:
+                                                    // setShowAddressModal(false);
+                                                    // setIsAddingNewAddress(true); // Show form
+                                                    // reset(address); // Populate form with this address
+                                                    // setEditingAddressId(address._id || address.id); // Set mode to update
                                                 }}
                                                 className="text-xs text-yellow-400 hover:text-yellow-300 font-medium"
                                             >
@@ -549,7 +701,7 @@ function CheckouT() {
                         </div>
                         <button
                             onClick={() => {
-                                toggleAddNewAddress(); // This will set isAddingNewAddress to true and clear selectedAddress
+                                toggleAddNewAddress();
                                 setShowAddressModal(false);
                             }}
                             className="mt-6 w-full bg-gray-200 text-gray-700 py-2 px-4 rounded-md font-medium hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"

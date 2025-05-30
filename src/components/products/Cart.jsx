@@ -1,4 +1,4 @@
-  import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   removeItemFromCart,
@@ -270,12 +270,14 @@ function Cart() {
                 </div>
 
                 <div className="flex sm:justify-end gap-1 justify-center sm:pr-3">
-                  <Link
-                    to={"/products/checkout"}
-                    className="block rounded bg-gray-700 px-5 py-3 text-sm text-gray-100 transition hover:bg-gray-600"
-                  >
-                    Checkout
-                  </Link>
+                  {items.length !== 0 && (
+                    <Link
+                      to={"/products/checkout"}
+                      className="block rounded bg-gray-700 px-5 py-3 text-sm text-gray-100 transition hover:bg-gray-600"
+                    >
+                      Checkout
+                    </Link>
+                  )}
                   <button
                     onClick={handleClearCart}
                     className="block rounded bg-red-700 px-5 py-3 text-sm text-gray-100 transition hover:bg-red-600"
