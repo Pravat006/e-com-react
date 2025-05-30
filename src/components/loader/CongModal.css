@@ -1,0 +1,123 @@
+/* Keyframe animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes confettiAnimation {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(200px) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Modal Content */
+.modal-content {
+  background: linear-gradient(135deg, #A8E61D, #FFD700); /* Green to Yellow gradient */
+  border-radius: 15px;
+  padding: 40px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  color: #333;
+  position: relative;
+  overflow: hidden; /* For confetti */
+  width: 90%;
+  max-width: 500px;
+  animation: slideIn 0.5s ease-out;
+  border: 4px solid #fff; /* White border for crispness */
+}
+
+/* Title */
+.modal-title {
+  font-size: 2.8em;
+  color: #2e7d32; /* Darker green for title */
+  margin-bottom: 20px;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Message */
+.modal-message {
+  font-size: 1.3em;
+  color: #4CAF50; /* A pleasant green for message */
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+/* Confetti Container */
+.confetti-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* Allows clicks to pass through */
+}
+
+/* Confetti Piece */
+.confetti-piece {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  opacity: 0;
+  animation: confettiAnimation forwards; /* Animation properties are set inline in JS */
+}
+
+/* Close Button */
+.close-button {
+  background-color: #FFC107; /* Amber yellow for button */
+  color: #333;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 25px;
+  font-size: 1.2em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: bold;
+}
+
+.close-button:hover {
+  background-color: #FFA000; /* Darker amber on hover */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.close-button:active {
+  transform: translateY(0);
+  box-shadow: none;
+}

@@ -7,10 +7,8 @@ import { useSelector, useDispatch } from 'react-redux'; // Added useDispatch
 import addressService from '@/services/address.service';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import orderService from '@/services/order.service';
-// import { useRouter } from 'next/router'; // Uncomment if using Next.js for navigation
-// import { clearCart } from '@/store/cartSlice'; // Example: if you have a clearCart action
-
-// Helper function to load a script (can be moved to a utility file)
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 const loadScript = (src) => {
     return new Promise((resolve) => {
         const script = document.createElement('script');
@@ -41,8 +39,7 @@ function CheckouT() {
     });
     const userDetails = useSelector((state) => state.auth.userData);
     const { items, cartTotal, status, error: cartError, coupon } = useSelector((state) => state.cart);
-    const dispatch = useDispatch(); // For potential actions like clearCart
-    // const router = useRouter(); // Uncomment if using Next.js
+    const navigate = useNavigate()
 
     const [selectedAddress, setSelectedAddress] = useState(null);
     const [isAddingNewAddress, setIsAddingNewAddress] = useState(false);
@@ -249,7 +246,6 @@ function CheckouT() {
             const orderData = await orderService.generateOrder({
                 addressId: addressForPayment._id
             })
-            // Expected orderData: { id (Razorpay Order ID), amount, currency, keyId (Your Razorpay Key ID) }
             // 2. Configure Razorpay Options
             const options = {
                 key: process.env.REACT_APP_RAZORPAY_KEY_ID,
@@ -258,26 +254,28 @@ function CheckouT() {
                 name: "Tech cart",
                 description: `Payment for Order ${orderData?.data?.id}`, // Ensure orderData.data.id is the Razorpay order_id
                 order_id: orderData?.data?.id, // This should be the Razorpay order_id from your backend
-                handler: async function (razorpayHandlerResponse) { // Renamed 'response' for clarity
+                handler: async function (razorpayHandlerResponse) { 
                     setIsProcessingPayment(true);
                     setPaymentSuccess('Payment received. Verifying...');
                     try {
-                        // 3. Verify Payment with your backend
-                        console.log("Verifying payment with Razorpay response:", razorpayHandlerResponse);
+                        // 3. Verify Payment with  backend
+                        // console.log("Verifying payment with Razorpay response:", razorpayHandlerResponse);
 
                         // orderService.verifyPayment now directly returns the parsed JSON object
                         const backendVerificationResult = await orderService.verifyPayment(
                             razorpayHandlerResponse
                         );
 
-                        console.log("Backend verification result (direct from service):", backendVerificationResult);
+                        // console.log("Backend verification result (direct from service):", backendVerificationResult);
 
                         // Now check the 'success' field from your backend's response structure
                         if (backendVerificationResult && backendVerificationResult.success === true) {
                             setPaymentSuccess(`Payment Successful! Payment ID: ${razorpayHandlerResponse.razorpay_payment_id}. Order ID: ${razorpayHandlerResponse.razorpay_order_id}`);
                             // dispatch(clearCart()); // Example: Uncomment and ensure clearCart is imported and works
-                            console.log("Payment Verified Successfully. Order Data:", backendVerificationResult.data);
-                            alert("Payment Successful! Your order has been placed.");
+                            // console.log("Payment Verified Successfully. Order Data:", backendVerificationResult.data);
+
+
+
                             // router.push(`/order-confirmation?orderId=${razorpayHandlerResponse.razorpay_order_id}&paymentId=${razorpayHandlerResponse.razorpay_payment_id}`) // Example navigation
                         } else {
                             // Use the message from your backend's response, or a default
@@ -310,8 +308,8 @@ function CheckouT() {
 
                 prefill: { // Prefill for Razorpay modal can still use full details for better UX
                     name: userDetails?.user?.username || userDetails?.username || 'Guest User',
-                    email: userDetails?.email,
-                    contact: addressForPayment?.phoneNumber || userDetails?.phoneNumber,
+                    email: userDetails?.user.email,
+                    contact: addressForPayment?.phoneNumber
                 },
                 notes: { // These notes are for Razorpay's dashboard, can still contain address summary
                     address: `${addressForPayment.addressLine1}, ${addressForPayment.city} - ${addressForPayment.pincode}`,
@@ -386,6 +384,17 @@ function CheckouT() {
         if (paymentSuccess && !isProcessingPayment) return "Payment Successful!";
         return `Pay ₹${cartTotal.toFixed(2)}`;
     };
+
+
+    // now the payment is success ful and order has been places we can redirect the user to the home page safely after 4 seconds
+    // we will use the set time ou function
+    setTimeout(() => {
+        if (paymentSuccess && !isProcessingPayment) {
+            navigate("/")
+            toast.success("Payment Successful! Your order has been placed.")
+        }
+    }, 2500)
+
 
     return (
         <div className="min-h-screen bg-white bg-opacity-5 backdrop-blur-lg py-4 px-6 sm:px-10 lg:px-8 rounded-lg mt-2">

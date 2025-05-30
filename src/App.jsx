@@ -22,6 +22,7 @@ import Allproducts from "./pages/Allproducts";
 import ShopByFetaturedCategory from "./components/products/ShopByFetaturedCategory";
 import Wishlists from "./components/products/Wishlists";
 import CheckouT from "./components/Checkout/CheckouT";
+import NotFound from "./components/loader/NotFound";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
         <Route element={<UserLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/product/id/:productId" element={<ProductDetails />} />
+           <Route path="*" element={<NotFound/>} />
           <Route path="/products/c" element={<SearchedProduct />} />
           <Route path="/products/c" element={<ShopByFetaturedCategory />} />
           <Route path="/all-products" element={<Allproducts />} />
@@ -68,6 +70,8 @@ function App() {
             path="/admin/dashboard/create-category"
             element={<CreateCategory />}
           />
+          {/* <NotFound  */}
+         
         </Route>
       </Routes>
     </BrowserRouter>
