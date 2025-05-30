@@ -17,15 +17,11 @@ import SearchedProduct from "./components/products/SearchedProduct";
 import CreateProduct from "./components/admin/product/CreateProduct";
 import CategoryTable from "./components/admin/category/CategoryTable";
 import CreateCategory from "./components/admin/category/CreateCategory";
-import Checkout from "./components/Checkout/Checkout";
 import YourOrder from "./components/customer/YourOrder";
 import Allproducts from "./pages/Allproducts";
 import ShopByFetaturedCategory from "./components/products/ShopByFetaturedCategory";
 import Wishlists from "./components/products/Wishlists";
-import OrderSummery from "./components/Checkout/OrderSummery";
-import PriceDetails from "./components/Checkout/PriceDetails";
-import LandingPage from "./components/root/LandingPage";
-import AddressList from "./components/Checkout/Adresses";
+import CheckouT from "./components/Checkout/CheckouT";
 
 function App() {
   return (
@@ -42,15 +38,12 @@ function App() {
           <Route path="/products/c" element={<SearchedProduct />} />
           <Route path="/products/c" element={<ShopByFetaturedCategory />} />
           <Route path="/all-products" element={<Allproducts />} />
-          {/* <Route path="/test-page" element={<OrderSummery />} /> */}
-          {/* <Route path="/test-page" element={<LandingPage />} /> */}
-          {/* <Route path="/test-page" element={<Demo />} /> */}
-          <Route path="/test-page" element={<AddressList />} />
+        
           <Route>
             <Route element={<PrivateLayout />}>
               <Route path="/user/cart" element={<Cart />} />
               <Route path="/user/profile" element={<Profile />} />
-              <Route path="/products/checkout" element={<Checkout />} />
+              <Route path="/products/checkout" element={<CheckouT />} />
               <Route path="/user/orders" element={<YourOrder />} />
               <Route path="/user/wishlists" element={<Wishlists />} />
             </Route>

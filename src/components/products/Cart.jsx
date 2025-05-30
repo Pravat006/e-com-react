@@ -27,7 +27,7 @@ function Cart() {
     useSelector((state) => state.cart);
 
   const [availableCoupons, setAvailableCoupons] = useState([]);
-  console.log("coupons: ", availableCoupons);
+  // console.log("coupons: ", availableCoupons);
 
   const handleRemove = (id) => {
     dispatch(removeItemFromCart(id));
@@ -117,20 +117,20 @@ function Cart() {
                     </div>
 
                     <div className="flex flex-1 items-center justify-end gap-2">
-                      <div className="flex items-center gap-0 bg-gray-50">
+                      <div className="flex items-center gap-0 ">
                         <button
-                          className="w-8 h-8 flex justify-center items-center  hover:bg-gray-800 hover:text-white text-gray-800 font-bold rounded "
+                          className="w-8 h-8 flex justify-center items-center  text-gray-100  text-2xl font-bold rounded "
                           onClick={() =>
                             handleQuantityChange(item?.product._id, "decrement")
                           }
                         >
                           -
                         </button>
-                        <h2 className="h-8 w-12 rounded border-gray-200 bg-gray-50 p-0  flex justify-center items-center  text-xs text-gray-600 :m-0 ">
+                        <h2 className="h-8 w-12 rounded  bg-opacity-5 bg-white backdrop-blur-xl p-0  flex justify-center items-center  text-xs text-gray-100 :m-0 ">
                           {item.quantity}
                         </h2>
                         <button
-                          className="w-8 h-8 flex justify-center items-center  hover:bg-gray-800 hover:text-white text-gray-800 font-semibold rounded"
+                          className="w-8 h-8 flex justify-center items-center   text-gray-100  font-bold rounded text-2xl"
                           onClick={() =>
                             handleQuantityChange(item?.product._id, "increment")
                           }

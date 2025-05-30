@@ -16,7 +16,7 @@ import { MdDeleteForever } from "react-icons/md";
 
 import orderService from "@/services/order.service";
 import { useSelector } from "react-redux";
-import OrderSummary from "./OrderSummery";
+import OrderSummary from "./OrderSummeryCard";
 import PriceDetails from "./PriceDetails";
 
 const Checkout = () => {
@@ -45,11 +45,9 @@ const Checkout = () => {
       document.body.appendChild(script);
     });
   };
-
   // Handle Payment
   const handlePayment = async () => {
     setLoading(true);
-
     // Load Razorpay SDK
     const res = await loadRazorpayScript();
     if (!res) {
@@ -57,7 +55,6 @@ const Checkout = () => {
       setLoading(false);
       return;
     }
-
     try {
       // Request a new order from backend
       const razorPayOrder = await orderService.generateOrder({
@@ -65,7 +62,6 @@ const Checkout = () => {
       });
       setToPayAmount(razorPayOrder?.data.amount);
       console.log("Razorpay Order:", razorPayOrder);
-
       // Open Razorpay Checkout
       const options = {
         key: process.env.REACT_APP_RAZORPAY_KEY_ID, // Public Key
@@ -73,7 +69,6 @@ const Checkout = () => {
         currency: razorPayOrder.data.currency,
         description: "Test Transaction",
         order_id: razorPayOrder.data.id, // Razorpay Order ID
-
         handler: async (response) => {
           // Send payment response to backend for verification
           const verifyRes = await orderService.verifyPayment({
@@ -86,30 +81,24 @@ const Checkout = () => {
         prefill: {
           email: customerDetails.user.email,
         },
-
         theme: {
           color: "#3399cc",
         },
       };
-
       const paymentObject = new window.Razorpay(options);
       paymentObject.open();
     } catch (error) {
       console.error("Payment Error:", error);
       alert("Payment failed. Try again.");
     }
-
     setLoading(false);
   };
-
   const goToPreviousPage = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
-
   const goToNextPage = () => {
     if (currentPage < 3) setCurrentPage(currentPage + 1);
   };
-
   const { data: addresses, isLoading: isAddressesLoading } = useQuery({
     queryKey: ["addresses"],
     queryFn: async () => {
@@ -122,9 +111,7 @@ const Checkout = () => {
       }
     },
   });
-
   // console.log(addresses[0])
-
   const createAddress = async (data) => {
     try {
       const res = await addressService.createAddress(data);
@@ -134,7 +121,6 @@ const Checkout = () => {
       return error?.message;
     }
   };
-
   const deleteAddress = async (id) => {
     try {
       const res = await addressService.deleteAddress(id);
@@ -144,9 +130,7 @@ const Checkout = () => {
       return error?.message;
     }
   };
-
   const queryClient = useQueryClient();
-
   const creatMmutation = useMutation({
     mutationFn: createAddress,
     onSuccess: () => {
@@ -154,7 +138,6 @@ const Checkout = () => {
       queryClient.invalidateQueries("addresses");
     },
   });
-
   const deleteAddressMutation = useMutation({
     mutationFn: deleteAddress,
     onSuccess: () => {
@@ -162,22 +145,18 @@ const Checkout = () => {
       queryClient.invalidateQueries("addresses");
     },
   });
-
   const onSubmit = async (data) => {
     creatMmutation.mutate(data);
   };
-
   const handleDelete = (id) => {
     deleteAddressMutation.mutate(id);
   };
-
   const handleDeliverHere = (id) => {
     // setCurrentPage(2);
     setAddressId(id);
     setIsAddressSelected(true);
   };
   console.log(addressId);
-
   return (
     <div className="w-screen sm:w-[80%] lg:w-[70%] p-4 border rounded shadow-lg h-[70vh] my-7  flex flex-col justify-between">
       {/* Page 1 */}
@@ -213,22 +192,6 @@ const Checkout = () => {
                       >
                         <MdDeleteForever />
                       </button>
-
-                      {/* <button
-                       
-                        className="text-xl"
-                        onClick={() => handleDeliverHere(address._id)}
-                      >
-                        {
-                          addressId === address._id ? (
-                            "✅"
-                          )  : (
-                          "➡️"
-                          )
-
-                        }
-                       
-                      </button> */}
                       <input
                         type="checkbox"
                         checked={addressId === address._id}
@@ -297,7 +260,6 @@ const Checkout = () => {
                             },
                           })}
                         />
-
                         <button className="mx-auto mt-2 bg-green-600 text-white font-bold py-2 px-6 rounded-[20px]">
                           Create
                         </button>
@@ -310,17 +272,12 @@ const Checkout = () => {
           )}
         </div>
       )}
-
       {/* Page 2 */}
       {currentPage === 2 && (
         <div className="w-full h-screen flex gap-3 overflow-y-auto scrollbar-hide items-center justify-center ">
           <OrderSummary />
         </div>
-
-
-
       )}
-
       {/* Page 3 */}
       {currentPage === 3 && (
         <div>
@@ -334,11 +291,9 @@ const Checkout = () => {
               {loading ? "Processing..." : "Pay ₹" + discountedTotal}
             </button>
           </div>
-
           {/* info about product and  */}
         </div>
       )}
-
       {/* Navigation Buttons */}
       <div className="flex justify-between mt-4">
         <button

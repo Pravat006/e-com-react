@@ -17,6 +17,9 @@ class AddressService {
   async updateAddress(addressId,data) {
     return await Axios.patch(`/ecommerce/addresses/${addressId}`, data);
   }
+  async setDefaultAddress(addressId) {
+    return await Axios.patch(`/ecommerce/addresses/${addressId}/default`);
+  }
 }
 
 export default new AddressService();
