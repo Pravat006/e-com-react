@@ -273,9 +273,6 @@ function CheckouT() {
                             setPaymentSuccess(`Payment Successful! Payment ID: ${razorpayHandlerResponse.razorpay_payment_id}. Order ID: ${razorpayHandlerResponse.razorpay_order_id}`);
                             // dispatch(clearCart()); // Example: Uncomment and ensure clearCart is imported and works
                             // console.log("Payment Verified Successfully. Order Data:", backendVerificationResult.data);
-
-
-
                             // router.push(`/order-confirmation?orderId=${razorpayHandlerResponse.razorpay_order_id}&paymentId=${razorpayHandlerResponse.razorpay_payment_id}`) // Example navigation
                         } else {
                             // Use the message from your backend's response, or a default
@@ -666,7 +663,7 @@ function CheckouT() {
                                             <button
                                                 onClick={(e) => {
                                                     e.stopPropagation();
-                                                    setAddressdefault(address._id || address.id);
+                                                    setAddressdefault(address._id );
                                                 }}
                                                 className="text-xs text-blue-400 hover:text-blue-300 font-medium"
                                             >
@@ -677,7 +674,7 @@ function CheckouT() {
                                             <button
                                                 onClick={(e) => {
                                                     e.stopPropagation();
-                                                    console.log("Update address:", address._id || address.id);
+                                                    console.log("Update address:", address?._id );
                                                     // Placeholder for update logic:
                                                     // setShowAddressModal(false);
                                                     // setIsAddingNewAddress(true); // Show form
@@ -692,13 +689,13 @@ function CheckouT() {
                                                 onClick={(e) => {
                                                     e.stopPropagation();
                                                     if (window.confirm("Are you sure you want to delete this address?")) {
-                                                        deleteAddressMutation.mutate(address._id || address.id);
+                                                        deleteAddressMutation.mutate(address?._id);
                                                     }
                                                 }}
-                                                disabled={deleteAddressMutation.isLoading && deleteAddressMutation.variables === (address._id || address.id)}
+                                                disabled={deleteAddressMutation.isLoading && deleteAddressMutation.variables === (address?._id )}
                                                 className="text-xs text-red-400 hover:text-red-300 font-medium disabled:opacity-50"
                                             >
-                                                {deleteAddressMutation.isLoading && deleteAddressMutation.variables === (address._id || address.id) ? 'Deleting...' : 'Delete'}
+                                                {deleteAddressMutation.isLoading && deleteAddressMutation.variables === (address?._id) ? 'Deleting...' : 'Delete'}
                                             </button>
                                         </div>
                                     </div>

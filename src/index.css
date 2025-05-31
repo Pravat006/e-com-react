@@ -30,6 +30,21 @@ html, body {
 
 }
 
+
+.custom-glass {
+  @apply bg-white backdrop-blur-lg;
+}
+
+/* Variants with different opacities */
+.custom-glass-5 {
+  @apply bg-white/5 backdrop-blur-lg;
+}
+
+.custom-glass-10 {
+  @apply bg-white/10 backdrop-blur-lg;
+}
+
+
 /* Apply globally */
 
 

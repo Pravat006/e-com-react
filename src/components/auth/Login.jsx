@@ -15,12 +15,16 @@ function Login() {
   const navigate = useNavigate();
   
   const [error, setError] = React.useState(null);
+  const[loading, setLoading] = React.useState(false);
+
+
   const { register, handleSubmit } = useForm();
   const onSubmit =  async (data) => {
     try { 
       const res = await AuthService.login(data);
       // console.log(data)
       if (res?.data) {
+        setLoading(true);
         dispatch(login(res.data));
         toast.success('logged in successful')
         
@@ -36,6 +40,8 @@ function Login() {
       setError(error?.message);
       console.log(error)
       toast.error('Something went wrong !')
+    }finally {
+      setLoading(false);
     }
   };
 
@@ -91,8 +97,11 @@ function Login() {
         <Button
           type="submit"
           label="Log in"
-          text="log in"
           className="text-xl"
+          disabled={loading}
+          text={loading ? "Logging in..." : "Log in"}
+          
+
         />
       </form>
       {error && <p className="text-red-600 mt-8">{error}</p>}
