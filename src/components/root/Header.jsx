@@ -12,7 +12,7 @@ import image from "../../assets/pngwing.com.png";
 
 function Header() {
     return (
-        <header className=" flex flex-col items-center justify-center text-center px-4 py-20 md:py-32 overflow-hidden relative">
+        <header className=" flex flex-col items-center justify-center text-center px-4 py-10 md:py-20 overflow-hidden relative w-full max-w-screen">
             {/* Background Animation Component */}
             <BackgroundAnimation />
             <div className="relative w-full h-full flex items-center justify-center flex-col sm:flex-row rounded-3xl ">

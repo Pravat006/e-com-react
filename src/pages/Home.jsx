@@ -7,17 +7,19 @@ import TrendingProducts from '@/components/root/TrendingProducts'
 import FeaturedCategories from '@/components/root/FeaturedCategories'
 import TestBtn from '@/components/root/TestBtn'
 import Header from '@/components/root/Header'
+import FeaturedProducts from '@/components/Landing page/FeaturedProducts'
 
 
 function Home() {
     // const navigate= useNavigate()
   return (
-    <div className='text-center max-w-screen-[1440px] flex flex-col items-center justify-center gap-6 mt-4 h-screen'>
+    <div className='text-center container flex flex-col items-center justify-center gap-4 mt-4 min-h-screen'>
         <Header/>
         {/* <Banner/> */}
         {/* <TrendingProducts/>
         <FeaturedCategories/> */}
-        {/* <TestBtn/> */}
+        <FeaturedProducts />
+        <TestBtn/>
         {/* <RandomProduct/> */}
         {/* <Allproducts/> */}
     </div>

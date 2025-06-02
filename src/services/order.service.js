@@ -8,7 +8,7 @@ class OrderService {
         return await Axios.post("/ecommerce/orders/provider/razorpay/verify-payment", data);
     }
     async myOrders() {
-        return await Axios.get("/ecommerce/orders");
+        return await Axios.get("/ecommerce/orders/list/user");
     }
     async getOrderById(orderId) {
         return await Axios.get(`/ecommerce/orders/${orderId}`);
