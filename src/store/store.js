@@ -4,7 +4,7 @@ import cartReducer from '../slices/cartSlice.js';
 import { combineReducers } from 'redux';
 import wishListSlice from '../slices/wishListSlice.js';  
 import { persistReducer,persistStore } from 'redux-persist'
-import sessionStorage from 'redux-persist/lib/storage/session'
+import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
 import orderSlice from '../slices/orderSlice.js';
 
 
@@ -17,7 +17,7 @@ const rootReducer = combineReducers({
 
 const persistConfig = {
     key: "root",
-    storage: sessionStorage,
+    storage, // use localStorage instead of sessionStorage
     whitelist: ["cart", "auth", "wishlist"], // State slices to persist
   };
   
