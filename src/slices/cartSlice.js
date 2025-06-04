@@ -29,6 +29,7 @@ export const addItemToCart = createAsyncThunk(
       const response = await CustomerService.addToCart(productId, { "quantity": 1 });
       if (response) {
         console.log("new product added to cart");
+          console.log("response after adding item to cart : ", response?.data);
         toast.success("Product added to cart")
       }
       return response?.data;
