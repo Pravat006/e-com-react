@@ -1,11 +1,7 @@
-// import React from "react";
-// import AddtocartBtn from "../root/AddtocartBtn";
-// import LearnMoreBtn from "../root/LearnMoreBtn";
+
 import React from "react";
-// import { BackgroundGradient } from "../ui/background-gradient";
-// import { useNavigate  } from "react-router-dom";
+
 import LearnMoreBtn from "../root/LearnMoreBtn";
-// import { IconAppWindow } from "@tabler/icons-react";
 
 function ProductCard({ imageLink, name, description, price, id }) {
 
