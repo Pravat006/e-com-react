@@ -24,7 +24,7 @@ const AddtocartBtn = ({productId,
       return;
     } else {
       console.log("Adding item to cart:", productId);
-      dispatch(addItemToCart(productId))
+      dispatch(addItemToCart({productId: productId}))
     }
   };
   

@@ -1,4 +1,4 @@
-import { StrictMode, useState } from "react";
+import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.jsx";
@@ -12,23 +12,19 @@ import { ThemeProvider } from "./components/root/ThemeContex";
 
 const queryClient = new QueryClient();
 
-  // initialising the dark and light theme functions
-
+// initialising the dark and light theme functions
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
 
     <Provider store={store}>
-    <QueryClientProvider client={queryClient}>
-      <PersistGate persistor={persistor}>
-        <Toaster position="top-right" reverseOrder={false} />
-       <ThemeProvider>
-
-        <App />
-       </ThemeProvider>
-
-  
-      </PersistGate>
+      <QueryClientProvider client={queryClient}>
+        <PersistGate persistor={persistor}>
+          <Toaster position="top-right" reverseOrder={false} />
+          <ThemeProvider>
+            <App />
+          </ThemeProvider>
+        </PersistGate>
       </QueryClientProvider>
     </Provider>
   </StrictMode>

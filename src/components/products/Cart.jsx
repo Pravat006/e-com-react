@@ -22,6 +22,11 @@ import couponService from "@/services/coupon.service.js";
 import { Link } from "react-router-dom";
 
 function Cart() {
+
+
+
+
+
   const dispatch = useDispatch();
   const { items, cartTotal, discountedTotal, status, error, coupon } =
     useSelector((state) => state.cart);
