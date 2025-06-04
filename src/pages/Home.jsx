@@ -19,7 +19,7 @@ function Home() {
         {/* <TrendingProducts/>
         <FeaturedCategories/> */}
         <FeaturedProducts />
-        <TestBtn/>
+        {/* <TestBtn/> */}
         {/* <RandomProduct/> */}
         {/* <Allproducts/> */}
     </div>
