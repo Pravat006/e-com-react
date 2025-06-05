@@ -39,7 +39,7 @@ function Navbar() {
         </div>
 
         <div  className="flex items-center space-x-4 justify-between">
-          {
+          {/* {
             authStatus && (
               <ThemeButton className="hidden sm:flex" />
             )
@@ -50,7 +50,7 @@ function Navbar() {
               <ThemeButton  />
             )
 
-          }
+          } */}
 
           {/* <ThemeButton /> */}
           <div className="flex items-center space-x-4 ">
@@ -100,12 +100,9 @@ function Navbar() {
                     <DropdownMenuItem className="flex items-center justify-center">
                       <Link to="/user/wishlists">Wishlists</Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem className="sm:hidden flex items-center justify-center p-0">
-                      
+                    {/* <DropdownMenuItem className="sm:hidden flex items-center justify-center p-0">     
                       <ThemeButton   className="h-full w-full"/>
-
-                   
-                    </DropdownMenuItem>
+                    </DropdownMenuItem> */}
                     <DropdownMenuItem className="flex items-center justify-center">
                       <LogoutBtn />
                     </DropdownMenuItem>

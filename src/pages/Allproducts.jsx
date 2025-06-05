@@ -3,21 +3,15 @@ import ProductCardSkeleton from "@/components/products/ProductCardSkeleton";
 import React, { useState } from "react"; 
 import ProductService from "../services/product.service.js";
 import { useQuery } from "@tanstack/react-query";
+import Pagination from "@/components/root/Pagination";
 
 function Allproducts() {
   const [pageNumber, setPageNumber] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-const [page, setPage] = useState(1);
-  const totalPage = 12;
-  const itemsPerPage = 10;
-  const totalItems = 115;
-
   const fetchProducts = async () => {
     try {
       const res = await ProductService.getAllProducts(pageNumber);
       if (res?.success && res.data) {
-        setTotalPages(res.data.totalPages || 1);
-        return res.data.products || [];
+        return res.data
       }
       throw new Error(res?.message || "Failed to fetch products structure");
     } catch (error) {
@@ -30,7 +24,6 @@ const [page, setPage] = useState(1);
     queryKey: ["products", pageNumber],
     queryFn: fetchProducts,
   });
-
   const displaySkeleton = isLoading; 
   if (isError) {
     return (
@@ -48,8 +41,8 @@ const [page, setPage] = useState(1);
           ? Array.from({ length: 8 }).map((_, index) => (
               <ProductCardSkeleton key={index} />
             ))
-          : data && data.length > 0
-            ? data.map((product) => (
+          : data?.products && data?.products.length > 0
+            ? data?.products.map((product) => (
                 <ProductCard
                   id={product?._id}
                   key={product?._id}
@@ -69,30 +62,17 @@ const [page, setPage] = useState(1);
       )}
 
       {/* Pagination controls - only show if not displaying skeleton and there's data */}
-      {!displaySkeleton && data && data.length > 0 && (
-        <div className="text-center items-center justify-center flex w-full p-4 ">
-          <div className="flex justify-between items-center mx-auto">
-            <button
-              onClick={() => setPageNumber((prev) => Math.max(1, prev - 1))}
-              disabled={pageNumber === 1}
-              className="bg-gray-300 text-black font-bold px-4 py-2 rounded hover:bg-gray-400 disabled:opacity-50 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
-            >
-              Previous
-            </button>
-            <h1 className="px-4 font-bold border-black outline-[1px] outline mx-1 rounded dark:border-gray-600 dark:text-gray-200">
-              {pageNumber}
-            </h1>
-            <button
-              onClick={() => setPageNumber((prev) => prev + 1)}
-              disabled={pageNumber >= totalPages || data.length === 0}
-              className="bg-gray-300 text-black font-bold px-8 py-2 rounded hover:bg-gray-400 disabled:opacity-50 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
-            >
-              Next
-            </button>
-          </div>
-        </div>
+      {!displaySkeleton && data && data.products && data.products.length > 0 && (
+        <Pagination
+          page={data.page}
+          totalPages={data.totalPages}
+          hasPrevPage={data.hasPrevPage}
+          hasNextPage={data.hasNextPage}
+          prevPage={data.prevPage}
+          nextPage={data.nextPage}
+          onPageChange={setPageNumber}
+        />
       )}
-      
     </div>
   );
 }

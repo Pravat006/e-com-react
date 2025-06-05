@@ -54,8 +54,8 @@ const FProductCard = ({ product }) => {
             </h3>
             {/* Mobile: flex-row layout, Desktop: flex-col layout */}
             <div className="flex flex-row sm:flex-col justify-between sm:space-y-1">
-              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 truncate">{product?.category?.name}</p>
-              <p className="text-sm sm:text-base lg:text-lg xl:text-xl font-bold text-slate-900 dark:text-white">₹{product?.price}</p>
+              <p className="text-xs sm:text-sm text-slate-500 truncate">{product?.category?.name}</p>
+              <p className="text-sm sm:text-base lg:text-lg xl:text-xl font-bold text-slate-200 ">₹{product?.price}</p>
             </div>
           </div>
         </div>

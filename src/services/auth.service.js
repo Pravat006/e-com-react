@@ -19,8 +19,8 @@ class AuthService {
   async currentUser(){
     return await Axios.get("/users/current-user");
   }
-  async changeAvatar(){
-    return Axios.patch("/users/avatar");
+  async changeAvatar(data){
+    return Axios.patch("/users/avatar", data);
   }
 }
 export default new AuthService();
