@@ -60,7 +60,7 @@ const Pagination = ({
 
     return (
         <nav
-            className="flex flex-col sm:flex-row items-center justify-between custom-glass-5 rounded-full px-4 py-3 sm:px-6 mt-6"
+            className="flex flex-col sm:flex-row items-center justify-between custom-glass-5 rounded-full px-4 py-3 sm:px-6 my-6 "
             aria-label="Pagination"
         >
             {/* Pagination controls */}

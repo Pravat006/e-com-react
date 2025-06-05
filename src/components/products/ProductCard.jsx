@@ -28,7 +28,7 @@ function ProductCard({ imageLink, name, description, price, id }) {
 
         {/* Button at Bottom */}
         <div className="mt-auto"> {/* Ensures button is at the bottom of this flex item */}
-          <LearnMoreBtn price={price} productId={id} />
+        <LearnMoreBtn price={price} productId={id} />
         </div>
       </div>
     </div>

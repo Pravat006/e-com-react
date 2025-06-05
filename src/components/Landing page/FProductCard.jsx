@@ -2,6 +2,8 @@ import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import AddtocartBtn from "../root/AddtocartBtn";
 import { Star } from "lucide-react";
+import { useInView } from 'react-intersection-observer';
+
 const StarRating = ({ rating, reviews }) => {
   const fullStars = Math.floor(rating);
   const halfStar = rating % 1 !== 0;
@@ -23,6 +25,8 @@ const StarRating = ({ rating, reviews }) => {
 
 const FProductCard = ({ product }) => {
   const navigate = useNavigate();
+  const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.1 });
+
   // Handler for card click
   const handleCardClick = () => {
     navigate(`/product/id/${product?._id}`);
@@ -30,17 +34,22 @@ const FProductCard = ({ product }) => {
 
   // Fallback image URL
   return (
-    <div className="group relative flex flex-col overflow-hidden rounded-xl custom-glass-5 backdrop-blur-lg shadow hover:shadow-lg transition-all duration-300 min-w-0 w-full h-full">
+    <div ref={ref} className="group relative flex flex-col overflow-hidden rounded-xl bg-white dark:bg-gray-900 shadow hover:shadow-lg transition-shadow duration-200 min-w-0 w-full h-full">
       {/* Make this wrapper clickable */}
       <div onClick={handleCardClick} className="flex flex-col cursor-pointer h-full">
         {/* Image Container with increased height for mobile */}
         <div className="dark:bg-slate-700/50 group-hover:opacity-80 transition-opacity w-full h-32 sm:h-36 md:h-44 lg:h-52 xl:h-60 flex items-center justify-center shrink-0 p-1">
-          <img
-            src={product?.mainImage?.url || "https://placehold.co/600x600/F3F4F6/9CA3AF?text=No+Image"}
-            alt={product?.name}
-            className="h-full w-full object-cover object-center rounded"
-            onError={(e) => { e.target.onerror = null; e.target.src = "https://placehold.co/600x600/F3F4F6/9CA3AF?text=Image+Error"; }}
-          />
+          {inView ? (
+            <img
+              src={product?.mainImage?.url || "https://placehold.co/600x600/F3F4F6/9CA3AF?text=No+Image"}
+              alt={product?.name}
+              className="h-full w-full object-cover object-center rounded"
+              onError={(e) => { e.target.onerror = null; e.target.src = "https://placehold.co/600x600/F3F4F6/9CA3AF?text=Image+Error"; }}
+              loading="lazy"
+            />
+          ) : (
+            <div style={{ height: 200 }} />
+          )}
         </div>
         
         {/* Content Container with mobile-optimized layout */}
@@ -65,8 +74,9 @@ const FProductCard = ({ product }) => {
       <div className="p-2 sm:p-3 lg:p-4 pt-0 mt-auto space-y-1 sm:space-y-2 shrink-0">
         <StarRating rating={"5"} reviews={"good"} />
         <AddtocartBtn
+          stock={product?.stock}
           productId={product?._id}
-          className="w-full rounded bg-blue-600 px-2 py-1.5 sm:px-3 sm:py-2 lg:px-4 lg:py-2 text-xs sm:text-sm lg:text-base font-medium text-white hover:bg-blue-700 transition-colors"
+          className="w-full rounded bg-blue-600 px-2 py-1.5 sm:px-3 sm:py-2 lg:px-4 lg:py-2 text-xs sm:text-sm lg:text-base font-medium text-white hover:bg-red-950  transition-colors duration-200"
         />
       </div>
     </div>

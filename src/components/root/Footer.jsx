@@ -1,5 +1,5 @@
 function Footer() {
-    const footerNavs = [
+const footerNavs = [
         { href: 'javascript:void()', name: 'About' },
         { href: 'javascript:void()', name: 'Blog' },
         { href: 'javascript:void()', name: '' },

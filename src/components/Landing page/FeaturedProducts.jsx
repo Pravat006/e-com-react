@@ -21,6 +21,7 @@ function FeaturedProducts() {
   const { data, error, isLoading, isError } = useQuery({
     queryKey: ["products"],
     queryFn: () => fetchProducts(),
+    staleTime: 5 * 60 * 1000, // 5 minutes
   });
 
 console.log("featured products data : ", data);

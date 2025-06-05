@@ -21,37 +21,29 @@ function Navbar() {
   const authData = useSelector((state) => state.auth.userData);
   return (
     <header className="text-base lg:text-sm shadow-md backdrop-blur-md  sticky top-0 z-50 bg-transparent"
-    // style={{
-    //   backgroundColor: "var(--card-bg)",
-    // }}
     >
       {/* ************************************************************** */}
       <div className=" items-center  px-4 max-w-screen-xl mx-auto flex lg:px-8  justify-between p-4 py-3 ">
         <div className="flex justify-center items-center">
           <img src={logo} width={50} height={50} alt="tech-cart" />
           <span className="sm:text-2xl  font-serif sm:font-bold hidden sm:block">
-            Tech Cart
+            Techmart
           </span>
         </div>
-
         <div className="search-bar">
           <Searchbar />
         </div>
-
         <div  className="flex items-center space-x-4 justify-between">
           {/* {
             authStatus && (
               <ThemeButton className="hidden sm:flex" />
             )
-
           }
           {
             ! authStatus && (
               <ThemeButton  />
             )
-
           } */}
-
           {/* <ThemeButton /> */}
           <div className="flex items-center space-x-4 ">
             {!authStatus && (
@@ -63,7 +55,6 @@ function Navbar() {
               </Link>
             )}
           </div>
-
           {authStatus && (
             <div className="cartLogo-and-profile flex justify-between items-center mr-4 ">
               <div className="items-center space-x-4 hidden sm:flex px-5">
@@ -81,11 +72,9 @@ function Navbar() {
                           "https://static.vecteezy.com/system/resources/previews/005/544/718/large_2x/profile-icon-design-free-vector.jpg"
                         }
                       />
-
                       <AvatarFallback src={authData?.user.name} />
                     </Avatar>
                   </DropdownMenuTrigger>
-
                   <DropdownMenuContent>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem className="flex items-center justify-center">

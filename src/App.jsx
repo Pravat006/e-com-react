@@ -41,6 +41,7 @@ function App() {
           <Route path="/products/c" element={<SearchedProduct />} />
           <Route path="/products/c" element={<ShopByFetaturedCategory />} />
           <Route path="/all-products" element={<Allproducts />} />
+          <Route path="/all-products/page/:pageNumber" element={<Allproducts />} />
           <Route path="/test-page" element={<LandingPage />} />
 
           <Route>

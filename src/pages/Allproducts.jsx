@@ -1,17 +1,24 @@
 import ProductCard from "@/components/products/ProductCard";
 import ProductCardSkeleton from "@/components/products/ProductCardSkeleton";
-import React, { useState } from "react"; 
+import React from "react";
 import ProductService from "../services/product.service.js";
 import { useQuery } from "@tanstack/react-query";
 import Pagination from "@/components/root/Pagination";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 
 function Allproducts() {
-  const [pageNumber, setPageNumber] = useState(1);
+  const { pageNumber } = useParams();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // If pageNumber is undefined, we're on /all-products (page 1)
+  const page = pageNumber ? parseInt(pageNumber, 10) : 1;
+
   const fetchProducts = async () => {
     try {
-      const res = await ProductService.getAllProducts(pageNumber);
+      const res = await ProductService.getAllProducts(page);
       if (res?.success && res.data) {
-        return res.data
+        return res.data;
       }
       throw new Error(res?.message || "Failed to fetch products structure");
     } catch (error) {
@@ -21,10 +28,13 @@ function Allproducts() {
   };
 
   const { data, error, isLoading, isError } = useQuery({
-    queryKey: ["products", pageNumber],
+    queryKey: ["products", page],
     queryFn: fetchProducts,
+    staleTime: 5 * 60 * 1000,
   });
-  const displaySkeleton = isLoading; 
+
+  const displaySkeleton = isLoading;
+
   if (isError) {
     return (
       <p className="text-red-500 text-center p-4">
@@ -33,6 +43,18 @@ function Allproducts() {
       </p>
     );
   }
+
+  const handlePageChange = (newPage) => {
+    if (newPage === 1) {
+      // Go to /all-products for page 1
+      if (location.pathname !== "/all-products") {
+        navigate("/all-products");
+      }
+    } else {
+      // Go to /all-products/page/2, /3, etc.
+      navigate(`/all-products/page/${newPage}`);
+    }
+  };
 
   return (
     <div className="flex flex-col items-center justify-center w-full">
@@ -52,7 +74,7 @@ function Allproducts() {
                   price={product?.price}
                 />
               ))
-            : null 
+            : null
         }
       </div>
 
@@ -70,7 +92,7 @@ function Allproducts() {
           hasNextPage={data.hasNextPage}
           prevPage={data.prevPage}
           nextPage={data.nextPage}
-          onPageChange={setPageNumber}
+          onPageChange={handlePageChange}
         />
       )}
     </div>
