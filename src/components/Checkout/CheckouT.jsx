@@ -1,4 +1,3 @@
-// ...existing code...
 import React, { useEffect, useState } from 'react';
 import AddressInput from './AddressInput';
 import OrderSummeryCard from './OrderSummeryCard';
@@ -44,16 +43,6 @@ function CheckouT() {
     const [selectedAddress, setSelectedAddress] = useState(null);
     const [isAddingNewAddress, setIsAddingNewAddress] = useState(false);
     const [showAddressModal, setShowAddressModal] = useState(false);
-    const [manualAddress, setManualAddress] = useState({
-        addressLine1: '',
-        addressLine2: '',
-        city: '',
-        state: '',
-        pincode: '',
-        phoneNumber: '',
-        addressType: 'home',
-        country: 'India',
-    });
 
     const pincodeValue = watch("pincode");
 
@@ -172,10 +161,6 @@ function CheckouT() {
         onSuccess: (newlyCreatedAddress) => {
             queryClient.invalidateQueries("addresses");
             reset({ // Reset RHF form
-                addressLine1: '', addressLine2: '', city: '', state: '',
-                pincode: '', phoneNumber: '', addressType: 'home', country: 'India',
-            });
-            setManualAddress({ // Reset local manualAddress state as well
                 addressLine1: '', addressLine2: '', city: '', state: '',
                 pincode: '', phoneNumber: '', addressType: 'home', country: 'India',
             });
@@ -353,12 +338,6 @@ function CheckouT() {
         setShowAddressModal(false);
     };
 
-    const handleManualAddressChange = (e) => { // This might be redundant if RHF is fully used for form inputs
-        const { name, value } = e.target;
-        setManualAddress(prev => ({ ...prev, [name]: value }));
-        setValue(name, value, { shouldValidate: true, shouldDirty: true });
-    };
-
     const toggleAddNewAddress = () => {
         setIsAddingNewAddress(true);
         setSelectedAddress(null);
@@ -367,7 +346,6 @@ function CheckouT() {
             pincode: '', phoneNumber: '', addressType: 'home', country: 'India',
         };
         reset(defaultFormValues);
-        setManualAddress(prev => ({ ...prev, ...defaultFormValues, addressType: 'home' }));
     };
 
     const handleCreateAddress = (data) => {
@@ -519,7 +497,6 @@ function CheckouT() {
                                                     key={type}
                                                     type="button"
                                                     onClick={() => {
-                                                        setManualAddress(prev => ({ ...prev, addressType: type }));
                                                         setValue("addressType", type, { shouldDirty: true });
                                                     }}
                                                     className={`px-4 py-2 border rounded-md text-sm font-medium transition-colors duration-150 ease-in-out
