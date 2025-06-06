@@ -27,7 +27,7 @@ function Navbar() {
         <div className="flex justify-center items-center">
           <img src={logo} width={50} height={50} alt="tech-cart" />
           <span className="sm:text-2xl  font-serif sm:font-bold hidden sm:block">
-            Techmart
+            Gear Mart
           </span>
         </div>
         <div className="search-bar">
