@@ -17,7 +17,7 @@ function Header() {
             <BackgroundAnimation />
             <div className="relative w-full h-full flex items-center justify-center flex-col sm:flex-row rounded-3xl ">
                 <div className="max-w-5xl px-6 text-white text-center md:text-left py-5">
-                    <h1 className="text-4xl md:text-5xl font-bold">
+                    <h1 className="text-4xl md:text-5xl font-bold ">
                         Next-Gen Tech <br />
                         <span className="text-blue-300">For Your Digital Life</span>
                     </h1>
