@@ -24,6 +24,7 @@ const loadScript = (src) => {
 
 
 function CheckouT() {
+    // React Hook Form setup for address fields
     const { register, handleSubmit, setValue, watch, reset, formState: { errors } } = useForm({
         defaultValues: {
             addressLine1: '',
@@ -36,62 +37,56 @@ function CheckouT() {
             country: 'India',
         }
     });
+
+    // Redux selectors for user and cart data
     const userDetails = useSelector((state) => state.auth.userData);
     const { items, cartTotal, status, error: cartError, coupon } = useSelector((state) => state.cart);
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
+    // Local state for address and modal management
     const [selectedAddress, setSelectedAddress] = useState(null);
     const [isAddingNewAddress, setIsAddingNewAddress] = useState(false);
     const [showAddressModal, setShowAddressModal] = useState(false);
 
+    // Watch pincode value for auto-filling city/state
     const pincodeValue = watch("pincode");
 
-    // --- Razorpay State ---
+    // Razorpay payment state
     const [isProcessingPayment, setIsProcessingPayment] = useState(false);
     const [paymentError, setPaymentError] = useState('');
     const [paymentSuccess, setPaymentSuccess] = useState('');
-    // --- End Razorpay State ---
 
+    // Load Razorpay script on mount
     useEffect(() => {
-        // Load Razorpay checkout script when component mounts
         loadScript('https://checkout.razorpay.com/v1/checkout.js').then(loaded => {
             if (!loaded) {
                 setPaymentError("Failed to load Razorpay SDK. Please refresh and try again.");
             }
         });
-        // Cleanup function to remove script if component unmounts, though generally not strictly necessary for Razorpay's script
-        // return () => {
-        //     const script = document.querySelector('script[src="https://checkout.razorpay.com/v1/checkout.js"]');
-        //     if (script) document.body.removeChild(script);
-        // };
     }, []);
 
-
+    // Auto-fill city/state/country based on pincode
     useEffect(() => {
         const fetchAddressDetails = async () => {
             if (pincodeValue && pincodeValue.length === 6) {
                 try {
                     const response = await fetch(`https://api.postalpincode.in/pincode/${pincodeValue}`);
                     if (!response.ok) {
-                        console.warn(`API request failed for pincode ${pincodeValue} with status ${response.status}`);
                         setValue("city", "", { shouldDirty: true });
                         setValue("state", "", { shouldDirty: true });
                         return;
                     }
                     const data = await response.json();
-
                     if (data && data[0] && data[0].Status === "Success" && data[0].PostOffice && data[0].PostOffice.length > 0) {
                         const postOffice = data[0].PostOffice[0];
                         setValue("city", postOffice.District || '', { shouldValidate: true, shouldDirty: true });
                         setValue("state", postOffice.State || '', { shouldValidate: true, shouldDirty: true });
                         setValue("country", postOffice.Country || 'India', { shouldValidate: true, shouldDirty: true });
                     } else {
-                        console.warn("Pincode not found or API error:", data[0]?.Message);
                         setValue("city", "", { shouldValidate: true, shouldDirty: true });
                         setValue("state", "", { shouldValidate: true, shouldDirty: true });
                     }
                 } catch (error) {
-                    console.error("Error fetching pincode details:", error);
                     setValue("city", "", { shouldDirty: true });
                     setValue("state", "", { shouldDirty: true });
                 }
@@ -103,10 +98,10 @@ function CheckouT() {
                 }
             }
         };
-
         fetchAddressDetails();
     }, [pincodeValue, setValue, watch]);
 
+    // Fetch saved addresses using React Query
     const { data: addresses, isLoading: isAddresssLoading, error: addressesError } = useQuery({
         queryKey: ["addresses"],
         queryFn: async () => {
@@ -114,15 +109,14 @@ function CheckouT() {
                 const res = await addressService.getAllAddress();
                 return res?.success ? res?.data?.addresses : [];
             } catch (error) {
-                console.error("Error fetching addresses:", error);
                 throw error;
             }
         }
     });
 
+    // Set default address or show add new address form if none exist
     useEffect(() => {
         if (isAddresssLoading) return;
-
         if (addresses && !selectedAddress && !isAddingNewAddress) {
             if (Array.isArray(addresses) && addresses.length > 0) {
                 const defaultAddress = addresses.find(addr => addr.isDefault);
@@ -134,33 +128,35 @@ function CheckouT() {
         }
     }, [addresses, selectedAddress, isAddingNewAddress, isAddresssLoading]);
 
+    // React Query client for cache invalidation
     const queryClient = useQueryClient();
 
+    // Create address API call
     const createAddress = async (data) => {
         try {
             const res = await addressService.createAddress(data);
             return res?.success ? (res.data?.address || res.data) : null;
         } catch (error) {
-            console.log("failed to create address ");
             throw error;
         }
-    }
+    };
 
+    // Delete address API call
     const deleteAddress = async (id) => {
         try {
             const res = await addressService.deleteAddress(id);
             return res?.success ? res?.data : null;
         } catch (error) {
-            console.log("failed to delete address");
             throw error;
         }
     };
 
+    // Mutation for creating address
     const createAddressMutaton = useMutation({
         mutationFn: createAddress,
         onSuccess: (newlyCreatedAddress) => {
             queryClient.invalidateQueries("addresses");
-            reset({ // Reset RHF form
+            reset({
                 addressLine1: '', addressLine2: '', city: '', state: '',
                 pincode: '', phoneNumber: '', addressType: 'home', country: 'India',
             });
@@ -174,6 +170,7 @@ function CheckouT() {
         }
     });
 
+    // Mutation for deleting address
     const deleteAddressMutation = useMutation({
         mutationFn: deleteAddress,
         onSuccess: (data, addressId) => {
@@ -187,6 +184,7 @@ function CheckouT() {
         }
     });
 
+    // Set address as default
     const setAddressdefault = async (addressid) => {
         try {
             const res = await addressService.setDefaultAddress(addressid);
@@ -199,87 +197,64 @@ function CheckouT() {
         }
     };
 
-    // --- MODIFIED HANDLE PAYMENT FUNCTION ---
+    // Handle payment with Razorpay
     const handlePayment = async () => {
-        // Ensure a saved address is selected and has an ID
+        // Ensure a saved address is selected and valid
         if (!selectedAddress || !selectedAddress._id) {
             alert('Please select a saved shipping address to proceed with payment. If you are adding a new address, please save it first and then select it.');
             return;
         }
-
-        // Use selectedAddress for payment details
         const addressForPayment = selectedAddress;
-
-        // Optional: A further check to ensure the selected address is complete, 
-        // though your backend might handle this if it fetches the address by ID.
         if (!addressForPayment.addressLine1 || !addressForPayment.city || !addressForPayment.pincode || !addressForPayment.phoneNumber) {
             alert('The selected shipping address appears to be incomplete. Please ensure all details are present.');
             return;
         }
-
         if (cartTotal <= 0) {
             alert('Your cart is empty or total is zero. Cannot proceed to payment.');
             return;
         }
-
         setIsProcessingPayment(true);
         setPaymentError('');
         setPaymentSuccess('');
-
         try {
             // 1. Create Razorpay Order by calling your backend
             const orderData = await orderService.generateOrder({
                 addressId: addressForPayment._id
-            })
+            });
             // 2. Configure Razorpay Options
             const options = {
                 key: process.env.REACT_APP_RAZORPAY_KEY_ID,
                 amount: orderData?.data?.amount,
                 currency: orderData?.data?.currency,
                 name: "Tech cart",
-                description: `Payment for Order ${orderData?.data?.id}`, // Ensure orderData.data.id is the Razorpay order_id
-                order_id: orderData?.data?.id, // This should be the Razorpay order_id from your backend
+                description: `Payment for Order ${orderData?.data?.id}`,
+                order_id: orderData?.data?.id,
                 handler: async function (razorpayHandlerResponse) { 
                     setIsProcessingPayment(true);
                     setPaymentSuccess('Payment received. Verifying...');
                     try {
-                        // 3. Verify Payment with  backend
-                        // console.log("Verifying payment with Razorpay response:", razorpayHandlerResponse);
-
-                        // orderService.verifyPayment now directly returns the parsed JSON object
+                        // 3. Verify Payment with backend
                         const backendVerificationResult = await orderService.verifyPayment(
                             razorpayHandlerResponse
                         );
-
-                        // console.log("Backend verification result (direct from service):", backendVerificationResult);
-
-                        // Now check the 'success' field from your backend's response structure
                         if (backendVerificationResult && backendVerificationResult.success === true) {
                             setPaymentSuccess(`Payment Successful! Payment ID: ${razorpayHandlerResponse.razorpay_payment_id}. Order ID: ${razorpayHandlerResponse.razorpay_order_id}`);
-                            // dispatch(clearCart()); // Example: Uncomment and ensure clearCart is imported and works
-                            // console.log("Payment Verified Successfully. Order Data:", backendVerificationResult.data);
-                            // router.push(`/order-confirmation?orderId=${razorpayHandlerResponse.razorpay_order_id}&paymentId=${razorpayHandlerResponse.razorpay_payment_id}`) // Example navigation
                         } else {
-                            // Use the message from your backend's response, or a default
                             let errorMessage = "Payment verification failed. Please contact support.";
                             if (backendVerificationResult && backendVerificationResult.message) {
                                 errorMessage = backendVerificationResult.message;
                                 if (backendVerificationResult.errors && backendVerificationResult.errors.length > 0) {
-                                    // Optionally append specific error details
                                     const specificErrors = backendVerificationResult.errors.map(e => e.msg || JSON.stringify(e)).join(', ');
                                     errorMessage += ` Details: ${specificErrors}`;
                                 }
                             }
                             setPaymentError(errorMessage);
-                            console.error("Payment verification failed:", backendVerificationResult);
                         }
-                    } catch (error) { // This catches errors if orderService.verifyPayment itself throws an error (e.g. network issue before backend responds)
-                        console.error("Payment verification error (catch block):", error);
+                    } catch (error) {
                         let detailedErrorMessage = error.message || "An unexpected error occurred during payment verification.";
-                        // If the error object has more details (e.g. from an Axios error)
                         if (error.response && error.response.data && error.response.data.message) {
                             detailedErrorMessage = error.response.data.message;
-                        } else if (error.data && error.data.message) { // Some error wrappers might put data here
+                        } else if (error.data && error.data.message) {
                             detailedErrorMessage = error.data.message;
                         }
                         setPaymentError(`Verification Error: ${detailedErrorMessage}. Please contact support with your Payment ID: ${razorpayHandlerResponse.razorpay_payment_id}`);
@@ -287,13 +262,12 @@ function CheckouT() {
                         setIsProcessingPayment(false);
                     }
                 },
-
-                prefill: { // Prefill for Razorpay modal can still use full details for better UX
+                prefill: {
                     name: userDetails?.user?.username || userDetails?.username || 'Guest User',
                     email: userDetails?.user.email,
                     contact: addressForPayment?.phoneNumber
                 },
-                notes: { // These notes are for Razorpay's dashboard, can still contain address summary
+                notes: {
                     address: `${addressForPayment.addressLine1}, ${addressForPayment.city} - ${addressForPayment.pincode}`,
                     customer_id: userDetails?._id || userDetails?.id || 'guest_user',
                 },
@@ -309,12 +283,10 @@ function CheckouT() {
                     }
                 }
             };
-
             // 3. Open Razorpay Checkout
             if (window.Razorpay) {
                 const rzp = new window.Razorpay(options);
                 rzp.on('payment.failed', function (response) {
-                    console.error("Razorpay payment.failed event:", response.error);
                     setPaymentError(`Payment Failed: ${response.error.description} (Code: ${response.error.code}). ${response.error.metadata?.order_id ? `Order ID: ${response.error.metadata.order_id}` : ''}`);
                     setIsProcessingPayment(false);
                 });
@@ -323,21 +295,20 @@ function CheckouT() {
                 setPaymentError("Razorpay SDK could not be loaded. Please check your internet connection or refresh the page.");
                 setIsProcessingPayment(false);
             }
-
         } catch (error) {
-            console.error("Error during payment initiation:", error);
             setPaymentError(`Error: ${error.message}`);
             setIsProcessingPayment(false);
         }
     };
-    // --- END MODIFIED HANDLE PAYMENT FUNCTION ---
 
+    // Handle selecting an address from the modal
     const handleSelectAddress = (address) => {
         setSelectedAddress(address);
         setIsAddingNewAddress(false);
         setShowAddressModal(false);
     };
 
+    // Show add new address form and reset form values
     const toggleAddNewAddress = () => {
         setIsAddingNewAddress(true);
         setSelectedAddress(null);
@@ -348,40 +319,45 @@ function CheckouT() {
         reset(defaultFormValues);
     };
 
+    // Handle creating a new address
     const handleCreateAddress = (data) => {
-        console.log("Submitting address data:", data);
         createAddressMutaton.mutate(data);
     };
 
-    // Helper to determine button text and disabled state
+    // Helper for payment button text
     const getPaymentButtonText = () => {
         if (isProcessingPayment) return "Processing Payment...";
         if (paymentSuccess && !isProcessingPayment) return "Payment Successful!";
         return `Pay ₹${cartTotal.toFixed(2)}`;
     };
 
-
-    // now the payment is success ful and order has been places we can redirect the user to the home page safely after 4 seconds
-    // we will use the set time ou function
-    setTimeout(() => {
+    // Redirect to home page after successful payment (with a delay)
+    useEffect(() => {
         if (paymentSuccess && !isProcessingPayment) {
-            navigate("/")
-            toast.success("Payment Successful! Your order has been placed.")
+            const timeout = setTimeout(() => {
+                navigate("/");
+                toast.success("Payment Successful! Your order has been placed.");
+            }, 2500);
+            return () => clearTimeout(timeout);
         }
-    }, 2500)
+    }, [paymentSuccess, isProcessingPayment, navigate]);
 
-
+    // --- JSX Render ---
     return (
         <div className="min-h-screen bg-white bg-opacity-5 backdrop-blur-lg py-4 px-6 sm:px-10 lg:px-8 rounded-lg mt-2">
+            {/* Main container for checkout */}
             <div className="mx-auto w-full sm:max-w-2xl md:max-w-4xl lg:max-w-6xl xl:max-w-7xl">
                 <h1 className="text-2xl sm:text-3xl lg:text-4xl font-light text-center text-gray-100 mb-6 sm:mb-8 lg:mb-12 [text-shadow:0_0_5px_#FFF,0_0_8px_#FFF,0_0_12px_#60A5FA,0_0_15px_#60A5FA]">
                     Checkout
                 </h1>
                 <div className="grid grid-cols-1 lg:grid-cols-5 lg:gap-8">
+                    {/* Address and order summary section */}
                     <div className="lg:col-span-3 space-y-6 overflow-hidden min-w-0">
                         <div className="bg-white rounded-lg shadow-sm p-5 sm:p-6 lg:p-8 w-full bg-opacity-10">
+                            {/* Show selected address or address form */}
                             {selectedAddress && !isAddingNewAddress ? (
                                 <div className="p-4 border border-gray-200 rounded-md bg-gray-100 bg-opacity-15 w-full">
+                                    {/* Display selected address details */}
                                     <p className="font-medium text-gray-100">{selectedAddress.addressLine1}</p>
                                     {selectedAddress.addressLine2 && <p className="text-sm text-white">{selectedAddress.addressLine2}</p>}
                                     <p className="text-sm text-white">{`${selectedAddress.city}, ${selectedAddress.state} - ${selectedAddress.pincode}`}</p>
@@ -406,9 +382,11 @@ function CheckouT() {
                                     </div>
                                 </div>
                             ) : (
+                                // Address form for adding a new address
                                 <form className="space-y-4"
                                     onSubmit={handleSubmit(handleCreateAddress)}
                                 >
+                                    {/* Address input fields */}
                                     <AddressInput
                                         label="Address Line 1"
                                         placeholder="House No, Building, Street, Area"
@@ -489,6 +467,7 @@ function CheckouT() {
                                             }
                                         />
                                     </div>
+                                    {/* Address type selection */}
                                     <div>
                                         <label className="block text-sm font-medium text-gray-200 mb-2">Address Type</label>
                                         <div className="flex space-x-2 justify-center items-center">
@@ -509,7 +488,7 @@ function CheckouT() {
                                                 </button>
                                             ))}
                                             <button
-                                                type="submit" // Changed to submit to trigger RHF handleSubmit
+                                                type="submit"
                                                 disabled={createAddressMutaton.isLoading}
                                                 className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md text-sm font-medium transition-colors disabled:opacity-50"
                                             >
@@ -517,6 +496,7 @@ function CheckouT() {
                                             </button>
                                         </div>
                                     </div>
+                                    {/* Option to choose from saved addresses */}
                                     {isAddingNewAddress && addresses && addresses.length > 0 && (
                                         <button
                                             type="button"
@@ -529,6 +509,7 @@ function CheckouT() {
                                 </form>
                             )}
                         </div>
+                        {/* Order summary section */}
                         <div className="bg-white bg-opacity-10 backdrop-blur-lg rounded-lg shadow-sm p-4 sm:p-6 lg:p-8">
                             <h2 className="text-lg sm:text-xl font-medium text-gray-200 mb-4 sm:mb-6">
                                 Order Summary
@@ -537,6 +518,7 @@ function CheckouT() {
                                 {
                                     status === 'loading' ? (
                                         <div className="flex justify-center items-center h-32">
+                                            {/* Loading spinner */}
                                             <svg className="animate-spin h-8 w-8 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                                                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2.93 6.07A8 8 0 0112 20v4c-6.627 0-12-5.373-12-12h4a8 8 0 006.93 6.07zM20 12a8 8 0 01-8 8v4c6.627 0 12-5.373 12-12h-4zm-2.93-6.07A8 8 0 0112 4V0c6.627 0 12 5.373 12 12h-4z"></path>
@@ -546,7 +528,7 @@ function CheckouT() {
                                         : (
                                             items.map(item => (
                                                 <OrderSummeryCard
-                                                    key={item?.product._id} // Added key
+                                                    key={item?.product._id}
                                                     name={item?.product.name}
                                                     id={item?.product._id}
                                                     image={item?.product.mainImage.url}
@@ -565,6 +547,7 @@ function CheckouT() {
                             </div>
                         </div>
                     </div>
+                    {/* Price details and payment button */}
                     <div className="lg:col-span-2 mt-6 lg:mt-0">
                         <div className="lg:sticky lg:top-8">
                             <div className="bg-white bg-opacity-10 backdrop-blur-lg rounded-lg shadow-sm p-4 sm:p-6 lg:p-8">
@@ -585,14 +568,7 @@ function CheckouT() {
                                         <span className="text-gray-200">₹{cartTotal.toFixed(2)}</span>
                                     </div>
                                 </div>
-
-                                {/* {paymentError && (
-                                    <p className="text-red-400 text-sm mb-3 p-2 bg-red-900 bg-opacity-30 rounded">{paymentError}</p>
-                                )}
-                                {paymentSuccess && !isProcessingPayment && (
-                                    <p className="text-green-400 text-sm mb-3 p-2 bg-green-900 bg-opacity-30 rounded">{paymentSuccess}</p>
-                                )} */}
-
+                                {/* Payment button */}
                                 <button
                                     onClick={handlePayment}
                                     disabled={isProcessingPayment || cartTotal <= 0 || (!!paymentSuccess && !isProcessingPayment)}
@@ -605,14 +581,14 @@ function CheckouT() {
                     </div>
                 </div>
             </div>
-
+            {/* Address selection modal */}
             {showAddressModal && (
                 <div className="fixed inset-0 bg-black bg-opacity-75 overflow-y-auto h-full w-full z-50 flex items-center justify-center p-4">
                     <div className="bg-white bg-opacity-5 backdrop-blur-xl p-5 sm:p-8 rounded-lg shadow-xl w-full max-w-md">
                         <div className="flex justify-between items-center mb-4">
                             <h3 className="text-xl font-semibold text-gray-200">Select Shipping Address</h3>
                             <button onClick={() => setShowAddressModal(false)} className="text-gray-400 hover:text-gray-600">
-                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                             </button>
                         </div>
                         <div className="space-y-3 max-h-96 overflow-y-auto">

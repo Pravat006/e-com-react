@@ -1,7 +1,7 @@
 import React from 'react';
 
 const OrderCardSkeleton = () => (
-    <div className="w-full flex flex-col sm:flex-row items-start sm:items-center sm:justify-between p-4 border-none custom-glass-5 shadow-sm rounded-lg min-h-[140px] sm:min-h-[120px] animate-pulse">
+    <div className="w-full flex flex-col sm:flex-row items-start sm:items-center sm:justify-between p-4 border-none bg-white/5 shadow-sm rounded-lg min-h-[140px] sm:min-h-[120px] animate-pulse">
         {/* Left Section: Image + Product Info */}
         <div className="flex flex-row items-center w-full sm:w-auto mb-4 sm:mb-0">
             {/* Image Placeholder */}

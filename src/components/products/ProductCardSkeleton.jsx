@@ -2,7 +2,7 @@ import React from "react";
 
 function ProductCardSkeleton() {
     return (
-        <div className="h-full max-w-sm backdrop-blur-lg flex flex-col rounded-xl shadow-md overflow-hidden animate-pulse">
+        <div className="h-full max-w-sm  flex flex-col rounded-xl shadow-md overflow-hidden animate-pulse">
             {/* Image Placeholder */}
             <div className="bg-gray-300 dark:bg-gray-700 w-full h-40 xs:h-44 sm:h-48 md:h-52 lg:h-56"></div>
             {/* Text Content & Button Placeholder */}

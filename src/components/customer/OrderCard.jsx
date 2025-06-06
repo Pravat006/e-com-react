@@ -12,7 +12,7 @@ const getStatusColor = (status) => {
 };
 
 const OrderCard = ({ order }) => (
-    <div className="w-full flex flex-col sm:flex-row items-start sm:items-center sm:justify-between p-4 border-none  custom-glass-5 shadow-sm rounded-lg min-h-[140px] sm:min-h-[120px]">
+    <div className="w-full flex flex-col sm:flex-row items-start sm:items-center sm:justify-between p-4 border-none  bg-white/5 shadow-sm rounded-lg min-h-[140px] sm:min-h-[120px]">
         {/* Image Section - Fixed width */}
 
         <div className="flex flex-row items-center ">

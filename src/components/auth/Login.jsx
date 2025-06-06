@@ -31,7 +31,7 @@ function Login() {
   const loginMutation = useMutation({
     mutationFn: (userData) => AuthService.login(userData),
     onSuccess: (res, variables) => {
-      console.log("Login response:", res);
+      // console.log("Login response:", res);
       
       if (res?.data) {
         dispatch(login(res.data));
