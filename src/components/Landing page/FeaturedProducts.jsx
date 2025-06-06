@@ -24,7 +24,7 @@ function FeaturedProducts() {
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
 
-console.log("featured products data : ", data);
+// console.log("featured products data : ", data);
   return (
     <div className="py-8 sm:py-16 bg-transparent  h-full w-full">
       <div className="container mx-auto px-2 sm:px-6 lg:px-8 w-full">

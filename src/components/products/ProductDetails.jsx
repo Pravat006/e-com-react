@@ -10,7 +10,7 @@ function ProductDetails() {
 
   // Fetch product data using React Query
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ["product"],
+    queryKey: ["product", productId],
     queryFn: async () => {
       const response = await ProductService.getProductById(productId);
       if (!response?.data) throw new Error("No product data found");
@@ -94,10 +94,9 @@ function ProductDetails() {
                 <div
                   key={image + "-" + originalIndex}
                   className={`aspect-[4/3] min-w-0 rounded-md overflow-hidden cursor-pointer border-2 transition-all duration-150 hover:opacity-80
-                    ${
-                      mainImage === image
-                        ? "border-blue-500 shadow-md"
-                        : "border-transparent hover:border-gray-400"
+                    ${mainImage === image
+                      ? "border-blue-500 shadow-md"
+                      : "border-transparent hover:border-gray-400"
                     }`}
                   onClick={() => swapWithFirst(originalIndex)}
                   onMouseEnter={() => setMainImage(image)}
@@ -138,7 +137,7 @@ function ProductDetails() {
         <p className="text-sm md:text-base text-gray-500 dark:text-gray-400 leading-relaxed mt-2">
           {data?.description || "No description available."}
         </p>
-             <div className="mt-4 flex flex-col gap-3">
+        <div className="mt-4 flex flex-col gap-3">
           <div className="w-full lg:w-fit lg:self-center lg:min-w-[300px]">
             <AddtocartBtn productId={data?._id} stock={data?.stock} />
           </div>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import OrderCard from './OrderCard'; // Import the OrderCard component
+import OrderCardSkeleton from './OrderCardSkeleton'; // Import the Skeleton Card
 import orderService from '@/services/order.service';
 import { useQuery } from '@tanstack/react-query';
 
@@ -50,14 +51,19 @@ const YourOrder = () => {
 const {data:allOrders, isLoading:ordersLoading, error:ordersError} = useQuery({
   queryKey: ['orders'],
   queryFn: oredrList,
+  staleTime: 5 * 60 * 1000, // Added staleTime for caching, adjust as needed
 })
-console.log("order data : ",allOrders);
+// console.log("order data : ",allOrders);
 
 
 // Filter logic
 const filteredOrders = (allOrders || []).filter((order) => {
   const matchesStatus = !filters.status || order.status === filters.status;
-  const matchesTime = !filters.time || order.createdAt.includes(filters.time) || order.updatedAt.includes(filters.time);
+  const matchesTime = !filters.time || 
+    (order.createdAt && new Date(order.createdAt).getFullYear().toString() === filters.time) || // Example: Match by year
+    (filters.time === 'Last 30 days' && new Date(order.createdAt) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)) // Example: Match last 30 days
+  // Add more sophisticated time filtering based on your timeOptions values
+  ;
   const matchesSearch =
     !filters.searchTerm ||
     order.items.some(item =>
@@ -68,10 +74,31 @@ const filteredOrders = (allOrders || []).filter((order) => {
 });
 
 const statusOptions = ['On the way', 'Delivered', 'Cancelled', 'Returned'];
-const timeOptions = ['Last 30 days', '2024', '2023', '2022', '2021', 'Older'];
+// For time filtering, you might want to use actual date ranges or year values
+const timeOptions = [
+  { label: 'All Time Periods', value: '' },
+  { label: 'Last 30 days', value: 'Last 30 days' }, // This will need special handling in filter
+  { label: '2024', value: '2024' },
+  { label: '2023', value: '2023' },
+  { label: '2022', value: '2022' },
+  { label: '2021', value: '2021' },
+  { label: 'Older', value: 'Older' } // This will also need special handling
+];
+
+
+if (ordersError) {
+  return (
+    <div className="font-sans custom-glass-5 min-h-screen max-w-7xl w-screen p-4">
+      <div className="custom-glass-10 p-4 text-center rounded-lg">
+        <h3 className="text-lg font-medium text-red-500 mb-1">Error Fetching Orders</h3>
+        <p className="text-gray-300 text-sm">{ordersError.message || "An unexpected error occurred."}</p>
+      </div>
+    </div>
+  )
+}
 
 return (
-  <div className="font-sans custom-glass-5 min-h-screen  max-w-7xl w-screen">
+  <div className="font-sans custom-glass-5 min-h-screen  max-w-7xl w-screen my-5 rounded-lg">
     {/* Top Navigation / Breadcrumbs */}
     <div className="custom-glass-10 p-4 text-sm  border-b max-w-7xl mx-4 mt-3 rounded-lg">
       <div className="container mx-auto max-w-7xl">
@@ -115,10 +142,9 @@ return (
                 onChange={handleTimeChange}
                 className="w-full p-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm custom-glass-10 text-gray-200 bg-opacity-10 backdrop-blur-xl"
               >
-                <option value="" className='text-gray-900 hover:bg-gray-700 '>All Time Periods</option>
-                {timeOptions.map((time) => (
-                  <option key={time} value={time} className='text-gray-900 hover:bg-gray-700 '>
-                    {time}
+                {timeOptions.map((timeOpt) => (
+                  <option key={timeOpt.value} value={timeOpt.value} className='text-gray-900 hover:bg-gray-700 '>
+                    {timeOpt.label}
                   </option>
                 ))}
               </select>
@@ -141,20 +167,23 @@ return (
       {/* Main Content Area: Order List */}
       <div>
         <div className="space-y-4">
-          {filteredOrders.length > 0 ? (
+          {ordersLoading ? (
+            Array.from({ length: 3 }).map((_, index) => ( // Display 3 skeleton cards
+              <OrderCardSkeleton key={index} />
+            ))
+          ) : filteredOrders.length > 0 ? (
             filteredOrders.map((order) => (
               <OrderCard key={order._id} order={order} />
             ))
           ) : (
             // Empty state styled like a card, same width
-            // ...inside your render, replacing the empty state div...
-            <div className="w-full sm:w-[600px] mx-auto p-8 border border-gray-200 bg-white shadow-sm rounded-lg min-h-[140px] flex flex-col items-center justify-center">
-              <svg className="mx-auto h-12 w-12 text-gray-300 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="w-full p-8 border border-gray-700 custom-glass-10 shadow-sm rounded-lg min-h-[140px] flex flex-col items-center justify-center text-center">
+              <svg className="mx-auto h-12 w-12 text-gray-400 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
               </svg>
-              <div className="text-center">
-                <h3 className="text-lg font-medium text-gray-900 mb-1">No orders found</h3>
-                <p className="text-gray-600 text-sm">No orders match your current filters. Try adjusting your search criteria.</p>
+              <div>
+                <h3 className="text-lg font-medium text-gray-200 mb-1">No orders found</h3>
+                <p className="text-gray-400 text-sm">No orders match your current filters. Try adjusting your search criteria.</p>
               </div>
             </div>
           )}

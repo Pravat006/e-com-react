@@ -10,7 +10,7 @@ export const fetchCart = createAsyncThunk(
     try {
       const response = await CustomerService.myCart();
       if (response) {
-        console.log("cart response : ", response);
+        // console.log("cart response : ", response);
       }
       
       return response?.data;
@@ -28,8 +28,8 @@ export const addItemToCart = createAsyncThunk(
     try {
       const response = await CustomerService.addToCart(productId, { "quantity": 1 });
       if (response) {
-        console.log("new product added to cart");
-          console.log("response after adding item to cart : ", response?.data);
+        // console.log("new product added to cart");
+          // console.log("response after adding item to cart : ", response?.data);
         toast.success("Product added to cart")
       }
       return response?.data;
@@ -45,15 +45,15 @@ export const removeItemFromCart = createAsyncThunk(
   "cart/removeItemFromCart",
   async (productid, { rejectWithValue }) => {
     try {
-      console.log(
-        "product id after remove item from cart called : ",
-        productid
-      );
+      // console.log(
+      //   "product id after remove item from cart called : ",
+      //   productid
+      // );
       const response = await CustomerService.removeItem(productid);
       if (response) {
         console.log("product removed from  cart");
       }
-      console.log("after remove res :", response?.data);
+      // console.log("after remove res :", response?.data);
       return response?.data;
     } catch (error) {
       return rejectWithValue(
