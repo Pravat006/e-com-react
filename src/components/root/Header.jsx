@@ -12,7 +12,7 @@ import image from "../../assets/pngwing.com.png";
 
 function Header() {
     return (
-        <header className=" flex flex-col items-center justify-center text-center px-4 py-10 md:py-20 overflow-hidden relative w-full max-w-screen  border-b-2">
+        <header claHssName=" flex flex-col items-center justify-center text-center px-4 py-5 md:py-20 overflow-hidden relative w-full max-w-screen  border-b-2 rounded-lg">
             {/* Background Animation Component */}
             <BackgroundAnimation />
             <div className="relative w-full h-full flex items-center justify-center flex-col sm:flex-row rounded-3xl ">
@@ -45,7 +45,7 @@ function Header() {
                     </div>
                 </div>
 
-                <CardContainer className="inter-var">
+                <CardContainer className="inter-var z-20">
                     <CardBody>
                         <img src={image}
 

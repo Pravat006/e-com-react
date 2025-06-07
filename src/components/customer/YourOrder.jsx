@@ -98,9 +98,9 @@ if (ordersError) {
 }
 
 return (
-  <div className="font-sans custom-glass-5 min-h-screen  max-w-7xl w-screen my-5 rounded-lg">
+  <div className="font-sans bg-white/5 min-h-screen  max-w-7xl w-screen my-5 rounded-lg">
     {/* Top Navigation / Breadcrumbs */}
-    <div className="custom-glass-10 p-4 text-sm  border-b max-w-7xl mx-4 mt-3 rounded-lg">
+    <div className="bg-white/10 p-4 text-sm  border-b max-w-7xl mx-4 mt-3 rounded-lg">
       <div className="container mx-auto max-w-7xl">
         <span className="font-semibold text-xl text-gray-200">My Orders</span>
       </div>
@@ -120,7 +120,7 @@ return (
                 name="statusFilter"
                 value={filters.status}
                 onChange={handleStatusChange}
-                className="w-full p-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm custom-glass-10 text-gray-200 bg-opacity-10 backdrop-blur-xl"
+                className="w-full p-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm bg-white/10 text-gray-200 "
               >
                 <option value="" className='text-gray-900 hover:bg-gray-700 '> All Statuses</option>
                 {statusOptions.map((status) => (
@@ -140,7 +140,7 @@ return (
                 name="timeFilter"
                 value={filters.time}
                 onChange={handleTimeChange}
-                className="w-full p-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm custom-glass-10 text-gray-200 bg-opacity-10 backdrop-blur-xl"
+               className="w-full p-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm bg-white/10 text-gray-200 "
               >
                 {timeOptions.map((timeOpt) => (
                   <option key={timeOpt.value} value={timeOpt.value} className='text-gray-900 hover:bg-gray-700 '>
