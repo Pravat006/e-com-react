@@ -319,8 +319,25 @@ function CheckouT() {
         reset(defaultFormValues);
     };
 
-    // Handle creating a new address
-    const handleCreateAddress = (data) => {
+    // Handle creating a new address with API validation for pincode
+    const handleCreateAddress = async (data) => {
+        // 1. Check pincode validity from API
+        const pincodeRes = await fetch(`https://api.postalpincode.in/pincode/${data.pincode}`);
+        const pincodeData = await pincodeRes.json();
+        if (
+            !pincodeData ||
+            !pincodeData[0] ||
+            pincodeData[0].Status !== "Success" ||
+            !pincodeData[0].PostOffice ||
+            pincodeData[0].PostOffice.length === 0
+        ) {
+            toast.error("Invalid pincode. Please enter a valid Indian pincode.");
+            return;
+        }
+
+        // 2. (Optional) Phone number API validation can be added here if you have an endpoint
+
+        // 3. Proceed to create address if all validations pass
         createAddressMutaton.mutate(data);
     };
 
@@ -390,6 +407,8 @@ function CheckouT() {
                                     <AddressInput
                                         label="Address Line 1"
                                         placeholder="House No, Building, Street, Area"
+                                        requiredType="string"
+                                        error={errors.addressLine1?.message}
                                         {...register("addressLine1", {
                                             required: "Address Line 1 is required",
                                         })}
@@ -399,6 +418,8 @@ function CheckouT() {
                                             label="Address Line 2"
                                             name="addressLine2"
                                             placeholder="New lane central, D-203"
+                                            requiredType="string"
+                                            error={errors.addressLine2?.message}
                                             {...register("addressLine2")}
                                         />
                                     </div>
@@ -406,6 +427,8 @@ function CheckouT() {
                                         <div>
                                             <AddressInput
                                                 label="City"
+                                                requiredType="string"
+                                                error={errors.city?.message}
                                                 {...register("city", {
                                                     required: "City is required",
                                                 })}
@@ -416,6 +439,8 @@ function CheckouT() {
                                             <AddressInput
                                                 label="State"
                                                 placeholder="e.g. Odisha"
+                                                requiredType="string"
+                                                error={errors.state?.message}
                                                 {...register("state", {
                                                     required: "State is required",
                                                 })}
@@ -427,17 +452,17 @@ function CheckouT() {
                                             <AddressInput
                                                 label="Pincode"
                                                 placeholder="e.g. 752015"
-                                                type="number"
+                                                type="text"
+                                                requiredType="number"
+                                                error={errors.pincode?.message}
                                                 {...register("pincode", {
                                                     required: "Pincode is required",
-                                                    minLength: {
-                                                        value: 6,
-                                                        message: "Pincode should be 6 digits",
+                                                    pattern: {
+                                                        value: /^[1-9][0-9]{5}$/,
+                                                        message: "Pincode must be a valid 6-digit number",
                                                     },
-                                                    maxLength: {
-                                                        value: 6,
-                                                        message: "Pincode should be 6 digits",
-                                                    },
+                                                    validate: value =>
+                                                        value.length === 6 || "Pincode should be exactly 6 digits",
                                                 })}
                                             />
                                         </div>
@@ -445,6 +470,8 @@ function CheckouT() {
                                             <AddressInput
                                                 label="Country"
                                                 placeholder="e.g. India"
+                                                requiredType="string"
+                                                error={errors.country?.message}
                                                 {...register("country", {
                                                     required: "Country is required",
                                                 })}
@@ -455,16 +482,18 @@ function CheckouT() {
                                         <AddressInput
                                             label="Phone Number"
                                             name="phoneNumber"
-                                            placeholder="e.g. +917847875599"
-                                            {
-                                            ...register("phoneNumber", {
+                                            placeholder="e.g. 9876543210"
+                                            requiredType="number"
+                                            error={errors.phoneNumber?.message}
+                                            {...register("phoneNumber", {
                                                 required: "Phone Number is required",
                                                 pattern: {
-                                                    value: /^\+?[1-9]\d{1,14}$/,
-                                                    message: "Invalid phone number format",
+                                                    value: /^[6-9]\d{9}$/,
+                                                    message: "Phone number must be a valid 10-digit Indian number",
                                                 },
-                                            })
-                                            }
+                                                validate: value =>
+                                                    value.length === 10 || "Phone number should be exactly 10 digits",
+                                            })}
                                         />
                                     </div>
                                     {/* Address type selection */}
