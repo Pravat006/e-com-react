@@ -9,7 +9,7 @@ function Footer() {
     ];
 
     return (
-        <footer className="text-gray-500 px-4 py-8 mt-auto w-full bg-white dark:bg-gray-900">
+        <footer className="text-gray-500 px-4 py-8 mt-auto w-full bg-gray-50 dark:bg-gray-950">
             <div className="max-w-3xl mx-auto flex flex-col items-center text-center">
                 <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100">Gear-Mart Commercial</h3>
                 <p className="leading-relaxed mt-2 text-[15px] max-w-xl">

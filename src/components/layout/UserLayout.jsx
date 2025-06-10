@@ -22,14 +22,10 @@ function UserLayout() {
 
 
 
-    <div className='min-h-screen flex flex-col rounded-md bg-gradient-to-br from-gray-950 via-gray-900 to-black text-white font-inter antialiased'
-      // style={{
-      //   backgroundColor: "var(--card-bg)",
-      // }}
-    >
+    <div className="min-h-screen flex flex-col rounded-md bg-gray-200 dark:bg-gray-900 text-gray-900 dark:text-white font-inter antialiased">
       {/* <StarryBackground/> */}
       <Navbar />
-      <div className='flex-grow text-center flex justify-center items-center w-full '>
+      <div className="flex-grow text-center flex justify-center items-center w-full">
         <Outlet />
       </div>
       <Footer />

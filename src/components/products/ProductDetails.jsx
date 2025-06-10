@@ -67,9 +67,9 @@ function ProductDetails() {
   }
 
   return (
-    <div className="sm:w-[80%] w-full min-h-[90vh] h-auto mx-2 sm:mx-auto mb-10 mt-3 rounded-2xl shadow-md box-border flex lg:flex-row flex-col p-4 gap-4 bg-white bg-opacity-5 backdrop-blur">
+    <div className="sm:w-[80%] w-full min-h-[90vh] h-auto mx-2 sm:mx-auto mb-10 mt-3 rounded-2xl shadow-md box-border flex lg:flex-row flex-col p-4 gap-4 bg-white bg-opacity-5  ">
       {/* Responsive Image Gallery Section */}
-      <div className="lg:w-3/5 w-full flex flex-col gap-3">
+      <div className="lg:w-3/5 w-full flex flex-col gap-3 border-2 border-black dark:border-white rounded-lg p-2">
         {/* Main Image Display */}
         <div className="w-full aspect-[4/3] rounded-lg overflow-hidden shadow-sm bg-gray-200 dark:bg-gray-700">
           {imageLinks.length > 0 ? (
@@ -115,7 +115,7 @@ function ProductDetails() {
       </div>
 
       {/* Product Details Section (right side) */}
-      <div className="lg:w-2/5 w-full flex flex-col justify-center gap-3 lg:gap-4 p-2">
+      <div className="lg:w-2/5 w-full flex flex-col justify-center gap-3 lg:gap-4 p-2 theme-border">
         <h1 className="text-2xl md:text-3xl font-bold text-gray-800 dark:text-gray-100">
           {data?.name || "Product Name"}
         </h1>

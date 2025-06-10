@@ -124,18 +124,18 @@ function Cart() {
                     <div className="flex flex-1 items-center justify-end gap-2">
                       <div className="flex items-center gap-0 ">
                         <button
-                          className="w-8 h-8 flex justify-center items-center  text-gray-100  text-2xl font-bold rounded "
+                          className="w-8 h-8 flex justify-center items-center    text-2xl font-bold rounded "
                           onClick={() =>
                             handleQuantityChange(item?.product._id, "decrement")
                           }
                         >
                           -
                         </button>
-                        <h2 className="h-8 w-12 rounded  bg-opacity-5 bg-white backdrop-blur-xl p-0  flex justify-center items-center  text-xs text-gray-100 :m-0 ">
+                        <h2 className="h-8 w-12 rounded  bg-opacity-5 bg-gray-600 backdrop-blur-xl p-0  flex justify-center items-center  text-xs  ">
                           {item.quantity}
                         </h2>
                         <button
-                          className="w-8 h-8 flex justify-center items-center   text-gray-100  font-bold rounded text-2xl"
+                          className="w-8 h-8 flex justify-center items-center     font-bold rounded text-2xl"
                           onClick={() =>
                             handleQuantityChange(item?.product._id, "increment")
                           }

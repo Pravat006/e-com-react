@@ -39,7 +39,7 @@ function ProductCard({ imageLink, name, description, price, id }) {
       {inView && (
         <div className="flex-grow flex flex-col justify-between p-2 sm:p-3 md:p-4">
           <div>
-            <p className="text-sm sm:text-base md:text-lg font-semibold text-gray-800 dark:text-gray-200 mt-1 mb-1 sm:mt-2 sm:mb-1.5 line-clamp-2 leading-tight">
+            <p className="text-sm sm:text-base md:text-lg font-semibold  dark:text-gray-200 mt-1 mb-1 sm:mt-2 sm:mb-1.5 line-clamp-2 leading-tight">
               {name}
             </p>
             <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 line-clamp-2 sm:line-clamp-3 mb-2 sm:mb-3">

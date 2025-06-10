@@ -10,7 +10,7 @@ html, body {
 /* Define light and dark mode variables */
 :root {
   --bg-color: #f8f9fa; /* Light background */
-  --text-color: #0f0f0f;  /* Light text */
+  --text-color: #070707;  /* Light text */
   --card-bg: #ffffff; 
   --searchBar-bg: #D9D9D9;
   /* Light card background */
@@ -47,4 +47,13 @@ html, body {
 
 /* Apply globally */
 
+.dark-bg {
+  @apply bg-gradient-to-br  from-gray-950 via-gray-900 to-black;
+}
+.light-bg {
+  @apply bg-gradient-to-br from-gray-100 via-gray-200 to-white;
+}
 
+.theme-border{
+  @apply border-2 border-black dark:border-white rounded-lg
+}

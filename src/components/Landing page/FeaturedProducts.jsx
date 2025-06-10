@@ -26,13 +26,13 @@ function FeaturedProducts() {
 
 // console.log("featured products data : ", data);
   return (
-    <div className="py-8 sm:py-16 bg-transparent  h-full w-full border-y-2 rounded-lg mb-6">  
+    <div className="py-8 sm:py-16 bg-transparent  h-full w-full border-y-2 rounded-lg mb-6 border-2 border-black dark:border-white ">  
       <div className="container mx-auto px-2 sm:px-6 lg:px-8 w-full">
         <div className="text-center mb-6 sm:mb-12">
-          <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-slate-400 ">
+          <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-slate-500 ">
             Featured Products
           </h2>
-          <p className="mt-2 sm:mt-4 text-base sm:text-lg text-slate-300  max-w-2xl mx-auto">
+          <p className="mt-2 sm:mt-4 text-base sm:text-lg text-slate-400  max-w-2xl mx-auto">
             Check out our handpicked selection of top-rated and bestselling items.
           </p>
         </div>

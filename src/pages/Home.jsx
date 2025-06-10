@@ -8,7 +8,7 @@ import React from 'react'
 // import TestBtn from '@/components/root/TestBtn'
 import Header from '@/components/root/Header'
 import FeaturedProducts from '@/components/Landing page/FeaturedProducts'
-import FilterNavbar from '@/components/root/FilterNavbar'
+
 import Carousel from '@/components/root/Carousel'
 
 
@@ -23,7 +23,7 @@ function Home() {
       alt: 'A serene forest with a path leading through the trees.',
     },
     {
-      image: 'https://images.unsplash.com/photo-1519985176271-dba12999e446?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80',
+      image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80',
       alt: 'A vibrant city skyline at night.',
     },
   ];
@@ -35,7 +35,7 @@ function Home() {
         {/* <Banner/> */}
         {/* <TrendingProducts/>
         <FeaturedCategories/> */}
-        <Carousel slides={slides} />
+        {/* <Carousel slides={slides} /> */}
         <FeaturedProducts />
         {/* <TestBtn/> */}
         {/* <RandomProduct/> */}

@@ -20,46 +20,35 @@ function Navbar() {
   const authStatus = useSelector((state) => state.auth.status);
   const authData = useSelector((state) => state.auth.userData);
   return (
-    <header className="text-base lg:text-sm shadow-md backdrop-blur-md  sticky top-0 z-50 bg-transparent"
-    >
-      {/* ************************************************************** */}
-      <div className=" items-center  px-4 max-w-screen-xl mx-auto flex lg:px-8  justify-between p-4 py-3 ">
+    <header className="text-base lg:text-sm shadow-md backdrop-blur-md sticky top-0 z-50 bg-transparent">
+      <div className="items-center px-4 max-w-screen-xl mx-auto flex lg:px-8 justify-between p-4 py-3">
         <div className="flex justify-center items-center">
           <img src={logo} width={50} height={50} alt="tech-cart" />
-          <span className="sm:text-2xl  font-serif sm:font-bold hidden sm:block">
+          <span className="sm:text-2xl text-gray-800 dark:text-gray-100 font-serif sm:font-bold hidden sm:block">
             Gear Mart
           </span>
         </div>
         <div className="search-bar">
           <Searchbar />
         </div>
-        <div  className="flex items-center space-x-4 justify-between">
-          {/* {
-            authStatus && (
-              <ThemeButton className="hidden sm:flex" />
-            )
-          }
-          {
-            ! authStatus && (
-              <ThemeButton  />
-            )
-          } */}
-          {/* <ThemeButton /> */}
-          <div className="flex items-center space-x-4 ">
+        <div className="flex items-center space-x-4 justify-between">
+          {authStatus && <ThemeButton className="hidden sm:flex" />}
+          {!authStatus && <ThemeButton />}
+          <div className="flex items-center space-x-4">
             {!authStatus && (
               <Link
                 to="/login"
-                className="  text-gray-900  bg-gray-400 flex items-center justify-center px-3 py-2 text-xl  rounded-[50px]  "
+                className="text-gray-900 dark:text-gray-100 bg-gray-400 flex items-center justify-center px-3 py-2 text-xl rounded-[50px]"
               >
                 <RxAvatar />
               </Link>
             )}
           </div>
           {authStatus && (
-            <div className="cartLogo-and-profile flex justify-between items-center mr-4 ">
+            <div className="cartLogo-and-profile flex justify-between items-center mr-4">
               <div className="items-center space-x-4 hidden sm:flex px-5">
                 <Link to="/user/cart">
-                  <IoIosCart className="text-4xl   text-[var(--text-bg)] " />
+                  <IoIosCart className="text-4xl text-[var(--text-bg)] dark:text-gray-100" />
                 </Link>
               </div>
               <div>
@@ -77,22 +66,22 @@ function Navbar() {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem className="flex items-center justify-center">
+                    <DropdownMenuItem className="flex items-center justify-center dark:text-gray-100">
                       <Link to="/user/profile">Your Profile</Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem className="flex items-center justify-center">
+                    <DropdownMenuItem className="flex items-center justify-center dark:text-gray-100">
                       <Link to="/user/orders">Your Orders</Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem className="flex items-center justify-center">
+                    <DropdownMenuItem className="flex items-center justify-center dark:text-gray-100">
                       <Link to="/user/cart">Your Cart</Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem className="flex items-center justify-center">
+                    <DropdownMenuItem className="flex items-center justify-center dark:text-gray-100">
                       <Link to="/user/wishlists">Wishlists</Link>
                     </DropdownMenuItem>
-                    {/* <DropdownMenuItem className="sm:hidden flex items-center justify-center p-0">     
-                      <ThemeButton   className="h-full w-full"/>
-                    </DropdownMenuItem> */}
-                    <DropdownMenuItem className="flex items-center justify-center">
+                    <DropdownMenuItem className="sm:hidden flex items-center justify-center p-0">
+                      <ThemeButton className="h-full w-full" />
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="flex items-center justify-center dark:text-gray-100">
                       <LogoutBtn />
                     </DropdownMenuItem>
                   </DropdownMenuContent>

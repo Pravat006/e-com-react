@@ -57,7 +57,7 @@ function Allproducts() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center w-full">
+    <div className="flex flex-col items-center justify-center w-full border-2 border-black dark:border-white rounded-lg mx-2">
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-2 gap-y-4 sm:gap-x-4 sm:gap-y-8 p-4 lg:p-12 w-full">
         {displaySkeleton
           ? Array.from({ length: 8 }).map((_, index) => (
