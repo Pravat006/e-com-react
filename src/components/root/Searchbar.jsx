@@ -36,7 +36,7 @@ function Searchbar() {
       </div>
       <button
         onClick={handleSearch}
-        className="h-10 w-10 bg-gray-300 dark:bg-gray-500  backdrop-blur  flex justify-center items-center rounded-r-[50px] "
+        className="h-10 w-10 bg-gray-300 dark:bg-gray-700  backdrop-blur  flex justify-center items-center rounded-r-[50px] "
         // if the input is empty the disable the button
         disabled={!searchedText.trim()}
       >

@@ -12,7 +12,7 @@ function ProductCard({ imageLink, name, description, price, id }) {
   return (
     <div
       ref={ref}
-      className="h-full max-w-sm bg-white/10 flex flex-col rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden"
+      className="h-full max-w-sm bg-white/10 flex flex-col rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-200 overflow-hidden"
       // Removed: backdrop-blur-lg (expensive), reduced transition duration
     >
       {/* Image */}

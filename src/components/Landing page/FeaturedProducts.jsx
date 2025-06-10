@@ -26,7 +26,7 @@ function FeaturedProducts() {
 
 // console.log("featured products data : ", data);
   return (
-    <div className="py-8 sm:py-16 bg-transparent  h-full w-full border-y-2 rounded-lg mb-6 border-2 border-black dark:border-white ">  
+    <div className="py-8 sm:py-16 bg-transparent  h-full w-full border-y-2 rounded-lg mb-6 theme-border ">  
       <div className="container mx-auto px-2 sm:px-6 lg:px-8 w-full">
         <div className="text-center mb-6 sm:mb-12">
           <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-slate-500 ">

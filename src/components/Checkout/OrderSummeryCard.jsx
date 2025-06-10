@@ -2,7 +2,7 @@ import React from 'react'
 
 function OrderSummeryCard({id, image, name, quantity, price}) {
   return (
-    <div key={id} className="flex items-center space-x-3 sm:space-x-4">
+    <div key={id} className="flex items-center space-x-3 sm:space-x-4 theme-border px-2 py-3">
       <img
         src={image}
         alt={name}

@@ -57,8 +57,8 @@ function Allproducts() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center w-full border-2 border-black dark:border-white rounded-lg mx-2">
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-2 gap-y-4 sm:gap-x-4 sm:gap-y-8 p-4 lg:p-12 w-full">
+    <div className="flex flex-col items-center justify-center w-full theme-border mx-2 lg:mx-6 my-4 shadow-xl rounded-lg">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-2 gap-y-4 sm:gap-x-4 sm:gap-y-8 p-4 lg:p-12 w-full max-w-7xl">
         {displaySkeleton
           ? Array.from({ length: 8 }).map((_, index) => (
               <ProductCardSkeleton key={index} />

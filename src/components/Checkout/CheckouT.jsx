@@ -368,10 +368,10 @@ function CheckouT() {
                 </h1>
                 <div className="grid grid-cols-1 lg:grid-cols-5 lg:gap-8">
                     <div className="lg:col-span-3 space-y-6 overflow-hidden min-w-0">
-                        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-5 sm:p-6 lg:p-8 w-full bg-opacity-10 dark:bg-opacity-20">
+                        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm   w-full bg-opacity-10 dark:bg-opacity-20">
                             {/* Show selected address or address form */}
                             {selectedAddress && !isAddingNewAddress ? (
-                                <div className="p-4 border border-gray-200 dark:border-gray-600 rounded-md bg-gray-100 dark:bg-gray-700 bg-opacity-15 dark:bg-opacity-25 w-full">
+                                <div className="p-4 border border-gray-200 dark:border-gray-600 rounded-md bg-gray-100 dark:bg-gray-700 bg-opacity-15 dark:bg-opacity-25 w-full theme-border ">
                                     {/* Display selected address details */}
                                     <p className="font-medium text-gray-900 dark:text-gray-100">{selectedAddress.addressLine1}</p>
                                     {selectedAddress.addressLine2 && <p className="text-sm text-gray-700 dark:text-white">{selectedAddress.addressLine2}</p>}
@@ -398,7 +398,7 @@ function CheckouT() {
                                 </div>
                             ) : (
                                 // Address form for adding a new address
-                                <form className="space-y-4"
+                                <form className="space-y-4 theme-border p-4"
                                     onSubmit={handleSubmit(handleCreateAddress)}
                                 >
                                     {/* Address input fields */}
@@ -537,7 +537,7 @@ function CheckouT() {
                             )}
                         </div>
                         {/* Order summary section */}
-                        <div className="bg-white dark:bg-gray-800 bg-opacity-10 dark:bg-opacity-20 backdrop-blur-lg rounded-lg shadow-sm p-4 sm:p-6 lg:p-8">
+                        <div className="bg-white dark:bg-gray-800 bg-opacity-10 dark:bg-opacity-20 backdrop-blur-lg rounded-lg shadow-sm p-4 sm:p-6 lg:p-8 theme-border">
                             <h2 className="text-lg sm:text-xl font-medium text-gray-800 dark:text-gray-200 mb-4 sm:mb-6">
                                 Order Summary
                             </h2>
@@ -575,8 +575,8 @@ function CheckouT() {
                         </div>
                     </div>
                     {/* Price details and payment button */}
-                    <div className="lg:col-span-2 mt-6 lg:mt-0">
-                        <div className="lg:sticky lg:top-8">
+                    <div className="lg:col-span-2 mt-6 lg:mt-0 ">
+                        <div className="lg:sticky lg:top-8 theme-border">
                             <div className="bg-white dark:bg-gray-800 bg-opacity-10 dark:bg-opacity-20 backdrop-blur-lg rounded-lg shadow-sm p-4 sm:p-6 lg:p-8">
                                 <h2 className="text-lg sm:text-xl font-medium text-gray-800 dark:text-gray-200 mb-4 sm:mb-6">
                                     Price Details
@@ -611,42 +611,87 @@ function CheckouT() {
             
             {/* Address selection modal */}
             {showAddressModal && (
-                <div className="fixed inset-0 bg-black bg-opacity-75 overflow-y-auto h-full w-full z-50 flex items-center justify-center p-4">
-                    <div className="bg-white dark:bg-gray-800 bg-opacity-5 dark:bg-opacity-20 backdrop-blur-xl p-5 sm:p-8 rounded-lg shadow-xl w-full max-w-md">
+                <div className="fixed inset-0  overflow-y-auto h-full w-full z-50 flex items-center justify-center p-4">
+                    <div className="bg-white dark:bg-black  p-5 sm:p-8 rounded-lg shadow-xl w-full max-w-md">
                         <div className="flex justify-between items-center mb-4">
                             <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200">Select Shipping Address</h3>
-                            <button onClick={() => setShowAddressModal(false)} className="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300">
-                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                            <button 
+                                onClick={() => setShowAddressModal(false)} 
+                                className="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                            >
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
                             </button>
                         </div>
-                        <div className="space-y-3 max-h-96 overflow-y-auto">
-                            {isAddresssLoading && <p className="text-gray-600 dark:text-gray-300 text-center">Loading addresses...</p>}
-                            {addressesError && <p className="text-red-600 dark:text-red-400 text-center">Error: {addressesError.message || "Could not load addresses"}</p>}
+                        
+                        {/* Remove scrollbar and add custom styling */}
+                        <div className="space-y-3 max-h-96 overflow-y-auto pr-2 scrollbar-hide">
+                            <style jsx>{`
+                                .scrollbar-hide {
+                                    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+                                    scrollbar-width: none;  /* Firefox */
+                                }
+                                .scrollbar-hide::-webkit-scrollbar { 
+                                    display: none;  /* Safari and Chrome */
+                                }
+                            `}</style>
+                            
+                            {isAddresssLoading && (
+                                <p className="text-gray-600 dark:text-gray-300 text-center py-8">Loading addresses...</p>
+                            )}
+                            
+                            {addressesError && (
+                                <p className="text-red-600 dark:text-red-400 text-center py-8">
+                                    Error: {addressesError.message || "Could not load addresses"}
+                                </p>
+                            )}
+                            
                             {!isAddresssLoading && !addressesError && addresses && addresses.map(address => (
                                 <div
                                     key={address._id || address.id}
-                                    className={`p-4 border rounded-md bg-white dark:bg-gray-700 bg-opacity-10 dark:bg-opacity-25 cursor-pointer transition-colors
+                                    className={`p-4  rounded-md bg-white dark:bg-gray-700 bg-opacity-10 dark:bg-opacity-25 cursor-pointer transition-all duration-200 hover:shadow-md theme-border
                                         ${selectedAddress?._id === (address._id || address.id)
-                                            ? 'border-blue-500 ring-2 ring-blue-500'
-                                            : 'border-gray-600 dark:border-gray-400 hover:border-gray-400 dark:hover:border-gray-300'}`}
+                                            ? 'border-blue-500 dark:border-blue-400 ring-2 ring-blue-500 dark:ring-blue-400 bg-blue-50 dark:bg-blue-900/20'
+                                            : 'border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800/30'
+                                        }`}
                                     onClick={() => handleSelectAddress(address)}
                                 >
-                                    <p className="font-medium text-gray-900 dark:text-gray-100">{address?.addressLine1}</p>
-                                    {address?.addressLine2 && <p className="text-sm text-gray-700 dark:text-gray-200">{address.addressLine2}</p>}
-                                    <p className="text-sm text-gray-700 dark:text-gray-200">{`${address?.city}, ${address?.state} - ${address?.pincode}`}</p>
-                                    <p className="text-sm text-gray-700 dark:text-gray-200">{address?.country}</p>
-                                    <p className="text-xs text-gray-600 dark:text-gray-200">Phone: {address?.phoneNumber}</p>
-                                    <p className="text-xs text-gray-600 dark:text-gray-200 capitalize">Type: {address?.addressType}</p>
-                                    {address.isDefault && <span className="mt-1 text-xs text-green-600 dark:text-green-400 font-semibold block">(Default)</span>}
+                                    <p className="font-medium text-gray-900 dark:text-gray-100 mb-1">
+                                        {address?.addressLine1}
+                                    </p>
+                                    {address?.addressLine2 && (
+                                        <p className="text-sm text-gray-700 dark:text-gray-300 mb-1">
+                                            {address.addressLine2}
+                                        </p>
+                                    )}
+                                    <p className="text-sm text-gray-700 dark:text-gray-300 mb-1">
+                                        {`${address?.city}, ${address?.state} - ${address?.pincode}`}
+                                    </p>
+                                    <p className="text-sm text-gray-700 dark:text-gray-300 mb-1">
+                                        {address?.country}
+                                    </p>
+                                    <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">
+                                        Phone: {address?.phoneNumber}
+                                    </p>
+                                    <p className="text-xs text-gray-600 dark:text-gray-400 capitalize mb-2">
+                                        Type: {address?.addressType}
+                                    </p>
+                                    
+                                    {address.isDefault && (
+                                        <span className="inline-block text-xs bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 px-2 py-1 rounded-full font-semibold mb-3">
+                                            Default Address
+                                        </span>
+                                    )}
 
-                                    <div className="mt-3 pt-3 border-t border-gray-300 dark:border-gray-600 flex justify-between items-center">
+                                    <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-600 flex justify-between items-center">
                                         {!address.isDefault && (
                                             <button
                                                 onClick={(e) => {
                                                     e.stopPropagation();
                                                     setAddressdefault(address._id);
                                                 }}
-                                                className="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium"
+                                                className="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium transition-colors"
                                             >
                                                 Set as Default
                                             </button>
@@ -657,7 +702,7 @@ function CheckouT() {
                                                     e.stopPropagation();
                                                     console.log("Update address:", address?._id);
                                                 }}
-                                                className="text-xs text-yellow-600 dark:text-yellow-400 hover:text-yellow-800 dark:hover:text-yellow-300 font-medium"
+                                                className="text-xs text-yellow-600 dark:text-yellow-400 hover:text-yellow-800 dark:hover:text-yellow-300 font-medium transition-colors"
                                             >
                                                 Update
                                             </button>
@@ -669,7 +714,7 @@ function CheckouT() {
                                                     }
                                                 }}
                                                 disabled={deleteAddressMutation.isLoading && deleteAddressMutation.variables === (address?._id)}
-                                                className="text-xs text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 font-medium disabled:opacity-50"
+                                                className="text-xs text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 font-medium disabled:opacity-50 transition-colors"
                                             >
                                                 {deleteAddressMutation.isLoading && deleteAddressMutation.variables === (address?._id) ? 'Deleting...' : 'Delete'}
                                             </button>
@@ -677,16 +722,21 @@ function CheckouT() {
                                     </div>
                                 </div>
                             ))}
+                            
                             {!isAddresssLoading && !addressesError && addresses && addresses.length === 0 && (
-                                <p className="text-gray-500 dark:text-gray-400 text-center">No saved addresses found. Please add one.</p>
+                                <div className="text-center py-8">
+                                    <p className="text-gray-500 dark:text-gray-400 mb-4">No saved addresses found.</p>
+                                    <p className="text-gray-400 dark:text-gray-500 text-sm">Please add your first address to continue.</p>
+                                </div>
                             )}
                         </div>
+                        
                         <button
                             onClick={() => {
                                 toggleAddNewAddress();
                                 setShowAddressModal(false);
                             }}
-                            className="mt-6 w-full bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200 py-2 px-4 rounded-md font-medium hover:bg-gray-300 dark:hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-500"
+                            className="mt-6 w-full bg-blue-600 dark:bg-blue-700 hover:bg-blue-700 dark:hover:bg-blue-800 text-white py-3 px-4 rounded-md font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:ring-offset-2 dark:focus:ring-offset-gray-800"
                         >
                             Add New Address
                         </button>

@@ -89,12 +89,12 @@ function Cart() {
             <h1 className="text-xl font-bold  sm:text-3xl">Your Cart</h1>
           </div>
 
-          <div className="mt-8 ">
-            <ul className="space-y-4 px-4">
+          <div className="mt-8  ">
+            <ul className="space-y-4 px-4 theme-border py-4 mx-1">
               {items?.length >= 0 &&
                 items?.map((item) => (
                   <li
-                    className="flex items-center gap-4"
+                    className="flex items-center gap-4 border-b-[1px] border-black pb-1 dark:border-white"
                     key={item?.product?._id}
                   >
                     <img
@@ -175,7 +175,7 @@ function Cart() {
               )}
             </ul>
 
-            <div className="mt-8 flex justify-end border-t border-gray-100 pt-8  ">
+            <div className="mt-8 flex justify-end border-t border-gray-100 pt-8 theme-border py-4">
               <div className="w-screen max-w-lg space-y-4">
                 <dl className="space-y-0.5 text-sm ">
                   <div className="flex justify-between px-3">

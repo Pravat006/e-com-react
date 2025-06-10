@@ -5,7 +5,7 @@ function LearnMoreBtn({ productId, price }) {
   return (
 
     <Link
-      className="rounded px-4 pr-1 py-1 text-white flex items-center space-x-1 bg-slate-600 mt-4 text-xs font-bold justify-between"
+      className="rounded px-2 py-1 text-white flex items-center space-x-1 bg-slate-600 mt-4 text-xs font-bold justify-between"
       to={`/product/id/${productId}`}
     >
       <span>learn more</span>
