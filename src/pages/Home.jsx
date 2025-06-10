@@ -9,24 +9,24 @@ import React from 'react'
 import Header from '@/components/root/Header'
 import FeaturedProducts from '@/components/Landing page/FeaturedProducts'
 
-import Carousel from '@/components/root/Carousel'
+// import Carousel from '@/components/root/Carousel'
 
 
 function Home() {
-   const slides = [
-    {
-      image: 'https://images.unsplash.com/photo-1509721434272-b79147e0e708?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80',
-      alt: 'A beautiful landscape with mountains and a lake.',
-    },
-    {
-      image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80',
-      alt: 'A serene forest with a path leading through the trees.',
-    },
-    {
-      image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80',
-      alt: 'A vibrant city skyline at night.',
-    },
-  ];
+  //  const slides = [
+  //   {
+  //     image: 'https://images.unsplash.com/photo-1509721434272-b79147e0e708?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80',
+  //     alt: 'A beautiful landscape with mountains and a lake.',
+  //   },
+  //   {
+  //     image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80',
+  //     alt: 'A serene forest with a path leading through the trees.',
+  //   },
+  //   {
+  //     image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80',
+  //     alt: 'A vibrant city skyline at night.',
+  //   },
+  // ];
     // const navigate= useNavigate()
   return (
     <div className='text-center container flex flex-col items-center justify-center gap-4 mt-4 min-h-screen'>
